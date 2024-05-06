@@ -1,0 +1,40 @@
+
+
+
+kafka FAQ
+---------------------------
+
+
+1. When to use key while producing messages to kafka?
+-----------------------------------------------------
+
+✅ Order Preservation: Ensure sequential processing of messages within a partition.
+✅ Data Affinity: Group related messages in the same partition for cohesive processing.
+✅ Load Distribution: Evenly distribute messages across partitions to avoid hotspots.
+✅ Stream Processing: Facilitate operations like joins and aggregations by grouping messages.
+✅ Log Compaction: Maintain only the latest message per key for scenarios needing the most current state.
+
+
+2. How to decide the number of partitions for a topic?
+-------------------------------------------------------
+
+✅ Peak Throughput: Base partition count on expected peak write throughput; more partitions allow higher throughput.
+✅ Consumer Scalability: Match partitions to the number of concurrent consumers; one partition per consumer per group.
+✅ Fault Tolerance: Use more partitions to distribute load across brokers, enhancing system resilience.
+✅ Manage Latency: Balance partition count against increased latency and higher operational overhead.
+✅ Plan for Growth: Anticipate future scale; resizing partitions later can be complex.
+✅ Operational Ease: Consider ease of management; too many partitions can complicate cluster operations.
+✅ Application Needs: Adjust based on whether the application requires real-time or batch processing.
+
+
+3. How to decide the replication factor for a topic?
+-----------------------------------------------------
+
+✅ Fault Tolerance: Ensure data durability by replicating across multiple brokers.
+✅ Availability: Maintain service availability by having replicas on different brokers.
+✅ Read Scalability: Improve read throughput by serving requests from multiple replicas.
+✅ Consistency: Achieve consistency by ensuring that all replicas have the same data.
+✅ Performance: Balance fault tolerance and performance by choosing the right replication factor.
+✅ Operational Overhead: Consider the operational overhead of maintaining replicas.
+
+
