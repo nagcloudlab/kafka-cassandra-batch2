@@ -7,10 +7,7 @@ import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-/**
- * Kafka Producer Client App
- */
+import org.apache.kafka.common.serialization.StringSerializer;
 
 public class ProducerClientApp {
 
@@ -20,34 +17,28 @@ public class ProducerClientApp {
 
         Properties props = new Properties();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092,localhost:9093");
-        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
-        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
-                "org.apache.kafka.common.serialization.StringSerializer");
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
 
-        KafkaProducer<String, String> producer = new KafkaProducer<>(props);
-
-        try {
+        try (KafkaProducer<String, String> producer = new KafkaProducer<>(props)) {
             String topic = "greetings";
-            for (int i = 0; i < 1; i++) {
-                String key = Integer.toString(i);
-                String value = "Hello Kafka " + i;
-                ProducerRecord<String, String> record = new ProducerRecord<>(topic, key, value);
-                producer.send(record, (metadata, exception) -> {
-                    if (exception != null) {
-                        exception.printStackTrace();
+            String value = "Hey Kafka!".repeat(100);
+            for (int i = 0; i < 32; i++) {
+                ProducerRecord<String, String> record1 = new ProducerRecord<>(topic, value);
+                logger.info("Sending message-{}{}", i, ">".repeat(20));
+                producer.send(record1, (recordMetadata, exception) -> {
+                    if (exception == null) {
+                        logger.info("<".repeat(20));
+                        logger.info("Received new metadata \nTopic: {}\nPartition: {}\nOffset: {}\nTimestamp: {}",
+                                recordMetadata.topic(), recordMetadata.partition(), recordMetadata.offset(),
+                                recordMetadata.timestamp());
                     } else {
-                        logger.info("Record sent to topic: {}\nPartition: {}\nOffset: {}\nTimestamp: {}",
-                                metadata.topic(),
-                                metadata.partition(),
-                                metadata.offset(),
-                                metadata.timestamp());
+                        System.out.println("Error while producing: " + exception);
                     }
                 });
             }
         } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            producer.close();
+
         }
     }
 }
