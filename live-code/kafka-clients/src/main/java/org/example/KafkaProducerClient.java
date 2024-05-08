@@ -17,25 +17,41 @@ public class ProducerKafkaClient {
     public static void main(String[] args) {
 
         Properties properties=new Properties();
-        properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"localhost:9092,localhost:9093,localhost:9094");
+        properties.put(ProducerConfig.CLIENT_ID_CONFIG,"producer-client");
+        properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"localhost:9092,localhost:9093");
         properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,StringSerializer.class.getName());
         //properties.put(ProducerConfig.PARTITIONER_CLASS_CONFIG,CustomPartitioner.class.getName());
-        properties.put(ProducerConfig.ACKS_CONFIG,"all");
-        properties.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG,"true");
+
+        properties.put(ProducerConfig.ACKS_CONFIG,"0");
+        properties.put(ProducerConfig.RETRIES_CONFIG,Integer.toString(Integer.MAX_VALUE));
+        properties.put(ProducerConfig.RETRY_BACKOFF_MS_CONFIG,100);
+        properties.put(ProducerConfig.DELIVERY_TIMEOUT_MS_CONFIG,120000);
+//        properties.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG,"true");
+        properties.put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION,5);
+
+        properties.put(ProducerConfig.COMPRESSION_TYPE_CONFIG,"snappy");
+        properties.put(ProducerConfig.LINGER_MS_CONFIG,20);
+        properties.put(ProducerConfig.BATCH_SIZE_CONFIG,Integer.toString(32*1024)); // 32 KB batch size
+
+
+        properties.put(ProducerConfig.BUFFER_MEMORY_CONFIG,Integer.toString(33554432)); // 32 MB buffer size
+        properties.put(ProducerConfig.MAX_BLOCK_MS_CONFIG,60000);
+        properties.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG,30000);
+        //properties.put(ProducerConfig.INTERCEPTOR_CLASSES_CONFIG,CustomProducerInterceptor.class.getName());
 
         try(KafkaProducer<String,String> producer=new KafkaProducer<>(properties)){
-
             String topic="greetings";
             List<String> languages=List.of("en","es","fr");
-
-            for (int i = 0; i < 1; i++) {
+            for (int i = 0; i < 32; i++) {
                 // random key
                 String key = languages.get(i % languages.size());
                 String value = "Hey Kafka!".repeat(100); // 1kb message
-                ProducerRecord<String, String> record = new ProducerRecord<>(topic,1,key, value);
+                ProducerRecord<String, String> record = new ProducerRecord<>(topic,key, value);
+                logger.info(">>>>>>>>>>>>>>>> send()");
                 producer.send(record, (recordMetadata, exception) -> {
                     if (exception == null) {
+                        logger.info(">>>>>>>>>>>>>>>> ack()");
                         logger.info("Received new metadata \nTopic: {}\nKey: {}\nPartition: {}\nOffset: {}\nTimestamp: {}",
                                 recordMetadata.topic(),
                                 key,
@@ -47,7 +63,6 @@ public class ProducerKafkaClient {
                     }
                 });
             }
-
         }catch (Exception e){
             e.printStackTrace();
         }
