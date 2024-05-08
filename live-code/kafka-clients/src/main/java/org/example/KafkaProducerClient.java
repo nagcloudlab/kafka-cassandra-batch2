@@ -9,10 +9,11 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
-public class ProducerKafkaClient {
+public class KafkaProducerClient {
 
-    private static final Logger logger = LoggerFactory.getLogger(ProducerKafkaClient.class);
+    private static final Logger logger = LoggerFactory.getLogger(KafkaProducerClient.class);
 
     public static void main(String[] args) {
 
@@ -43,15 +44,13 @@ public class ProducerKafkaClient {
         try(KafkaProducer<String,String> producer=new KafkaProducer<>(properties)){
             String topic="greetings";
             List<String> languages=List.of("en","es","fr");
-            for (int i = 0; i < 32; i++) {
+            for (int i = 0; i < Integer.MAX_VALUE; i++) {
                 // random key
                 String key = languages.get(i % languages.size());
                 String value = "Hey Kafka!".repeat(100); // 1kb message
                 ProducerRecord<String, String> record = new ProducerRecord<>(topic,key, value);
-                logger.info(">>>>>>>>>>>>>>>> send()");
                 producer.send(record, (recordMetadata, exception) -> {
                     if (exception == null) {
-                        logger.info(">>>>>>>>>>>>>>>> ack()");
                         logger.info("Received new metadata \nTopic: {}\nKey: {}\nPartition: {}\nOffset: {}\nTimestamp: {}",
                                 recordMetadata.topic(),
                                 key,
