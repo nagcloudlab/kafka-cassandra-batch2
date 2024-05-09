@@ -6,7 +6,7 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import java.util.List;
 import java.util.Properties;
 
-public class kafkaStreamsClient {
+public class kafkaStreamsClient_v1 {
     public static void main(String[] args) {
 
 

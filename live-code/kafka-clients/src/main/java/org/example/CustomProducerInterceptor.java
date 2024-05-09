@@ -10,14 +10,11 @@ public class CustomProducerInterceptor implements ProducerInterceptor<String, St
 
     @Override
     public ProducerRecord<String, String> onSend(ProducerRecord<String, String> record) {
-        System.out.println("Intercepted record: " + record.value());
         return record;
     }
 
     @Override
     public void onAcknowledgement(RecordMetadata metadata, Exception exception) {
-        // Acknowledgement logic
-        System.out.println("Acknowledgement received: " + metadata.topic());
     }
 
     @Override

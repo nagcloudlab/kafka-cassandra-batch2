@@ -1,47 +1,37 @@
 package org.example;
 
-import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.common.serialization.Serdes;
+import org.apache.kafka.streams.KafkaStreams;
+import org.apache.kafka.streams.StreamsBuilder;
+import org.apache.kafka.streams.StreamsConfig;
+import org.apache.kafka.streams.Topology;
+import org.apache.kafka.streams.kstream.KStream;
 
-import java.util.List;
 import java.util.Properties;
 
 public class kafkaStreamsClient_v2 {
     public static void main(String[] args) {
 
+        Properties props = new Properties();
+        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "streams-pipe");
+        props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");    // assuming that the Kafka broker this application is talking to runs on local machine with port 9092
+        props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
+        props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
+        props.put(StreamsConfig.NUM_STREAM_THREADS_CONFIG, 3); // 3 threads for processing (default is 1 thread
 
-        Properties consumerProperties=new Properties();
-        consumerProperties.put("bootstrap.servers","localhost:9092");
-        consumerProperties.put("key.deserializer","org.apache.kafka.common.serialization.StringDeserializer");
-        consumerProperties.put("value.deserializer","org.apache.kafka.common.serialization.StringDeserializer");
-        consumerProperties.put("group.id","test-group");
+        final StreamsBuilder builder = new StreamsBuilder();
 
-        Properties producerProperties=new Properties();
-        producerProperties.put("bootstrap.servers","localhost:9092");
-        producerProperties.put("key.serializer","org.apache.kafka.common.serialization.StringSerializer");
-        producerProperties.put("value.serializer","org.apache.kafka.common.serialization.StringSerializer");
+        KStream<String, String> source = builder.stream("numbers");
 
+        source.filter((key, value) -> Integer.parseInt(value) % 2 == 0)
+                .to("even-numbers");
+        source.filter((key, value) -> Integer.parseInt(value) % 2 != 0)
+                .to("odd-numbers");
 
-        KafkaConsumer<String,String> consumer=new KafkaConsumer<String, String>(consumerProperties);
-        consumer.subscribe(List.of("numbers"));
+        Topology topology= builder.build();
+        final KafkaStreams streams = new KafkaStreams(topology, props);
 
-        KafkaProducer<String,String> producer=new KafkaProducer<String, String>(producerProperties);
-
-
-        while(true){
-            var records=consumer.poll(100);
-            records.forEach(record->{
-             String value=record.value();
-                int number=Integer.parseInt(value);
-                if(number%2==0) {
-                    producer.send(new org.apache.kafka.clients.producer.ProducerRecord<String, String>("even-numbers", value));
-                }
-                else{
-                    producer.send(new org.apache.kafka.clients.producer.ProducerRecord<String, String>("odd-numbers", value));
-                }
-            });
-        }
-
+        streams.start();
 
     }
 }
