@@ -1,0 +1,733 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Stateless Processing</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="ded43f02-473b-4043-b672-d2338527c6f7" class="page sans"><header><h1 class="page-title"><strong>Stateless Processing</strong></h1><p class="page-description"></p></header><div class="page-body"><hr id="0697c1ce-a31e-4d3e-b722-15dde7baa046"/><p id="515d6602-d544-4cc7-b1f8-30582ccd0a2e" class="">
+</p><h3 id="9cecc73d-e392-4e47-bb1c-43c3381ea898" class=""><strong>Slide 1: Introduction to Stateless Stream Processing</strong></h3><ul id="4ecd0988-834a-4e50-8257-f142332fcfbc" class="bulleted-list"><li style="list-style-type:disc">Overview of stateless processing: Each event is consumed, processed independently, and not stored for future reference.</li></ul><ul id="3d1ab098-a9b0-425b-8c74-4b6a4881927a" class="bulleted-list"><li style="list-style-type:disc">Emphasizes the simplicity and efficiency of stateless operations within Kafka Streams.</li></ul><h3 id="6273500c-4391-40a1-bc5f-f2ce5c7ce779" class=""><strong>Slide 2: Understanding Stateless Operators</strong></h3><ul id="281b9ef8-5f9d-4459-9911-177a7d9a8379" class="bulleted-list"><li style="list-style-type:disc">Definition of stateless operators: Tools within Kafka Streams that operate without needing a memory of previous events.</li></ul><ul id="18900358-f582-4d84-990d-ec23932253df" class="bulleted-list"><li style="list-style-type:disc">Examples include filtering records, transforming records, and enriching data on the fly.</li></ul><h3 id="f9d9529b-aef7-4c9c-992f-78c5723e5b5c" class=""><strong>Slide 3: Common Stateless Tasks</strong></h3><ul id="607a211e-4bc9-46fb-b613-290a3d3cf402" class="bulleted-list"><li style="list-style-type:disc"><strong>Filtering Records</strong>: Excluding or including data based on specific criteria.</li></ul><ul id="981d32dd-a1b1-46d2-8183-38dca473c93b" class="bulleted-list"><li style="list-style-type:disc"><strong>Adding/Removing Fields</strong>: Modifying data structure dynamically during stream processing.</li></ul><ul id="bb61f280-be80-41af-a3a6-a1a98703a834" class="bulleted-list"><li style="list-style-type:disc"><strong>Rekeying Records</strong>: Altering the keys associated with data records for grouping or redirection.</li></ul><h3 id="07540fcb-82db-4123-8771-f71e02c61d1e" class=""><strong>Slide 4 Advanced Stateless Operations</strong></h3><ul id="b077444a-b4c8-40ec-9d21-c603412a3e50" class="bulleted-list"><li style="list-style-type:disc"><strong>Branching Streams</strong>: Splitting a stream into multiple streams based on specified conditions.</li></ul><ul id="a91b2222-ed75-4255-9e36-0c0f9f2a6799" class="bulleted-list"><li style="list-style-type:disc"><strong>Merging Streams</strong>: Combining multiple streams into a single stream to unify data sources.</li></ul><ul id="c0f20474-8047-4c2f-b770-dd18e2e46eb8" class="bulleted-list"><li style="list-style-type:disc"><strong>Transforming Outputs</strong>: Converting data into one or more new formats or representations.</li></ul><h3 id="3dad5046-2479-4664-95a1-01ce5f6f0839" class=""><strong>Slide 5: Use Case: Streaming Cryptocurrency Data</strong></h3><ul id="3e08d78b-d39d-4193-a2ce-ff4fefc2e880" class="bulleted-list"><li style="list-style-type:disc">Example scenario: Streaming data from Twitter on cryptocurrencies.</li></ul><ul id="7c010b64-b474-4f32-8113-20575ca09613" class="bulleted-list"><li style="list-style-type:disc">Applying stateless operators to transform raw tweets into actionable investment signals.</li></ul><h3 id="908df2cc-caa2-4f88-b5fd-fdb4f5c580ea" class=""><strong>Slide 6: Stateless vs. Stateful Processing</strong></h3><ul id="155ae652-558e-4a0c-8725-688757a6d382" class="bulleted-list"><li style="list-style-type:disc">Contrast between stateless and stateful processing:<ul id="c8c3dd2a-11bc-4951-b290-b5c5f94dc369" class="bulleted-list"><li style="list-style-type:circle"><strong>Stateless</strong>: Treats each event independently without maintaining state.</li></ul><ul id="13249018-2ca3-45d6-a413-d7a7ccb2fa5c" class="bulleted-list"><li style="list-style-type:circle"><strong>Stateful</strong>: Requires memory of past events for functions like aggregation or windowing.</li></ul></li></ul><ul id="bb8eb84f-8647-4b56-9976-f7fe766487e3" class="bulleted-list"><li style="list-style-type:disc">Impact on application complexity and operational considerations.</li></ul><p id="f99ab891-3a36-47ef-9899-e1bddaa4738d" class="">
+</p><hr id="3a866d3a-f5d7-4c22-8e70-fd445bbbf027"/><h1 id="bc3113b2-f911-467f-a8f6-9bcf0ce7f762" class=""><strong> Processing a Twitter Stream</strong></h1><p id="53258102-9912-41b9-802a-692a282ebb30" class="">
+</p><p id="2d48bf13-a671-4db9-abdf-c0d91f2baf1e" class="">
+</p><p id="bfba19e2-d444-4641-97f5-7d8af4b4d4a0" class=""><strong>The topology that we will be implementing for our tweet enrichment application</strong></p><p id="647acdbe-ea26-44ec-a85e-dffe3db1fb61" class="">
+</p><figure id="de442649-c41a-4d1d-a8bf-a4791900e11f" class="image"><a href="Stateless%20Processing%20ded43f02473b4043b672d2338527c6f7/Untitled.png"><img style="width:708px" src="Stateless%20Processing%20ded43f02473b4043b672d2338527c6f7/Untitled.png"/></a></figure><p id="31192f7a-a24f-4874-8843-8f9a81643d1b" class="">
+</p><p id="f0e88cf5-e259-4ff1-8ccd-e21ec2929bf0" class="">
+</p><p id="9b03f16c-639d-4240-b30a-11f588e58ee3" class="">
+</p><hr id="b56d9a98-0474-4ffb-9a8b-4dc2a751871b"/><p id="17ee5343-c35e-4f0c-ac43-fc53a1f28e62" class="">
+</p><p id="f780cbef-31cc-4867-8a12-4cb599820a5c" class="">
+</p><p id="28f24d54-d1a3-4897-b0c3-9df98898560f" class=""><strong>Adding a KStream Source Processor</strong></p><p id="fb624fa2-7261-45cf-bdc8-dfad09d146ca" class="">
+</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="416ae71a-0fb4-47fb-8be9-1692c06efbb3" class="code"><code class="language-JSON">{
+    &quot;CreatedAt&quot;: 1602545767000,
+    &quot;Id&quot;: 1206079394583924736,
+    &quot;Text&quot;: &quot;Anyone else buying the Bitcoin dip?&quot;,
+    &quot;Source&quot;: &quot;&quot;,
+    &quot;User&quot;: {
+        &quot;Id&quot;: &quot;123&quot;,
+        &quot;Name&quot;: &quot;Mitch&quot;,
+        &quot;Description&quot;: &quot;&quot;,
+        &quot;ScreenName&quot;: &quot;timeflown&quot;,
+        &quot;URL&quot;: &quot;https://twitter.com/timeflown&quot;,
+        &quot;FollowersCount&quot;: &quot;1128&quot;,
+        &quot;FriendsCount&quot;: &quot;1128&quot;
+    }
+}
+</code></pre><p id="bf9938bd-4a98-4d76-ac41-ab5bf1a21615" class="">
+</p><p id="1a8e7768-d606-4a68-adf6-2ce4e4e19836" class="">
+</p><p id="ea7b5504-8d8b-4bec-ae80-1e7a20d35ace" class=""><strong>Serialization/Deserialization</strong></p><p id="c0bb3250-ea9e-414e-b314-fd0ba148e64c" class="">
+</p><figure id="b6e07e42-e112-433e-82f1-fe3b72fb702f" class="image"><a href="Stateless%20Processing%20ded43f02473b4043b672d2338527c6f7/Untitled%201.png"><img style="width:1133px" src="Stateless%20Processing%20ded43f02473b4043b672d2338527c6f7/Untitled%201.png"/></a></figure><p id="a9a34042-5d7c-4ff3-9d25-e8b7120d32bf" class="">
+</p><hr id="d06a85d1-7839-4770-84b7-2cc7188133e3"/><p id="5a06cce1-699d-4ff2-aec7-e1cef326f131" class="">
+</p><p id="c7a09f1c-afa9-47cb-9123-233649e973ff" class="">Default Serdes implementations that are available in Kafka Streams</p><p id="a64b4586-0b97-4f70-8a71-9a979a74eecd" class="">
+</p><table id="bc7d0905-c176-400d-9785-d2455eec3a3f" class="simple-table"><tbody><tr id="35768465-57aa-4507-a6df-f90236142bf8"><td id="KKYR" class=""><strong>Data type</strong></td><td id="@~Pn" class=""><strong>Serdes class</strong></td></tr><tr id="7342e69c-4541-47ea-8913-9f67dc2d847a"><td id="KKYR" class=""><strong>byte[]</strong></td><td id="@~Pn" class=""><code><strong>Serdes.ByteArray()</strong></code><strong>, </strong><code><strong>Serdes.Bytes()</strong></code></td></tr><tr id="b14d8964-80b1-400c-8342-a87b8b692ac7"><td id="KKYR" class=""><strong>ByteBuffer</strong></td><td id="@~Pn" class=""><code><strong>Serdes.ByteBuffer()</strong></code></td></tr><tr id="42d07501-5c4f-4696-bce1-2726c62396a7"><td id="KKYR" class=""><strong>Double</strong></td><td id="@~Pn" class=""><code><strong>Serdes.Double()</strong></code></td></tr><tr id="d55123f9-646a-44b0-a5a6-9a18334582f0"><td id="KKYR" class=""><strong>Integer</strong></td><td id="@~Pn" class=""><code><strong>Serdes.Integer()</strong></code></td></tr><tr id="5552f150-b89d-4f71-b5c9-52ca2fca5677"><td id="KKYR" class=""><strong>Long</strong></td><td id="@~Pn" class=""><code><strong>Serdes.Long()</strong></code></td></tr><tr id="8c5dacf1-bdef-41ac-907e-6d6c617accf5"><td id="KKYR" class=""><strong>String</strong></td><td id="@~Pn" class=""><code><strong>Serdes.String()</strong></code></td></tr><tr id="ec275481-1c47-46f1-9660-518e8d0a0e9a"><td id="KKYR" class=""><strong>UUID</strong></td><td id="@~Pn" class=""><code><strong>Serdes.UUID()</strong></code></td></tr><tr id="2359781d-d0a3-44d1-b60c-e94448897c84"><td id="KKYR" class=""><strong>Void</strong></td><td id="@~Pn" class=""><code><strong>Serdes.Void()</strong></code></td></tr></tbody></table><p id="484c8376-9597-425e-a164-5b140e87315f" class="">
+</p><hr id="591f1498-17a0-4f3f-bec2-86c32e6f3236"/><p id="6ad45ff1-ebdd-4315-92f1-f4d65aa61828" class="">
+</p><p id="8088d5a0-c255-453a-8839-8198b5cb8a66" class=""><strong><strong>Building a Custom Serdes</strong></strong></p><p id="ebc0df44-d12d-4f09-8448-7d56b3be9946" class="">
+</p><hr id="9e43d9d3-06b3-46e0-9972-e54c5c03d543"/><p id="e6a09d7e-db25-40af-9b02-7b175ea57f1e" class="">
+</p><p id="19ce4aed-b8b6-4e21-8c34-0fc0f4e722bf" class="">
+</p><p id="0d736a8b-8412-4e8e-a622-e5c9b947f830" class=""><strong>Filtering Data</strong></p><p id="66337c8a-cc6b-4715-a349-809104147069" class="">
+</p><figure id="8c30b4ef-0ac3-4b17-92b5-e88c3aa82107" class="image"><a href="Stateless%20Processing%20ded43f02473b4043b672d2338527c6f7/Untitled%202.png"><img style="width:1044px" src="Stateless%20Processing%20ded43f02473b4043b672d2338527c6f7/Untitled%202.png"/></a></figure><p id="b0914c9e-cf9e-42f0-b2b5-d6541c28b6e9" class="">
+</p><p id="130e6053-3456-486d-adaa-2e835e4008a4" class="">
+</p><hr id="afa2c97f-469d-4404-b4e1-92f3a07ae00f"/><p id="f49e551c-dc01-4fae-8de1-29d033637fe1" class="">
+</p><p id="2f3a18d8-a8c5-47a9-9b6d-de7bc96bee42" class="">
+</p><p id="126ccfa6-7d93-498d-9653-5d3e9219610b" class=""><strong>Branching Data</strong></p><p id="468b84e3-dd94-4edc-b478-e7a05bedd59b" class="">
+</p><figure id="49c44a70-0a3f-445b-9f27-a834d32e6815" class="image"><a href="Stateless%20Processing%20ded43f02473b4043b672d2338527c6f7/Untitled%203.png"><img style="width:948px" src="Stateless%20Processing%20ded43f02473b4043b672d2338527c6f7/Untitled%203.png"/></a></figure><p id="4709a81e-3515-4b42-bef2-0bd395e6c149" class="">
+</p><p id="f823b2fc-5a49-4b42-b1a3-0187a67e0a49" class="">
+</p><hr id="7626c837-8686-43a5-9a80-e1ea0f517839"/><p id="668f0f1c-37ff-49d3-9f5e-2e59e0f7db0d" class="">
+</p><p id="6254511e-bae5-49cb-9594-2a87085cb6ea" class=""><strong>Translating Tweets</strong></p><p id="f3d730e0-d3c1-41d6-8afa-f1276e576a0b" class="">
+</p><figure id="5e23c352-b6bb-4ce8-a646-4979521c9d50" class="image"><a href="Stateless%20Processing%20ded43f02473b4043b672d2338527c6f7/Untitled%204.png"><img style="width:949px" src="Stateless%20Processing%20ded43f02473b4043b672d2338527c6f7/Untitled%204.png"/></a></figure><p id="ece691a6-a7fc-4fea-84af-ad72d00413a9" class="">
+</p><hr id="f16ee045-f00b-4f5e-8157-4a835426ebc8"/><p id="bdcc553d-34df-4f05-b0b3-b540c3f001ba" class="">
+</p><p id="58f70881-cf01-4b56-be00-1cfe86eec8db" class=""><strong>Merging Streams</strong></p><p id="76cd2871-a6de-4b07-a6ed-2465f8cf75e4" class="">
+</p><figure id="493b9ff6-0213-4381-bd63-688c215ca364" class="image"><a href="Stateless%20Processing%20ded43f02473b4043b672d2338527c6f7/Untitled%205.png"><img style="width:906px" src="Stateless%20Processing%20ded43f02473b4043b672d2338527c6f7/Untitled%205.png"/></a></figure><p id="1ab909bf-1b84-4167-9fec-6a55419d6258" class="">
+</p><hr id="9acdead4-e6a3-45c8-8536-5ac419b498c0"/><p id="aa643093-f408-42a1-834d-2a95b15970fe" class="">
+</p><p id="302a1d61-5464-4186-829b-475274b3e062" class=""><strong>Enriching Tweets</strong></p><p id="02a40a64-b0bf-4b2e-82f0-12891a3e2f0e" class="">
+</p><figure id="36c4e861-c623-4206-8703-22e28a8b835c" class="image"><a href="Stateless%20Processing%20ded43f02473b4043b672d2338527c6f7/Untitled%206.png"><img style="width:838px" src="Stateless%20Processing%20ded43f02473b4043b672d2338527c6f7/Untitled%206.png"/></a></figure><p id="258cc7eb-4e33-441c-8110-f94ebda0c4c2" class="">
+</p><p id="013fc9db-6737-41de-92ad-e9a013f9fe92" class="">
+</p><hr id="8190e6fb-dac7-4b43-ab54-4b305ccc02e4"/><p id="2f671c8a-b480-4618-8dec-b9fb2aba65da" class="">
+</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

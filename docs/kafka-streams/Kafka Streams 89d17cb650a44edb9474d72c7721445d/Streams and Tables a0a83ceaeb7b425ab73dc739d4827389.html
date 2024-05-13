@@ -1,0 +1,698 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Streams and Tables</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="a0a83cea-eb7b-425a-b73d-c739d4827389" class="page sans"><header><h1 class="page-title"><strong>Streams and Tables</strong></h1><p class="page-description"></p></header><div class="page-body"><hr id="b7cfc6bb-c1c6-4c0a-8a46-87b09793f4cd"/><p id="903dd70d-6c0c-4b01-a7e5-bcae61c9b21c" class="">
+</p><p id="84f88e92-4e91-493d-a03c-ad1e86b22478" class="">
+</p><p id="fdde072f-ab70-45cd-9886-98a57668d34a" class="">Keyed records in a single topic-partition</p><p id="5a91366f-1f44-480b-b3ae-6e669554e52d" class="">server-logs topic</p><table id="dbc663e6-e493-4a2c-ab9b-b7fd1bad7628" class="simple-table"><tbody><tr id="7ae4e329-1303-46dc-a5f2-ac93f221fcbc"><td id="{\R_" class=""><strong>Key</strong></td><td id="sayI" class=""><strong>Value</strong></td><td id="k:AY" class=""><strong>Offset</strong></td></tr><tr id="198913e9-0916-40c3-bb57-e95a18edfef5"><td id="{\R_" class=""><strong>mitch</strong></td><td id="sayI" class=""><code><strong>{ &quot;action&quot;: &quot;login&quot; }</strong></code></td><td id="k:AY" class=""><strong>0</strong></td></tr><tr id="2ffbf91e-306a-427c-b84e-c40d299daf4e"><td id="{\R_" class=""><strong>mitch</strong></td><td id="sayI" class=""><code><strong>{ &quot;action&quot;: &quot;logout&quot; }</strong></code></td><td id="k:AY" class=""><strong>1</strong></td></tr><tr id="0af7c0b5-e256-4597-9729-498b787f9488"><td id="{\R_" class=""><strong>elyse</strong></td><td id="sayI" class=""><code><strong>{ &quot;action&quot;: &quot;login&quot; }</strong></code></td><td id="k:AY" class=""><strong>2</strong></td></tr><tr id="ce29344f-f5b8-407a-8554-51cd0bfa531f"><td id="{\R_" class=""><strong>isabelle</strong></td><td id="sayI" class=""><code><strong>{ &quot;action&quot;: &quot;login&quot; }</strong></code></td><td id="k:AY" class=""><strong>3</strong></td></tr></tbody></table><p id="fdee3433-60d6-43f8-9a8b-610847a63e6b" class="">
+</p><p id="c6cd64fa-9630-4a8e-968d-e9b857e1aaf5" class="">
+</p><p id="a0ee36c9-6fd6-4003-9cb7-c5794bb45520" class=""><span style="border-bottom:0.05em solid">Streams ( Kstream )</span></p><table id="c98ef8ed-d06f-49cc-9de1-e9ec7e33ac2b" class="simple-table"><tbody><tr id="50489aa3-a769-4eb9-a947-c561e7a270ed"><td id="XnXm" class=""><strong>Key</strong></td><td id="^SWQ" class=""><strong>Value</strong></td><td id="aPxO" class=""><strong>Offset</strong></td></tr><tr id="58e140fc-8e05-4f85-8cb2-2fc940b86837"><td id="XnXm" class=""><strong>mitch</strong></td><td id="^SWQ" class=""><code><strong>{ &quot;action&quot;: &quot;login&quot; }</strong></code></td><td id="aPxO" class=""><strong>0</strong></td></tr><tr id="fb086ecc-f450-4a57-8673-15fe64691283"><td id="XnXm" class=""><strong>mitch</strong></td><td id="^SWQ" class=""><code><strong>{ &quot;action&quot;: &quot;logout&quot; }</strong></code></td><td id="aPxO" class=""><strong>1</strong></td></tr><tr id="5eb649f8-9a32-44f4-af8d-e6058124d8ee"><td id="XnXm" class=""><strong>elyse</strong></td><td id="^SWQ" class=""><code><strong>{ &quot;action&quot;: &quot;login&quot; }</strong></code></td><td id="aPxO" class=""><strong>2</strong></td></tr><tr id="cbe1409e-0972-4020-8ae0-e6b4f37759f7"><td id="XnXm" class=""><strong>isabelle</strong></td><td id="^SWQ" class=""><code><strong>{ &quot;action&quot;: &quot;login&quot; }</strong></code></td><td id="aPxO" class=""><strong>3</strong></td></tr></tbody></table><p id="37742cfe-5daf-4d6b-b726-e2f0b142448f" class="">
+</p><p id="79a2e611-8e46-4aed-b565-38a8409f457a" class=""><span style="border-bottom:0.05em solid">Table ( KTable )</span></p><table id="1fd1a480-cf2c-4ffb-abc3-f75971a7432f" class="simple-table"><tbody><tr id="ae004a5e-c8fc-42ab-9bea-2c2aa858318f"><td id="=|\H" class=""><strong>Key</strong></td><td id="N^Np" class=""><strong>Value</strong></td><td id="@zYc" class=""><strong>Offset</strong></td></tr><tr id="877f33c9-99a3-4a4a-b18a-bc87ee00000d"><td id="=|\H" class=""><strong>mitch</strong></td><td id="N^Np" class=""><code><strong>{ &quot;action&quot;: &quot;logout&quot; }</strong></code></td><td id="@zYc" class=""><strong>1</strong></td></tr><tr id="094442dd-f5c2-47f6-b2fd-589c7e191bde"><td id="=|\H" class=""><strong>elyse</strong></td><td id="N^Np" class=""><code><strong>{ &quot;action&quot;: &quot;login&quot; }</strong></code></td><td id="@zYc" class=""><strong>2</strong></td></tr><tr id="d73e3ec1-f320-44d7-ae7f-39ddf71430e7"><td id="=|\H" class=""><strong>isabelle</strong></td><td id="N^Np" class=""><code><strong>{ &quot;action&quot;: &quot;login&quot; }</strong></code></td><td id="@zYc" class=""><strong>3</strong></td></tr></tbody></table><p id="d42e029b-a004-4a72-aaed-e2fa49512f83" class="">
+</p><p id="6dda75cb-7458-498d-8e23-a874bedb3286" class="">
+</p><p id="853100d0-8e59-4ef4-82c9-a91a6ffc2d72" class=""><span style="border-bottom:0.05em solid">Aggregated Table ( KTable )</span></p><table id="435604fd-9ed6-4ab5-a604-b382b78efd6a" class="simple-table"><tbody><tr id="677e97f3-04f8-4173-aa5d-f2703cd8895e"><td id="Uxp?" class=""><strong>Key</strong></td><td id="xHyh" class=""><strong>Value</strong></td><td id="CYOa" class=""><strong>Offset</strong></td></tr><tr id="eae22b0d-7e66-4244-a33e-237445ff98cf"><td id="Uxp?" class=""><strong>mitch</strong></td><td id="xHyh" class=""><code><strong>2</strong></code></td><td id="CYOa" class=""><strong>1</strong></td></tr><tr id="06f3a5fa-4885-4387-91c9-512efdfcff2b"><td id="Uxp?" class=""><strong>elyse</strong></td><td id="xHyh" class=""><code><strong>1</strong></code></td><td id="CYOa" class=""><strong>2</strong></td></tr><tr id="1c319b95-a705-40cf-9482-c0e08fd076ca"><td id="Uxp?" class=""><strong>isabelle</strong></td><td id="xHyh" class=""><code><strong>1</strong></code></td><td id="CYOa" class=""><strong>3</strong></td></tr></tbody></table><p id="52d72cbc-5411-48f9-a46b-236d82742320" class="">
+</p><p id="72e02e6e-5326-4217-951a-c876255073f8" class="">
+</p><p id="cdd945c3-d7df-40a2-bed4-4c37cf117601" class="">
+</p><hr id="877fcca1-d6bb-4a14-9b84-cb5539230845"/><p id="16be8156-81ff-4171-ac7f-fb4b0f301e30" class="">
+</p><p id="0b6c0de2-4a6e-47b8-861a-069a0ebc4e07" class="">Records that are written to Kafka are immutable, so how is it possible to model data as updates, using a <em>table</em> representation of a Kafka topic?</p><p id="4d4528d5-1379-4995-8649-53acf1423778" class="">
+</p><p id="c1ed8066-dec7-477f-a204-1d839d4f708d" class=""><span style="border-bottom:0.05em solid">The answer is simple:</span> the table is materialized on the Kafka Streams side using a key-value store which, by default, is implemented using RocksDB</p><p id="8ed7e206-a847-4c10-b0b5-2a327da77bcd" class="">
+</p><hr id="2643de3a-55d3-43a5-907b-cff4853ba0ce"/><p id="537fd010-107f-44aa-b0c0-f1fd038d971b" class="">
+</p><h1 id="eafd6265-748f-49f5-92dc-2b69b16937d6" class=""><strong><strong>KStream, KTable, GlobalKTable</strong></strong></h1><p id="71e457ca-72f8-49bd-a2d0-361d97f941f4" class="">
+</p><h3 id="b56565c4-730b-4a45-9a23-b757c2fc4d73" class=""><strong>Slide 1: Introduction to Kafka Streams Abstractions</strong></h3><ul id="21a16e54-52c6-4b7a-b897-dc9bdf3cca69" class="bulleted-list"><li style="list-style-type:disc">Overview of key abstractions in Kafka Streams&#x27; High-Level DSL: KStream, KTable, and GlobalKTable.</li></ul><ul id="a05493ab-4852-4864-afab-d47b02dd8b0c" class="bulleted-list"><li style="list-style-type:disc">Importance of choosing the right abstraction based on application needs and data handling requirements.</li></ul><h3 id="7b417eab-fd2e-49f7-8a04-d41aac43af86" class=""><strong>Slide 2: KStream Overview</strong></h3><ul id="e662c311-20d2-4d09-b7f2-34555bc23029" class="bulleted-list"><li style="list-style-type:disc"><strong>Definition</strong>: KStream represents a partitioned record stream where each data event is independent.</li></ul><ul id="ca2e54ef-7696-41f1-a186-17ba9bf4fc1b" class="bulleted-list"><li style="list-style-type:disc"><strong>Usage</strong>: Ideal for applications that process incoming data records as individual events.</li></ul><ul id="6159cacc-becc-487b-96ab-d1e9bce4b5d3" class="bulleted-list"><li style="list-style-type:disc"><strong>Characteristics</strong>: Operates with insert semantics, treating each event as a new and unique entry.</li></ul><h3 id="a7e3d3a0-2a54-432d-87f0-f300c21a0a96" class=""><strong>Slide 3: KTable Overview</strong></h3><ul id="4dc2d351-c1d5-418e-a40e-d5ea40eaf1df" class="bulleted-list"><li style="list-style-type:disc"><strong>Definition</strong>: KTable is an abstraction of a partitioned table, akin to a changelog stream where updates are tracked by keys.</li></ul><ul id="dc949362-a011-43e1-903a-524f91daa75a" class="bulleted-list"><li style="list-style-type:disc"><strong>Usage</strong>: Best suited for applications that require maintaining the latest state or value for each key.</li></ul><ul id="0e2a19f9-12ed-4112-a348-592265a22757" class="bulleted-list"><li style="list-style-type:disc"><strong>Characteristics</strong>: Uses update semantics, updating the state of the key with each new event. Each task manages only a part of the full table due to its partitioned nature.</li></ul><h3 id="ce227153-27b3-42b6-8059-da480af94ee3" class=""><strong>Slide 4: GlobalKTable Overview</strong></h3><ul id="52d3763e-384b-4563-acdc-6da2aa706ddf" class="bulleted-list"><li style="list-style-type:disc"><strong>Definition</strong>: Similar to KTable but differs in that each instance of a GlobalKTable contains a full copy of the dataset, unpartitioned.</li></ul><ul id="90fd07d4-5ccb-4851-a26a-1485ac75b591" class="bulleted-list"><li style="list-style-type:disc"><strong>Usage</strong>: Useful when there is a need to perform join operations with a full dataset accessible across all application instances.</li></ul><ul id="e1d6b131-3219-4fdf-81aa-c6caed661eee" class="bulleted-list"><li style="list-style-type:disc"><strong>Characteristics</strong>: Maintains a complete, consistent view of the data, advantageous for specific join scenarios.</li></ul><h3 id="d8c54c27-6052-4ef4-8677-7a675a7eb94e" class=""><strong>Slide 5: Selecting Between KStream, KTable, and GlobalKTable</strong></h3><ul id="b8900ba7-619b-48b3-9c5e-bda4d9e8e989" class="bulleted-list"><li style="list-style-type:disc">Decision factors include the nature of the data, required processing semantics, and the specific needs of the application.</li></ul><p id="eb07b7fa-e01f-4d29-9904-8ec8f621f5da" class="">
+</p><p id="1b7c3117-c03f-4aca-bc61-e6c5b3c7f1e4" class="">
+</p><hr id="c10c55c2-9ec2-479d-a00f-8eebfd6cdeb5"/><p id="2331d91b-3499-4ebb-be06-0fb55d4bfe35" class="">
+</p><p id="f4d737d2-7f3c-4449-b2a8-15e66e335051" class="">kStream</p><p id="01476da5-a2d1-4e8a-9826-cba162910b13" class="">KTable</p><p id="ec8ed251-181c-4d1e-868b-513c11547ad3" class=""><strong>GlobalKTable</strong></p><p id="422cf6ba-249f-409d-8f3c-a148abf4e09b" class="">
+</p><hr id="99bd1776-14e1-4584-9774-2ab0429cb7ae"/><p id="7c3d9979-e01b-43cf-8210-b4130e4818cf" class="">
+</p><p id="9362109c-5aa1-45d0-8924-f19125177ad6" class="">
+</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

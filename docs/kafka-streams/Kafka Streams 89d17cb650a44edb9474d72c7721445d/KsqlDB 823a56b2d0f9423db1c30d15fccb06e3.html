@@ -1,0 +1,721 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>KsqlDB</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="823a56b2-d0f9-423d-b1c3-0d15fccb06e3" class="page sans"><header><h1 class="page-title">KsqlDB</h1><p class="page-description"></p></header><div class="page-body"><hr id="e49832cc-ad2b-4529-8b75-0ed47763ce6f"/><p id="8ecebe4c-519c-4b41-aadb-01e3dee1e6ef" class="">
+</p><p id="0fd0f08a-98eb-4d78-93cd-6bcb1b709c7b" class="">
+</p><h3 id="30b3cb76-6657-45a3-a26e-dad05e00f177" class=""><strong>What is ksqlDB?</strong></h3><ul id="efd7c01c-573d-48d3-8bba-15e84708a877" class="bulleted-list"><li style="list-style-type:disc"><strong>Open Source Database</strong>: Launched by Confluent in 2017, designed specifically for event streaming.</li></ul><ul id="70d6da42-87a4-472e-889d-6f2fbe6ec8a2" class="bulleted-list"><li style="list-style-type:disc"><strong>Integration of Kafka Components</strong>: Combines Kafka Connect and Kafka Streams, simplifying stream processing under a unified SQL interface.</li></ul><h3 id="7b5fb48a-bb7e-4c78-9061-44caa8634d6a" class=""><strong>Key Features of ksqlDB</strong></h3><ul id="d2ff6fe7-64dd-46b8-b3ee-4736a6dd4ffb" class="bulleted-list"><li style="list-style-type:disc"><strong>Data Modeling</strong>: Supports defining data as streams or tables via SQL.</li></ul><ul id="d58de4bc-c729-45d6-9466-59bb50a1125f" class="bulleted-list"><li style="list-style-type:disc"><strong>SQL Operations</strong>: Enables SQL-based operations like join, aggregate, transform, filter, and window without needing Java coding.</li></ul><ul id="519e917a-f4b2-46f1-a6cd-180045f2906d" class="bulleted-list"><li style="list-style-type:disc"><strong>Push Queries</strong>: Continuously running queries that emit results to clients as new data arrives, useful for event-driven applications.</li></ul><ul id="225e5b29-f6af-4e4f-8ac5-db6c6dc4278a" class="bulleted-list"><li style="list-style-type:disc"><strong>Materialized Views</strong>: Allows creation and querying of real-time views from streams or tables using pull queries for on-demand data retrieval.</li></ul><ul id="f1d26624-4867-425b-9a0c-9d3a316b0044" class="bulleted-list"><li style="list-style-type:disc"><strong>Connectors</strong>: Facilitates integration with external data systems, enhancing capabilities for streaming ETL workflows.</li></ul><h3 id="5fa44a5d-5465-4bd5-a874-5adb967ecdb2" class=""><strong>Advantages of Using ksqlDB</strong></h3><ul id="0d936de9-36cd-4a4c-a83e-221ea95a1ec5" class="bulleted-list"><li style="list-style-type:disc"><strong>Ease of Use</strong>: High-level SQL interface makes stream processing accessible to non-programmers.</li></ul><ul id="1b4a12ce-9762-4934-ac23-9c82dd64fd31" class="bulleted-list"><li style="list-style-type:disc"><strong>Efficiency</strong>: Integrates core Kafka functionalities into a single platform, reducing complexity.</li></ul><ul id="01463af0-fc21-4563-a56b-1b095472cf21" class="bulleted-list"><li style="list-style-type:disc"><strong>Flexibility</strong>: Suitable for a wide array of applications from microservices to complex ETL pipelines.</li></ul><p id="28508463-e4bc-4639-8860-c25d395d1acc" class="">
+</p><hr id="8efcfada-d3df-46f5-aa58-d06399111c48"/><p id="099f7dde-a856-4fe9-a8a2-dbc04b19943e" class="">
+</p><p id="27ec84b7-3c36-48de-85b7-082bbb2d264f" class="">
+</p><h3 id="27aab1e9-1b55-4059-a39d-376d1532f288" class=""><strong>When to Use ksqlDB</strong></h3><h3 id="15d15c00-eb29-479e-82d5-3ebec8115d9e" class=""><strong>Simplified Stream Processing</strong></h3><ul id="829df5db-f3e8-4cb7-9ce4-330a6979e1a3" class="bulleted-list"><li style="list-style-type:disc"><strong>High-Level Abstraction</strong>: Easier to use than lower-level APIs with a SQL interface.</li></ul><ul id="ead0444a-9c90-44f1-bb91-d1961905ee91" class="bulleted-list"><li style="list-style-type:disc"><strong>Interactive Workflows</strong>: Managed runtime with CLI and REST services for dynamic query submissions.</li></ul><h3 id="fafd4380-b6c9-4298-9325-1afe5206e969" class=""><strong>Developer Productivity and Maintainability</strong></h3><ul id="ba15c9ad-5ca7-4fbd-9bd7-9b49f5defbb6" class="bulleted-list"><li style="list-style-type:disc"><strong>Less Code</strong>: Stream topologies are expressed in SQL, reducing code complexity and maintenance.</li></ul><ul id="11850314-73a1-4d4d-8a49-fb5f26c85708" class="bulleted-list"><li style="list-style-type:disc"><strong>Faster Onboarding</strong>: Familiar SQL interface eases learning curve for new developers.</li></ul><ul id="13f2a195-2bf8-4a25-8680-ac5647cb967a" class="bulleted-list"><li style="list-style-type:disc"><strong>Interactive Development</strong>: Quick feedback loops with a built-in test harness simplify development and testing.</li></ul><h3 id="a24a1835-a412-4c72-9833-bb96bddf72b2" class=""><strong>Architectural Simplicity</strong></h3><ul id="8b194ffe-424b-43fd-a0a1-80d88473a779" class="bulleted-list"><li style="list-style-type:disc"><strong>Unified System</strong>: Combines management of data connectors and stream transformations.</li></ul><ul id="42c3027e-f663-4e54-8f41-6d0f428f4db2" class="bulleted-list"><li style="list-style-type:disc"><strong>Single JVM Option</strong>: Can run Kafka Connect within the same JVM for streamlined operations.</li></ul><h3 id="ed2b3bc1-bd57-4e17-9e2b-c678b1d314fb" class=""><strong>Deployment and Operational Efficiency</strong></h3><ul id="fbee1b61-f699-4135-ac14-79b72702e6e1" class="bulleted-list"><li style="list-style-type:disc"><strong>Turnkey Deployments</strong>: Supports Docker and cloud-based solutions for easy setup.</li></ul><ul id="820a0ab4-dcfe-41ec-9a75-2b666a741c1b" class="bulleted-list"><li style="list-style-type:disc"><strong>Cross-Project Consistency</strong>: Declarative SQL syntax promotes uniformity across projects.</li></ul><h3 id="119adab1-f69a-426b-b30c-b31c19e0407b" class=""><strong>Use Case Suitability</strong></h3><ul id="221d918a-3e4a-4edb-ae81-30ee1b6a9f74" class="bulleted-list"><li style="list-style-type:disc"><strong>Data Exploration</strong>: Enhanced support for topic inspection and querying materialized views.</li></ul><ul id="6b376ef2-82c6-468e-b032-e2d2392f74bb" class="bulleted-list"><li style="list-style-type:disc"><strong>Custom Functions</strong>: Extensible with custom Java functions, though frequent JVM-level customizations may suggest evaluating the abstraction level.</li></ul><h3 id="63423576-904a-4159-b2ad-d18fb2e4b1f8" class=""><strong>When to Prefer ksqlDB</strong></h3><ul id="cc33d28f-d3f1-4eea-b5be-081ab81ddc5c" class="bulleted-list"><li style="list-style-type:disc"><strong>Streamlined Projects</strong>: When projects benefit from simplified setup, rapid development, and SQL capabilities.</li></ul><ul id="f774a5d7-62dd-4d8e-baff-81a2960e8d20" class="bulleted-list"><li style="list-style-type:disc"><strong>Complex Stream Processing</strong>: Use Kafka Streams if needing lower-level control, custom data processing, or advanced monitoring.</li></ul><p id="ebbda251-a600-4c39-ba94-730cab80ec5a" class="">
+</p><hr id="f4850db1-0371-4f69-b14a-87d7a2a0fcff"/><p id="527c0124-ce68-48cb-bd78-5c2bcdd2a90b" class="">
+</p><h1 id="ae9c1fac-e5e6-45e0-a3e9-f07e13da5dc8" class="">Evolution of a New Kind of Database</h1><p id="88718f35-ca7e-4bf8-85bf-f8f534c2eaae" class="">
+</p><p id="37553b41-1f1a-4f7c-98c1-f355a5f2fc56" class=""><strong><strong>The first phase of ksqlDB’s evolution combined Kafka Streams with features of traditional SQL databases, including a SQL interface</strong></strong></p><p id="3f4da7a1-e7ff-4a0b-85ec-8c9c85d55876" class="">
+</p><figure id="628f75f2-260f-47c5-be7e-8c577d95d8af" class="image"><a href="KsqlDB%20823a56b2d0f9423db1c30d15fccb06e3/Untitled.png"><img style="width:983px" src="KsqlDB%20823a56b2d0f9423db1c30d15fccb06e3/Untitled.png"/></a></figure><p id="19ef9317-945c-46ee-8b23-97bea2ec5db9" class="">
+</p><p id="7913f296-337e-456f-9ff7-1a45f467985b" class="">
+</p><hr id="4f4bf661-2ba5-4a96-bf5a-3290fea45093"/><p id="fe89851a-93cc-4707-87cf-65c839560ba1" class="">
+</p><p id="c94dcd28-f0d7-4b14-80b5-998801e39c2e" class="">Push queries automatically emit results whenever new data becomes available; this allows applications/clients to listen for new data</p><p id="ddfb7245-0ba2-434f-9581-25fb1bde9676" class="">
+</p><figure id="e1f32fbd-a39c-4e9f-9001-4f6ee1d546ab" class="image"><a href="KsqlDB%20823a56b2d0f9423db1c30d15fccb06e3/Untitled%201.png"><img style="width:257px" src="KsqlDB%20823a56b2d0f9423db1c30d15fccb06e3/Untitled%201.png"/></a></figure><p id="675a8171-5548-4d96-9ff3-27b489778f6e" class="">
+</p><hr id="8973ed20-f98d-4b7e-a04c-a73737fd1ffa"/><p id="000f9ade-44f5-43e9-85e9-284c03584258" class="">
+</p><p id="84d6e6e3-664d-435a-a9eb-db534d452521" class=""><strong><strong>ksqlDB supports both push and pull queries</strong></strong></p><p id="753636da-a85a-4447-82ba-34f9dbf60639" class="">
+</p><figure id="bbbb495d-56ce-46aa-8adf-449396dd9069" class="image"><a href="KsqlDB%20823a56b2d0f9423db1c30d15fccb06e3/Untitled%202.png"><img style="width:315px" src="KsqlDB%20823a56b2d0f9423db1c30d15fccb06e3/Untitled%202.png"/></a></figure><p id="1af6d30c-5e82-402f-a6a1-19eaf6cbdd29" class="">
+</p><hr id="e3cd3f31-57c2-4694-a596-86b725f85f38"/><p id="c6457885-fa75-44ce-b76d-91bc273a5b0e" class="">
+</p><p id="fe894a97-8ff1-432a-9908-506efb794dd4" class="">ksqlDB evolved into a system that supports both data transformation and integration</p><p id="1f6dca80-b888-4ab6-81f7-032c14dc3f78" class="">
+</p><figure id="6d966daf-3edd-42a3-abeb-1bbabb5e21e6" class="image"><a href="KsqlDB%20823a56b2d0f9423db1c30d15fccb06e3/Untitled%203.png"><img style="width:885px" src="KsqlDB%20823a56b2d0f9423db1c30d15fccb06e3/Untitled%203.png"/></a></figure><p id="82d87417-6727-462b-8ef2-f4abdece4c1a" class="">
+</p><p id="4025f87a-bcc2-4d24-b430-ec38c1219771" class="">
+</p><hr id="97d97c53-b4ab-4c67-953e-378732be36d4"/><p id="0fc7bbbb-7151-4759-8880-d3e6673a4032" class="">
+</p><ol type="1" id="c0fefe8f-6c98-4511-bc08-1a87c411b183" class="numbered-list" start="1"><li><strong>Early Development</strong>:<ul id="2db94206-a264-4e82-8723-15ff119fb4ee" class="bulleted-list"><li style="list-style-type:disc">Initially known as KSQL.</li></ul><ul id="73557e46-98e8-4c25-90de-cb20586adb5b" class="bulleted-list"><li style="list-style-type:disc">Integrated Kafka Streams for stream processing.</li></ul><ul id="dd9a87f3-91be-48ba-a8af-10cd358fe5ea" class="bulleted-list"><li style="list-style-type:disc">Provided a SQL interface to build applications without Java/Scala.</li></ul></li></ol><ol type="1" id="bcd176f6-8899-4d17-8edb-80a80be082e0" class="numbered-list" start="2"><li><strong>SQL Interface Adoption</strong>:<ul id="82e88d45-ed1e-40dc-9570-c851bb5b18d0" class="bulleted-list"><li style="list-style-type:disc">Adopted from RDBMS to ease usage.</li></ul><ul id="8ca7d9b4-7d65-4479-805d-bd0d78142b7d" class="bulleted-list"><li style="list-style-type:disc">Enabled users familiar with SQL to easily transition to streaming data applications.</li></ul></li></ol><ol type="1" id="aa8400a6-94de-4df0-8c2f-7648462bbcc9" class="numbered-list" start="3"><li><strong>Transition from KSQL to ksqlDB</strong>:<ul id="2a8a1723-afe5-4c79-b164-9824bbc28741" class="bulleted-list"><li style="list-style-type:disc">Renamed to ksqlDB to reflect enhanced capabilities.</li></ul><ul id="40b670fb-0d77-4d44-bb3d-8bb182ff7e89" class="bulleted-list"><li style="list-style-type:disc">Introduced pull queries alongside existing push queries for more database-like interactions.</li></ul></li></ol><ol type="1" id="57378922-9d53-41a9-9373-eb7c06f979dc" class="numbered-list" start="4"><li><strong>Kafka Streams Integration</strong>:<ul id="67f89b66-c99c-43cf-94bf-6e0e96d39fd3" class="bulleted-list"><li style="list-style-type:disc">Core feature allowing continuous query execution.</li></ul><ul id="09d92430-b22c-4ed2-aab6-3a94a9833f98" class="bulleted-list"><li style="list-style-type:disc">Push queries emit results in real-time as data arrives.</li></ul></li></ol><ol type="1" id="6927c096-c60a-4a2f-8a41-7dd93b3b5f33" class="numbered-list" start="5"><li><strong>Kafka Connect Integration</strong>:<ul id="f6e96f3e-55e5-47ec-99be-01b0680d4c53" class="bulleted-list"><li style="list-style-type:disc">Added in the ksqlDB evolution to handle ETL processes.</li></ul><ul id="6b1e0df4-e6dc-465d-9290-fc5fea6609bb" class="bulleted-list"><li style="list-style-type:disc">Allows direct definition and management of connectors via SQL, simplifying data integration.</li></ul></li></ol><ol type="1" id="49246179-2e2f-4adf-afc4-c2d433c68d59" class="numbered-list" start="6"><li><strong>Enhanced SQL for Streaming</strong>:<ul id="6f82a757-0654-4048-8b94-0e7aa89cb55c" class="bulleted-list"><li style="list-style-type:disc">Extends standard SQL to handle streams and tables.</li></ul><ul id="8e5666e7-5a01-46ce-ac30-bc350e48ad1a" class="bulleted-list"><li style="list-style-type:disc">Supports complex operations like joins, aggregations, and windowing on streaming data.</li></ul></li></ol><ol type="1" id="a193c239-974f-4a89-a40d-934977d051be" class="numbered-list" start="7"><li><strong>Dual Query Capabilities</strong>:<ul id="5f1580cb-251d-4f59-a436-68b44b77d017" class="bulleted-list"><li style="list-style-type:disc"><strong>Push Queries</strong>: Continuous and emit results as data flows.</li></ul><ul id="46062d7a-6d74-4c8c-bc13-1b22f6ca7fc4" class="bulleted-list"><li style="list-style-type:disc"><strong>Pull Queries</strong>: On-demand queries similar to traditional database lookups.</li></ul></li></ol><ol type="1" id="3bed16b9-d7ce-492f-8761-4b605755ef5c" class="numbered-list" start="8"><li><strong>Significance of Evolution</strong>:<ul id="1915b166-6b9a-4976-8270-28fffaa200b4" class="bulleted-list"><li style="list-style-type:disc">ksqlDB&#x27;s development showcases its unique position as a streaming database.</li></ul><ul id="53018246-38d2-4198-b09a-3236b37eb9bd" class="bulleted-list"><li style="list-style-type:disc">Enhancements have focused on making stream processing more accessible and powerful.</li></ul></li></ol><p id="a63302e4-6ba6-4626-86a6-a1488baeb17f" class="">
+</p><hr id="f6020882-e2d0-479d-9349-177b2ae82e4e"/><p id="d42bc52d-2433-48f3-b1f5-a5d2751db577" class="">
+</p><p id="43802992-51a8-41c7-a5ca-6b7af3a0b728" class="">
+</p><p id="9a333cd7-a99f-490d-acd0-98bc6fd2df89" class=""><strong>Architecture</strong></p><p id="58e0588f-009a-4ff8-b876-bfc653bd473b" class="">
+</p><p id="f4d71338-f23a-4114-8575-d3604e49348d" class=""><strong>1. ksqlDB Servers:</strong></p><ul id="874c5a2d-a38a-4a33-8300-f269ddee4299" class="bulleted-list"><li style="list-style-type:disc"><strong>Role</strong>: Execute stream processing applications as a set of SQL queries.</li></ul><ul id="8ac4dfff-c9d3-4958-95fe-b1bebd8f3ab1" class="bulleted-list"><li style="list-style-type:disc"><strong>Composition</strong>: Each server acts like a Kafka Streams application instance.</li></ul><ul id="788fa605-0112-43ae-a2c8-61f1b8f4968b" class="bulleted-list"><li style="list-style-type:disc"><strong>Scalability</strong>: Servers are scaled by adding more with the same <code><strong>ksql.service.id</strong></code> to distribute workload.</li></ul><ul id="d702a91c-6e9f-4c1b-b4c2-b13715209ee4" class="bulleted-list"><li style="list-style-type:disc"><strong>Cluster Formation</strong>: Multiple servers with the same service ID form a ksqlDB cluster, allowing workload isolation and scalability.</li></ul><ul id="9a698e84-0214-4c34-95ff-f83f7bf73635" class="bulleted-list"><li style="list-style-type:disc"><strong>Components</strong>:<ul id="218a458e-0c71-40ee-bb10-8b350e51d7fb" class="bulleted-list"><li style="list-style-type:circle"><strong>SQL Engine</strong>: Parses SQL statements into Kafka Streams topologies and executes them.</li></ul><ul id="927e11d7-34b5-445b-b2f4-2f99b02cecfa" class="bulleted-list"><li style="list-style-type:circle"><strong>REST Service</strong>: Facilitates query submission and cluster management through HTTP requests.</li></ul></li></ul><p id="ee6e2775-eb19-436c-bff5-4383da928d9f" class=""><strong>2. ksqlDB Clients:</strong></p><ul id="a0f45884-64e0-4d02-974d-a35ee42a6fc2" class="bulleted-list"><li style="list-style-type:disc"><strong>Interface</strong>: Allows interaction with ksqlDB servers via a RESTful API.</li></ul><ul id="3d8c5f8c-2d10-47ff-8ec7-bca82a6a62d1" class="bulleted-list"><li style="list-style-type:disc"><strong>Tools</strong>: Includes the ksqlDB CLI and UI for user interactions, such as query submission and management.</li></ul><ul id="17ab2c4c-6fb3-4978-a720-5cd0f54cf569" class="bulleted-list"><li style="list-style-type:disc"><strong>Access Methods</strong>:<ul id="fef52a34-11cd-4e69-a860-3d1988724ee2" class="bulleted-list"><li style="list-style-type:circle"><strong>CLI (Command Line Interface)</strong>: Interactive command tool for direct server communication.</li></ul><ul id="6a294208-f6b5-47cd-9561-195304967731" class="bulleted-list"><li style="list-style-type:circle"><strong>UI (User Interface)</strong>: Web-based platform for managing and visualizing ksqlDB functionalities.</li></ul></li></ul><p id="cad35eba-49bf-41b1-b9b5-538fcae1d1c1" class=""><strong>3. Integration Components:</strong></p><ul id="7146016c-786d-4d7f-b395-bea92b0369be" class="bulleted-list"><li style="list-style-type:disc"><strong>Kafka Streams</strong>: Core component for stream processing, underlying the SQL engine to run queries and manage state.</li></ul><ul id="a2faecd7-5a51-4cd8-9069-5bf886ae4ce3" class="bulleted-list"><li style="list-style-type:disc"><strong>Kafka Connect</strong>: Integrated for managing connectors directly through ksqlDB, facilitating ETL processes and data integration.</li></ul><p id="b8e7a757-30a9-4fc2-8d43-29c019b921fd" class=""><strong>4. Operational Modes:</strong></p><ul id="a7035c9f-a84a-4237-ae89-a57648c4cfb1" class="bulleted-list"><li style="list-style-type:disc"><strong>Interactive Mode</strong>: Uses the REST API for dynamic query execution and system interaction.</li></ul><ul id="95b2e959-be3d-4699-9161-b0dc2f52c822" class="bulleted-list"><li style="list-style-type:disc"><strong>Headless Mode</strong>: Runs predefined queries from a file without interactive input, suitable for production environments.</li></ul><p id="8cb7bcd2-da36-4dba-8b64-69785d9d9ec8" class=""><strong>5. Configuration and Management:</strong></p><ul id="f7beda02-3788-4b5f-823d-bb91387bbc82" class="bulleted-list"><li style="list-style-type:disc"><strong>Listeners Configuration</strong>: Defines network settings for server communication.</li></ul><ul id="330fbccd-3268-479e-9cd0-77aa44e71a22" class="bulleted-list"><li style="list-style-type:disc"><strong>SSL Configuration</strong>: Ensures secure communication between clients and servers.</li></ul><ul id="23d08da6-0163-4078-aadf-e48c683618bf" class="bulleted-list"><li style="list-style-type:disc"><strong>Scaling Operations</strong>: Adding or removing servers dynamically adjusts the cluster&#x27;s capacity and load distribution.</li></ul><p id="06e4f662-bb2c-4fc0-afac-d3560f2213a4" class=""><strong>6. Key Features:</strong></p><ul id="c119fac5-1e44-4886-ae82-726b9d00e292" class="bulleted-list"><li style="list-style-type:disc"><strong>Query Execution</strong>: Both push and pull queries are supported, enabling real-time data streaming and on-demand data retrieval.</li></ul><ul id="70d7714b-0808-4eed-add0-8d9a6e412de3" class="bulleted-list"><li style="list-style-type:disc"><strong>Data Handling</strong>: SQL engine processes and converts SQL commands into actionable Kafka Streams operations.</li></ul><ul id="051da499-f5fb-4239-bed6-666cc5a2da61" class="bulleted-list"><li style="list-style-type:disc"><strong>High Availability and Fault Tolerance</strong>: Inherent from Kafka&#x27;s robust ecosystem, ensuring reliable data processing and system stability.</li></ul><p id="f954f504-3352-4f5b-99c6-8a6cb7e9cb02" class="">
+</p><hr id="1a26d787-88e5-456a-bf25-e604ae25d9cc"/><p id="fb78d477-9c0e-4c9d-a043-986e90b0c366" class="">
+</p><p id="d8725d60-92e5-440c-af03-88ce134e32f1" class="">Two ksqlDB clusters processing data from Kafka independently</p><p id="5cd24f32-af5c-45ea-8887-cdd96311f870" class="">
+</p><figure id="06ee4221-d9ee-4f96-bf90-d7be6457ccf6" class="image"><a href="KsqlDB%20823a56b2d0f9423db1c30d15fccb06e3/Untitled%204.png"><img style="width:1320px" src="KsqlDB%20823a56b2d0f9423db1c30d15fccb06e3/Untitled%204.png"/></a></figure><p id="4685696b-f8df-4d4a-89a4-e03b55f2fbea" class="">
+</p><hr id="70cfbd16-0163-448f-a8bd-6434c52b4c55"/><p id="6e6e8fdd-a0d5-48be-b4a8-6054d010a79b" class="">
+</p><p id="65e4d6cd-69a5-4d89-850d-9757902dbc6e" class=""><strong><strong>The SQL engine converts SQL statements into Kafka Streams topologies</strong></strong></p><p id="0c2a534b-6c99-4916-9889-0b8975e1e0c2" class="">
+</p><figure id="8761cfa8-f139-4d47-884b-ff9301f14042" class="image"><a href="KsqlDB%20823a56b2d0f9423db1c30d15fccb06e3/Untitled%205.png"><img style="width:815px" src="KsqlDB%20823a56b2d0f9423db1c30d15fccb06e3/Untitled%205.png"/></a></figure><p id="ec327ba9-8a8c-4cfc-9cdf-583dc195b1c2" class="">
+</p><p id="25d1d844-d83b-4522-987b-93875b1ce017" class="">
+</p><hr id="881b7617-db3f-4034-9771-34ff3192cdcd"/><p id="a1e2f6a8-9e0e-4594-af0c-0dc2fc0bfb88" class="">
+</p><p id="9b859c23-e4aa-49c8-b71f-19b5ee65dbeb" class=""><strong>Deployment Modes</strong></p><p id="5f1fb41e-7894-457d-b173-a2f06af9755c" class="">
+</p><p id="f1e7c966-bbff-4604-9f75-fdd3172dcc55" class=""><strong>1. Interactive Mode</strong></p><ul id="f81866bc-e468-4b3e-8b67-82fcb0580feb" class="bulleted-list"><li style="list-style-type:disc"><strong>Description</strong>: Allows real-time interaction with ksqlDB servers via the REST API.</li></ul><ul id="57bed3f4-99e1-41d7-84e1-de6c06da82a8" class="bulleted-list"><li style="list-style-type:disc"><strong>Capabilities</strong>:<ul id="af7963f3-e863-4b14-b550-54185ac1ce5d" class="bulleted-list"><li style="list-style-type:circle">Dynamically submit, modify, and terminate queries, streams, tables, and connectors.</li></ul><ul id="16d167ac-4263-41c7-a0ba-b5c1a37d890c" class="bulleted-list"><li style="list-style-type:circle">Utilizes the command topic for replicating SQL commands across all nodes in the cluster, ensuring consistent state and operation across the cluster.</li></ul></li></ul><ul id="9cbb8364-6a99-449a-95ba-026c9f2c425c" class="bulleted-list"><li style="list-style-type:disc"><strong>Characteristics</strong>:<ul id="574f9d9d-4d38-4e7c-96cc-f96623d95283" class="bulleted-list"><li style="list-style-type:circle">Default mode of operation for ksqlDB, enabling flexibility and ease of use.</li></ul><ul id="207d745d-eb2f-4b4a-801a-476a4b8081d7" class="bulleted-list"><li style="list-style-type:circle">Ideal for development and testing environments where frequent modifications are necessary.</li></ul></li></ul><ul id="555c48a3-01a3-4020-a2da-dbc02e91ad7c" class="bulleted-list"><li style="list-style-type:disc"><strong>Deployment</strong>:<ul id="8355b395-cfda-4f16-8c1f-a0005c8d0d8d" class="bulleted-list"><li style="list-style-type:circle">No special configuration needed beyond default setup.</li></ul><ul id="bef64d8d-4f4c-4053-9302-b80ac37513db" class="bulleted-list"><li style="list-style-type:circle">Depicted in Figure 8-8, illustrating active interaction through various clients like CLI, UI, or custom applications.</li></ul></li></ul><p id="6b21d25e-b197-43e8-aef4-2fd6c450a1e1" class=""><strong>2. Headless Mode</strong></p><ul id="18521f23-d46c-4860-9384-f281c694dc4b" class="bulleted-list"><li style="list-style-type:disc"><strong>Description</strong>: Runs ksqlDB servers without REST API interactivity, preventing any runtime modifications to the running queries.</li></ul><ul id="40984eca-fceb-4a24-90d2-6bc9f868d310" class="bulleted-list"><li style="list-style-type:disc"><strong>Capabilities</strong>:<ul id="15be48a5-2e6d-41af-bce9-6d59a42dca24" class="bulleted-list"><li style="list-style-type:circle">Executes a predefined set of queries loaded from a configuration file, providing stability and security for production environments.</li></ul><ul id="d26e497b-b098-45e7-8885-c2e27bb8e95f" class="bulleted-list"><li style="list-style-type:circle">Does not use the command topic for replication, relying instead on internal configurations and possibly a config topic for essential metadata.</li></ul></li></ul><ul id="f3ec7a3f-c8ca-494f-a1e8-017e9b9b7ffd" class="bulleted-list"><li style="list-style-type:disc"><strong>Characteristics</strong>:<ul id="52726329-eb8c-4640-8eb9-66c9eae7a031" class="bulleted-list"><li style="list-style-type:circle">Ensures a locked-down environment, suitable for production deployments where changes to the query logic are not allowed during runtime.</li></ul><ul id="cdbeeeb3-4176-48f9-a024-1ac59fc4d0fc" class="bulleted-list"><li style="list-style-type:circle">Requires specifying the path to a query file during server startup to set the operational queries.</li></ul></li></ul><ul id="98b59e7a-2959-49ff-9692-721c2b3961fd" class="bulleted-list"><li style="list-style-type:disc"><strong>Deployment</strong>:<ul id="bee2f069-3b37-4a54-b691-f89cef0c9a52" class="bulleted-list"><li style="list-style-type:circle">Requires configuration via <code><strong>queries.file</strong></code> property to indicate the location of the SQL file containing persistent queries.</li></ul></li></ul><p id="721b5d10-96f2-47e4-8614-0d825148c903" class=""><strong>Choosing the Right Mode</strong>:</p><ul id="4bc3b029-0788-4120-bd11-58cb0fa03a25" class="bulleted-list"><li style="list-style-type:disc"><strong>Interactive Mode</strong>: Opt for this mode if you need a dynamic and flexible environment where you can experiment and modify queries on the fly. Ideal for development, testing, or environments where changes are frequent.</li></ul><ul id="bb8b9a22-3d50-4696-b132-c2ca8c76a5be" class="bulleted-list"><li style="list-style-type:disc"><strong>Headless Mode</strong>: Best suited for production environments where stability is critical, and changes to queries should be controlled and limited to deployment cycles.</li></ul><p id="ae021a15-1963-4210-8989-e063b58e5517" class="">
+</p><hr id="e95b1702-0dc9-4e64-94f2-36e90573e28a"/><p id="4fd1377c-cf0a-4720-ab0a-d632d98a97b1" class="">
+</p><p id="63b2f650-eeb5-4ffe-87e0-8cd7bb4b9248" class="">ksqlDB running in interactive mode, allowing clients (e.g., the ksqlDB CLI, UI, the Java client, or even curl) to submit queries via the REST API</p><p id="7cf9d71f-273a-450c-b7d5-4a224e1dce07" class="">
+</p><figure id="e5340a67-21db-4142-9c07-5603dcd1e262" class="image"><a href="KsqlDB%20823a56b2d0f9423db1c30d15fccb06e3/Untitled%206.png"><img style="width:708px" src="KsqlDB%20823a56b2d0f9423db1c30d15fccb06e3/Untitled%206.png"/></a></figure><p id="6a276e51-9e45-4959-a090-4a47ddf11a37" class="">
+</p><hr id="39ff859d-f0c5-4fa2-a42b-7b6278d50aa9"/><p id="32e8d80d-219f-4f09-9b7e-caba566ac558" class="">
+</p><p id="14cacbbb-a271-459c-bde5-b28eccdd7231" class="">ksqlDB running in headless mode</p><p id="0b8d911a-7a26-4557-a629-53978559b3f7" class="">
+</p><figure id="ba12c615-8aed-4f7a-97ab-6f46cb48fd75" class="image"><a href="KsqlDB%20823a56b2d0f9423db1c30d15fccb06e3/Untitled%207.png"><img style="width:896px" src="KsqlDB%20823a56b2d0f9423db1c30d15fccb06e3/Untitled%207.png"/></a></figure><p id="c9903364-1f9b-431a-8007-fe443fb8e6cc" class="">
+</p><hr id="6258f718-756c-48a0-8aca-8d49590b7a70"/><p id="d07c2a60-8c32-438a-8de7-df35a42675f3" class="">
+</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

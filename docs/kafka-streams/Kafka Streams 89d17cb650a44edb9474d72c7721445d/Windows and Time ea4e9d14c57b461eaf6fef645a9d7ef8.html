@@ -1,0 +1,716 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Windows and Time</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="ea4e9d14-c57b-461e-af6f-ef645a9d7ef8" class="page sans"><header><h1 class="page-title"><strong>Windows and Time</strong></h1><p class="page-description"></p></header><div class="page-body"><hr id="fece0e70-8fda-4a22-95d0-2738ec0c7394"/><p id="d96cad5b-f144-4d47-b404-5302d8340e5a" class="">
+</p><p id="b7f4e334-e662-4d21-b744-0c13d78a2f8a" class="">
+</p><p id="24845d4e-cfec-4f88-bcfc-2980855da9f6" class=""><strong>Patient Monitoring Application</strong></p><p id="c232d72d-cae1-481d-a3e5-c30f50d39c56" class="">
+</p><p id="129418da-7581-4c8e-88d0-58f9d13fe277" class="">
+</p><figure id="68452bf4-949e-42de-be32-d226f490c1c9" class="image"><a href="Windows%20and%20Time%20ea4e9d14c57b461eaf6fef645a9d7ef8/Untitled.png"><img style="width:1152px" src="Windows%20and%20Time%20ea4e9d14c57b461eaf6fef645a9d7ef8/Untitled.png"/></a></figure><p id="fea12fbc-d4f5-4666-a1fe-aabb9a94f376" class="">
+</p><h3 id="c59dfbd1-c53f-4534-89b2-06e206e85200" class=""><strong>Slide 1: Introduction to Patient Vitals Monitoring</strong></h3><ul id="9c906f76-214d-4a87-929b-f3736f6c6bd6" class="bulleted-list"><li style="list-style-type:disc"><strong>Overview</strong>: Utilizing Kafka Streams to monitor health conditions in real-time by processing data from heartbeat and temperature sensors.</li></ul><ul id="fb2d73bf-984d-4b89-a850-ac7315f0a1bf" class="bulleted-list"><li style="list-style-type:disc"><strong>Data Sources</strong>:<ul id="43edb757-bfe6-4008-a091-f0fd502c8b27" class="bulleted-list"><li style="list-style-type:circle"><code><strong>pulse-events</strong></code>: Captures heartbeat data, keyed by patient ID.</li></ul><ul id="30e9cac9-d831-4b78-9617-a16356c21e47" class="bulleted-list"><li style="list-style-type:circle"><code><strong>body-temp-events</strong></code>: Records body temperature measurements, also keyed by patient ID.</li></ul></li></ul><h3 id="919253cf-2c3e-4c9e-93e6-e4978409dcbe" class=""><strong>Slide 2: Processing Pulse Events</strong></h3><ul id="a2c70d17-f87e-41f2-ae73-428c9717ad75" class="bulleted-list"><li style="list-style-type:disc"><strong>Objective</strong>: Convert raw pulse data into heart rate measured in beats per minute (bpm).</li></ul><ul id="d6384e59-bf70-425c-b3f3-792ae64cf887" class="bulleted-list"><li style="list-style-type:disc"><strong>Data Grouping</strong>: Grouping records by patient ID to prepare for aggregation.</li></ul><ul id="3505206b-9c57-4550-9c8f-8885752251ca" class="bulleted-list"><li style="list-style-type:disc"><strong>Windowed Aggregation</strong>: Calculate heart rate using a 60-second window to match the bpm measurement interval.</li></ul><h3 id="c7f221a7-8fce-4dcc-a533-92e45dad9dd6" class=""><strong>Slide 3: Suppressing Intermediate Results</strong></h3><ul id="97699bfe-befd-493c-8696-31a355ffc96e" class="bulleted-list"><li style="list-style-type:disc"><strong>Use of Suppress Operator</strong>: Ensures only the final result of each bpm computation window is emitted.</li></ul><ul id="6ebb7866-b404-44af-8a8f-58cbbd54ecda" class="bulleted-list"><li style="list-style-type:disc"><strong>Purpose</strong>: Reduces noise in the data stream and focuses on final, stable bpm measurements for accurate health assessment.</li></ul><h3 id="b083a66d-579f-4d58-a615-2554fd72e0a4" class=""><strong>Slide 4: Detecting Health Alerts</strong></h3><ul id="d207be97-a03b-461a-8a4a-04a02c34d8d3" class="bulleted-list"><li style="list-style-type:disc"><strong>Thresholds for Alerts</strong>:<ul id="c33de97f-35e2-449a-b6f1-2ed91c189c59" class="bulleted-list"><li style="list-style-type:circle">Heart rate ≥ 100 bpm.</li></ul><ul id="24ea61ba-f3c7-4988-9bd4-d2693d800dc8" class="bulleted-list"><li style="list-style-type:circle">Body temperature ≥ 100.4°F.</li></ul></li></ul><ul id="dae3a54e-db31-442f-a8f2-331768a07051" class="bulleted-list"><li style="list-style-type:disc"><strong>Filtering Strategy</strong>: Apply filters on both vitals streams to identify measurements that indicate potential health risks.</li></ul><h3 id="f1538501-2577-4b31-aa72-b0164ed878a7" class=""><strong>Slide 5: Rekeying and Joining Vitals Data</strong></h3><ul id="058a0a9c-90c2-4e7b-8e47-e627e422e485" class="bulleted-list"><li style="list-style-type:disc"><strong>Rekeying for Co-Partitioning</strong>: Adjust heart rate records&#x27; keys to ensure they align with temperature records for accurate joins.</li></ul><ul id="4ed7c5ad-4041-4ecd-82d5-7aa9de2e341c" class="bulleted-list"><li style="list-style-type:disc"><strong>Windowed Join</strong>: Merge filtered pulse and temperature data to detect conditions indicating possible infections or systemic inflammatory response syndrome (SIRS).</li></ul><h3 id="2377c8c0-3e7f-44b6-9bd3-cb3e29bb7917" class=""><strong>Slide 6: Exposing Results and Alerting</strong></h3><ul id="fdccb0b8-e22f-46b8-95f6-4760ec5e08e0" class="bulleted-list"><li style="list-style-type:disc"><strong>Interactive Queries</strong>: Allow real-time querying of the aggregated heart rate data.</li></ul><ul id="65f7a979-8b22-4406-b547-7d5bf644bdc9" class="bulleted-list"><li style="list-style-type:disc"><strong>Alerts Output</strong>: Stream results indicating potential health issues to a dedicated <code><strong>alerts</strong></code> topic for immediate response.</li></ul><h3 id="501b2b56-586e-4194-80e3-41670a996af9" class=""><strong>Slide 7: Conclusion</strong></h3><ul id="111fe9b9-25ad-4b69-8279-308d8c1320d4" class="bulleted-list"><li style="list-style-type:disc"><strong>Impact</strong>: Enhanced real-time health monitoring enables prompt detection and response to critical health changes.</li></ul><ul id="01139e46-9b94-4431-b60c-216a8edff871" class="bulleted-list"><li style="list-style-type:disc"><strong>Future Steps</strong>: Expand monitoring capabilities and refine detection algorithms based on ongoing data analysis and healthcare provider feedback.</li></ul><p id="35404cb0-7fb3-475e-a3e6-915ef7068987" class="">
+</p><hr id="29242ad8-063d-4edd-b223-c716f5e3e3c1"/><p id="05a569d2-4469-4283-be23-4022c5f01444" class="">
+</p><p id="2f6dd588-8d4c-4d97-b358-ba3359fc4344" class=""><strong>Time Semantics</strong></p><p id="dfddf6d2-af8d-493f-94dc-30d2bdc7c3fc" class="">
+</p><p id="bdb5e2d9-72ac-4856-9c43-1d3ddc8ee1bc" class=""><em>Event time</em></p><p id="00ec7744-0c26-4b02-a13f-22421a7295a1" class=""><strong>When an event was created at the source. This timestamp can be embedded in the payload of an event, or set directly using the Kafka producer client as of version 0.10.0.</strong></p><p id="44f321f3-1037-480b-93a9-2aad550bc6f6" class=""><em>Ingestion time</em></p><p id="1497c04e-5805-4f18-a568-f402e72b55ea" class=""><strong>When the event is appended to a topic on a Kafka broker. This always occurs after event time.</strong></p><p id="7dd4e66b-d0d6-43c5-8bcc-c8575c82a766" class=""><em>Processing time</em></p><p id="c5321a6c-1c71-4da5-954f-2829c0dc052b" class=""><strong>When the event is processed by your Kafka Streams application. This always occurs after event time </strong><em><strong>and</strong></em><strong> ingestion time. It is less static than event time, and reprocessing the same data (i.e., for bug fixes) will lead to new processing timestamps, and therefore nondeterministic windowing behavior.</strong></p><p id="4dab34a8-f9c8-47ff-9a64-364583c11394" class="">
+</p><hr id="7650ce68-8b7e-4d4e-a786-8fefbc749d9d"/><p id="89b04ffe-b037-466b-8bc9-53b21b86e0a3" class="">
+</p><figure id="f8608b71-cfac-4899-ac92-4bb27948c31f" class="image" style="text-align:left"><a href="Windows%20and%20Time%20ea4e9d14c57b461eaf6fef645a9d7ef8/Untitled%201.png"><img style="width:336px" src="Windows%20and%20Time%20ea4e9d14c57b461eaf6fef645a9d7ef8/Untitled%201.png"/></a></figure><p id="efcba47a-a9a2-4b44-ae1e-c24c9484b37e" class="">
+</p><hr id="7ad846f3-6f74-4fb3-af23-37c39a4b252b"/><p id="9041c28d-972d-4164-ab9d-a9a0ad02338f" class="">
+</p><p id="2ae7dd70-2a4c-45ec-aae3-ad81200067ad" class=""><code><strong>log.message.timestamp.type</strong></code><strong> (broker level)<br/><br/></strong><code><strong>message.timestamp.type</strong></code><strong> (topic level)</strong></p><p id="72603cf0-eee0-4f57-a1b5-4277cd010af4" class="">
+</p><hr id="280ae61e-b4b7-4803-a01d-bfdb47ba2cc6"/><p id="ebd90fda-dcb8-4816-9796-8f51b0c36ebb" class="">
+</p><p id="477af541-5150-4fed-aa2a-b1d9689a39e2" class=""><strong>Timestamp Extractors</strong></p><p id="e209a094-5c70-4edc-8b31-6b775f0476fe" class="">
+</p><h3 id="94afea60-078d-4710-bd77-b5017ef3ce85" class=""><strong>Slide 1: Introduction to Timestamp Extractors</strong></h3><ul id="3bd9ac4b-9862-4ea4-b340-fecfcb513294" class="bulleted-list"><li style="list-style-type:disc"><strong>Purpose</strong>: Timestamp extractors associate each Kafka record with a timestamp, crucial for time-dependent operations like windowed joins and aggregations.</li></ul><ul id="0c2606fd-dabd-47ff-b46a-7e7ca2f6cb12" class="bulleted-list"><li style="list-style-type:disc"><strong>Functionality</strong>: Extracts timestamps either from the record itself or uses the partition&#x27;s latest timestamp as a fallback.</li></ul><h3 id="03ed1758-6117-42b2-8f51-3a692ff8f288" class=""><strong>Slide 2: Default Timestamp Extractors in Kafka Streams</strong></h3><ul id="0335587d-a82f-4c2a-8be2-97c8f3b105c5" class="bulleted-list"><li style="list-style-type:disc"><strong>FailOnInvalidTimestamp</strong>: Default extractor that throws an exception if timestamps are invalid, typically set to event creation or ingestion time.</li></ul><ul id="31ed2007-19f2-4d10-828e-83dad27bfb73" class="bulleted-list"><li style="list-style-type:disc"><strong>LogAndSkipOnInvalidTimestamp</strong>: Similar to the default but logs a warning and skips invalid timestamps, allowing processing to continue.</li></ul><ul id="30542669-518f-4b17-9488-6ec4a9c2d9c4" class="bulleted-list"><li style="list-style-type:disc"><strong>WallclockTimestampExtractor</strong>: Uses system time for timestamps, suitable for processing-time semantics but may not accurately reflect event times.</li></ul><h3 id="1fae417e-87f5-4afd-a007-3e9e9c828cd6" class=""><strong>Slide 3: Importance of Accurate Timestamping</strong></h3><ul id="6c0b2888-92d5-4152-badd-dd55001e199d" class="bulleted-list"><li style="list-style-type:disc"><strong>Scenario</strong>: Monitoring patient vitals like heart rate and body temperature where accurate timing of data is crucial.</li></ul><ul id="e679260e-0118-45b5-949c-dcb63a5d943d" class="bulleted-list"><li style="list-style-type:disc"><strong>Challenge</strong>: Ensuring that windowed operations like calculating heart rate per minute accurately reflect the time events occur, not just when they are processed.</li></ul><h3 id="fa17e765-bd04-4d65-8c9b-1f7044d85cfb" class=""><strong>Slide 4: Implementing Custom Timestamp Extractors</strong></h3><ul id="63372190-c160-4fd0-9844-b7a11c9ec6c8" class="bulleted-list"><li style="list-style-type:disc"><strong>Custom Extractor Logic</strong>: Extract timestamps embedded in event payloads, essential for precise event-time processing.</li></ul><ul id="c93c4bdd-6e32-458e-9b9a-fd7ad17438a7" class="bulleted-list"><li style="list-style-type:disc"><strong>Example Implementation</strong>:<ul id="e4276daf-6e45-4ff1-9ab5-d893d6579190" class="bulleted-list"><li style="list-style-type:circle">Check if the event has a valid timestamp; if not, fallback to the latest known partition time.</li></ul><ul id="37d0ffe9-39c3-4469-ba2e-aca846b71fb9" class="bulleted-list"><li style="list-style-type:circle">Use the <code><strong>VitalTimestampExtractor</strong></code> to parse and convert embedded time data from records.</li></ul></li></ul><h3 id="df888374-6ae3-4135-9611-a084c8ebd5f4" class=""><strong>Slide 5: Integrating Timestamp Extractors with Kafka Streams</strong></h3><ul id="fb8ce537-cd0c-4021-b60e-71400bd9749a" class="bulleted-list"><li style="list-style-type:disc"><strong>Setup</strong>: Override the default timestamp extractor by configuring <code><strong>StreamsConfig.DEFAULT_TIMESTAMP_EXTRACTOR_CLASS_CONFIG</strong></code>.</li></ul><ul id="da0c67d9-7589-49e1-ae36-de4fc538917a" class="bulleted-list"><li style="list-style-type:disc"><strong>Application</strong>: Apply the custom timestamp extractor to specific streams to ensure all records are appropriately timestamped for subsequent processing steps.</li></ul><h3 id="e09caa13-19c6-4ec6-bf3a-0a357c48b409" class=""><strong>Slide 6: Practical Use Case - Patient Health Monitoring</strong></h3><ul id="3ff0fa08-b302-4533-8cd5-63174f7e10fb" class="bulleted-list"><li style="list-style-type:disc"><strong>Data Flow</strong>:<ol type="1" id="acfedcc0-67cd-49ee-86b2-caad80c3d7ce" class="numbered-list" start="1"><li>Raw pulse and temperature data arrive at their respective topics, each keyed by patient ID.</li></ol><ol type="1" id="e577d38c-42f2-48ff-945a-c392dc9298c0" class="numbered-list" start="2"><li>Data is timestamped using <code><strong>VitalTimestampExtractor</strong></code> to ensure accurate event times.</li></ol><ol type="1" id="ff18823d-94ff-410e-a05b-88f3b2f062c2" class="numbered-list" start="3"><li>Timestamped data is used in windowed aggregations to compute metrics like average heart rate.</li></ol></li></ul><ul id="e74a4c13-82f2-4797-acb6-f1032a231251" class="bulleted-list"><li style="list-style-type:disc"><strong>Benefits</strong>: Enables precise monitoring and timely health alerts based on real-time data analysis.</li></ul><p id="6778adf1-67d2-4393-b3b2-436fc40de2fb" class="">
+</p><hr id="ba40fc54-d7ae-4350-9494-38ee9cb5fd9b"/><p id="1abbb73c-3310-495f-a42e-44a13b77681d" class="">
+</p><p id="fd9c0b10-5496-4cf5-97cb-9c2c4ff3217a" class=""><strong>Window Streaming</strong></p><p id="a789affa-3767-4fc8-9bb6-8ae1b5bfccae" class="">
+</p><h3 id="dc1520f4-cea5-436d-9e1a-f24d3b05de50" class=""><strong>Slide 1: Introduction to Windowing in Kafka Streams</strong></h3><ul id="9df42c6c-839f-40b2-8f86-d4e99b1f59c9" class="bulleted-list"><li style="list-style-type:disc"><strong>Purpose</strong>: Utilize windowing to aggregate and join records based on specific time intervals.</li></ul><ul id="c6ce3e13-f119-43f7-96ed-cfe6371db183" class="bulleted-list"><li style="list-style-type:disc"><strong>Context</strong>: Example of converting raw pulse data into a heart rate measured in beats per minute (bpm).</li></ul><ul id="6885a80c-7caa-4c04-9b31-bb30912b36fc" class="bulleted-list"><li style="list-style-type:disc"><strong>Key Concept</strong>: Windowing allows for grouping records that are close in time, essential for time-dependent aggregations.</li></ul><h3 id="c6fbb34d-db3b-40c7-abca-9f3ae998d930" class=""><strong>Slide 2: Types of Windows in Kafka Streams</strong></h3><ul id="70da8731-9508-43e7-ac7e-b761d41c9158" class="bulleted-list"><li style="list-style-type:disc"><strong>Tumbling Windows</strong>: Fixed-size, non-overlapping windows that reset at regular intervals. Ideal for cases where each window is an independent time frame.</li></ul><ul id="e3de78e3-6130-46f6-86a5-e651604555a1" class="bulleted-list"><li style="list-style-type:disc"><strong>Hopping Windows</strong>: Fixed-size, overlapping windows that advance at specified intervals. Useful for capturing changes over time with some data redundancy.</li></ul><ul id="2f5dd782-310a-479f-8edf-ba5b0e9578a7" class="bulleted-list"><li style="list-style-type:disc"><strong>Session Windows</strong>: Dynamic windows that group events by activity sessions. Windows extend with each related event until a timeout period.</li></ul><ul id="b4bd386b-b59f-467d-b1b7-709908bd8655" class="bulleted-list"><li style="list-style-type:disc"><strong>Sliding Windows</strong>: Used for join operations, where two records fall into the same window if they meet the timing condition.</li></ul><h3 id="b1867f59-36c7-4809-8fcb-8cbcc4c0ac14" class=""><strong>Slide 3: Challenges with Windowing</strong></h3><ul id="9a9e75c5-80a3-49fa-828f-708a808f52b3" class="bulleted-list"><li style="list-style-type:disc"><strong>Window Alignment</strong>: Tumbling and hopping windows align with the epoch, affecting how records are grouped by time.</li></ul><ul id="82c93adc-afe0-4ec1-acbd-70761a5ae251" class="bulleted-list"><li style="list-style-type:disc"><strong>Data Sparsity and Overlap</strong>: Hopping windows can lead to redundant processing due to overlapping periods.</li></ul><ul id="1f241b6b-16a7-42aa-86eb-00d1d3885c09" class="bulleted-list"><li style="list-style-type:disc"><strong>Session Gaps</strong>: Session windows require careful definition of inactivity gaps to accurately reflect user sessions.</li></ul><h3 id="c69ce69c-9822-434a-b57b-310c9dc1dd65" class=""><strong>Slide 4: Advanced Windowing: Suppressing Intermediate Results</strong></h3><ul id="39c10476-a200-46f0-bc84-e35b038d3b7f" class="bulleted-list"><li style="list-style-type:disc"><strong>Need</strong>: Avoid intermediate result emissions during window processing, which can mislead in cases like heart rate monitoring.</li></ul><ul id="a75b188c-7b8f-450f-b144-cc374c609a69" class="bulleted-list"><li style="list-style-type:disc"><strong>Solution</strong>: Use the <code><strong>suppress</strong></code> operator to emit only the final result of each window, ensuring outputs reflect completed time frames.</li></ul><p id="13a108f5-e2c2-4eff-834d-da9e9df03eb9" class="">
+</p><hr id="e570a77a-6684-4655-b515-89166bac00e9"/><p id="ef468b54-3903-482b-b480-0685639696e4" class="">
+</p><h3 id="a8b012c2-f8be-4dbb-aa68-3cb130d798b0" class=""><strong>Tumbling Window</strong></h3><p id="d0cdde82-b625-4c5e-b104-cd884bcedc14" class="">
+</p><figure id="5620040f-ccbd-4d89-8d25-56ea6c4a0d02" class="image"><a href="Windows%20and%20Time%20ea4e9d14c57b461eaf6fef645a9d7ef8/Untitled%202.png"><img style="width:1272px" src="Windows%20and%20Time%20ea4e9d14c57b461eaf6fef645a9d7ef8/Untitled%202.png"/></a></figure><p id="a530c2f4-2583-49e1-8942-8328e8361692" class="">
+</p><hr id="b2cecea3-64d3-45e7-a4f6-13b15d9f52ad"/><p id="7f853fba-22bc-493e-b229-172c07e3f795" class="">
+</p><h3 id="0a5582a2-a8e7-4e61-b4f2-525b339805cd" class=""><strong>Hopping Wondow</strong></h3><p id="e58bd0e7-04cc-4403-866c-abc8375b8112" class="">
+</p><p id="6aaeb7c8-b487-4766-8535-dd3e2d8a434a" class="">
+</p><figure id="af5a6273-b71a-4ddd-9b05-ecde169f1f77" class="image"><a href="Windows%20and%20Time%20ea4e9d14c57b461eaf6fef645a9d7ef8/Untitled%203.png"><img style="width:1273px" src="Windows%20and%20Time%20ea4e9d14c57b461eaf6fef645a9d7ef8/Untitled%203.png"/></a></figure><p id="f95f6a21-47a5-4682-826a-bc2323ed822a" class="">
+</p><hr id="d9f74684-1db3-47f7-af57-8a06e32bfc3c"/><p id="a2b9d7e2-4d89-4b05-b1c9-3804206b7f37" class="">
+</p><h3 id="39dff0ab-c507-45c8-aea2-5b3b141e397b" class=""><strong>Session windows</strong></h3><p id="55c75202-5520-450f-9855-73a6868519ce" class="">
+</p><figure id="ffd88202-130a-4cdb-88ac-db7b54211cf2" class="image"><a href="Windows%20and%20Time%20ea4e9d14c57b461eaf6fef645a9d7ef8/Untitled%204.png"><img style="width:1316px" src="Windows%20and%20Time%20ea4e9d14c57b461eaf6fef645a9d7ef8/Untitled%204.png"/></a></figure><p id="6a661eca-77aa-44d3-bbe4-d184d52fc796" class="">
+</p><hr id="cb24b001-9cb4-48ae-b92c-01c1dec658b3"/><p id="c0a32e28-af34-4d12-b31e-76c90c884e51" class="">
+</p><h3 id="2dee7441-1a9e-4b39-ade2-e7b5d1ae38e4" class=""><strong><strong>Sliding join windows</strong></strong></h3><p id="8f48aa14-11f8-4c96-af6b-11e172a0a0f2" class="">
+</p><p id="42234010-20c2-4cd9-b368-0883fb4d0c88" class=""><strong></strong><code><strong>JoinWindows joinWindow = JoinWindows<br/> .of(Duration.ofSeconds(5));<br/></strong></code></p><figure id="ee3dc81a-fb44-4ddc-b2f4-f8d205e5a191" class="image"><a href="https://learning.oreilly.com/api/v2/epubs/urn:orm:book:9781492062486/files/assets/1.png"><img style="width:12px" src="https://learning.oreilly.com/api/v2/epubs/urn:orm:book:9781492062486/files/assets/1.png"/></a></figure><p id="a48e6244-dce0-41c1-abed-ead4ac1513b8" class=""><strong>Timestamps must be less than or equal to five seconds apart to fall within the same window.</strong></p><figure id="9dc235de-5d6b-45f4-8df9-3103196ba127" class="image"><a href="https://learning.oreilly.com/api/v2/epubs/urn:orm:book:9781492062486/files/assets/1.png"><img style="width:12px" src="https://learning.oreilly.com/api/v2/epubs/urn:orm:book:9781492062486/files/assets/1.png"/></a></figure><p id="bac752a8-ebdd-4138-9ce5-99cf60d6f78e" class="">
+</p><figure id="08ce5ba9-5226-43f5-a506-fc2fd9c66e7a" class="image"><a href="Windows%20and%20Time%20ea4e9d14c57b461eaf6fef645a9d7ef8/Untitled%205.png"><img style="width:1408px" src="Windows%20and%20Time%20ea4e9d14c57b461eaf6fef645a9d7ef8/Untitled%205.png"/></a></figure><hr id="2e639a3a-e758-4ca9-9834-7e131b7438b4"/><p id="8469b13b-7985-479d-916a-f6dfe5f3de40" class="">
+</p><p id="b06613ff-3bb1-4a63-ad6c-c8406fe22a3a" class="">
+</p><h1 id="e52e7346-af5d-4159-bae5-1b8fa1f54bfc" class="">Emitting Window Results</h1><p id="397ff75a-e42a-49c0-8d8c-3965752f7025" class="">
+</p><h3 id="49ba373f-892b-48c9-b946-8a5fcd4cf70d" class=""><strong>Slide 1: Introduction to Window Emission Complexity</strong></h3><ul id="25955e1c-97cc-4b84-bda3-72bbcf19e884" class="bulleted-list"><li style="list-style-type:disc"><strong>Key Challenges</strong>: Handling unbounded event streams that may arrive out of order or be delayed.</li></ul><ul id="1f6939d9-581c-4f3a-bdda-db07edd628ac" class="bulleted-list"><li style="list-style-type:disc"><strong>Event-Time Semantics</strong>: Events aren&#x27;t always processed in the order they occur, complicating window-based computations.</li></ul><h3 id="78836cee-b9f9-41a4-a751-20a84f7c13fb" class=""><strong>Slide 2: Issues with Window Result Emission</strong></h3><ul id="b944532c-562c-4fe0-baf0-4f5fdbc6063f" class="bulleted-list"><li style="list-style-type:disc"><strong>Out-of-Order Data</strong>: Events may arrive out of timestamp order due to network issues or multiple producers.</li></ul><ul id="b35dae85-1d7c-4917-9d71-ff11b20c1ede" class="bulleted-list"><li style="list-style-type:disc"><strong>Delayed Events</strong>: Late-arriving data can disrupt the accuracy of window computations.</li></ul><ul id="26b655e3-268b-4dec-b72f-cf2a4fb3783b" class="bulleted-list"><li style="list-style-type:disc"><strong>Example Scenario</strong>: Patient vitals monitoring where intermittent networking issues cause delayed data entries.</li></ul><h3 id="329358e7-7745-4769-be43-db1958c19ef4" class=""><strong>Slide 3: Trade-offs in Window Emission</strong></h3><ul id="2cd0b73d-ce5f-422d-bcd4-8b9101155c8e" class="bulleted-list"><li style="list-style-type:disc"><strong>Completeness vs. Latency</strong>: Deciding whether to wait for all data (optimizing for completeness) or emit results as they come (reducing latency).</li></ul><ul id="986e706d-b949-49d9-890d-4b1f296cde0a" class="bulleted-list"><li style="list-style-type:disc"><strong>Impact of Choices</strong>: Affects the timeliness and accuracy of alerts for critical patient conditions.</li></ul><h3 id="17a03731-b557-41aa-a7d8-b59e1556daec" class=""><strong>Slide 4: Managing Delayed and Out-of-Order Data</strong></h3><ul id="3cbd4483-0581-42fe-b086-212d7c4c9746" class="bulleted-list"><li style="list-style-type:disc"><strong>Grace Periods</strong>: Configuring windows to remain open longer to accommodate late data.<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="40c8c7eb-6df2-4d21-abf3-6285f221eea1" class="code"><code class="language-Java" style="white-space:pre-wrap;word-break:break-all">TimeWindows.of(Duration.ofSeconds(60)).grace(Duration.ofSeconds(5))</code></pre></li></ul><ul id="54f89434-34cd-4747-9e6a-1759c35e3ae2" class="bulleted-list"><li style="list-style-type:disc"><strong>Use Case</strong>: Allows heart rate calculations to include data that arrives up to five seconds late.</li></ul><h3 id="1982d089-5e1e-4650-80dd-c5993901ce2a" class=""><strong>Slide 5: Suppressing Intermediate Window Results</strong></h3><ul id="78497352-e072-4fce-9fa3-d18260e7ea2b" class="bulleted-list"><li style="list-style-type:disc"><strong>Continuous Refinement</strong>: By default, Kafka Streams emits updates with each new event, leading to intermediate results.</li></ul><ul id="c93153e1-119d-4278-aed4-6ac0add35f1e" class="bulleted-list"><li style="list-style-type:disc"><strong>Suppression Techniques</strong>: Utilizing the <code><strong>suppress</strong></code> operator to emit only the final result of a window.<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e5d6a638-d1f7-414a-814f-6ead28d90b9b" class="code"><code class="language-Java" style="white-space:pre-wrap;word-break:break-all">
+.suppress(Suppressed.untilWindowCloses(BufferConfig.unbounded().shutDownWhenFull()))
+</code></pre></li></ul><h3 id="7abf79da-2281-4e0f-a6ff-97a60c4f0e51" class=""><strong>Slide 6: Implementing Suppression in Kafka Streams</strong></h3><ul id="f8f208eb-d129-40b2-bf41-ea046c267155" class="bulleted-list"><li style="list-style-type:disc"><strong>Configurations</strong>:<ul id="28aae5a2-bef2-45ce-bbc1-c4a6635f9f8a" class="bulleted-list"><li style="list-style-type:circle"><strong>Buffer Configs</strong>: How suppressed events are stored in memory.</li></ul><ul id="ea01d625-9aa8-44a2-a309-1adb786554ec" class="bulleted-list"><li style="list-style-type:circle"><strong>Buffer Full Strategies</strong>: Handling scenarios when the buffer reaches capacity.</li></ul></li></ul><ul id="b0021323-b6d5-44ae-8965-3923e181e2cc" class="bulleted-list"><li style="list-style-type:disc"><strong>Strategic Choices</strong>:<ul id="1512c3c1-1051-4277-b2e2-2665509ea80f" class="bulleted-list"><li style="list-style-type:circle">Use <code><strong>Suppressed.untilWindowCloses</strong></code> for emitting final results only.</li></ul><ul id="3d4c2b7c-7d1a-44c4-9640-14bb0a729c6b" class="bulleted-list"><li style="list-style-type:circle">Configure <code><strong>BufferConfig.unbounded()</strong></code> to ensure all events are captured.</li></ul></li></ul><h3 id="a13affd8-ff74-4361-abf1-689b67aaec14" class=""><strong>Slide 7: Practical Application in Patient Monitoring</strong></h3><ul id="6f461db3-0ee2-4a30-8040-11a1d3c2260e" class="bulleted-list"><li style="list-style-type:disc"><strong>Final Implementation</strong>: Suppressing intermediate results to ensure only accurate, complete heart rate calculations are reported.</li></ul><ul id="67e80d1f-c141-4407-89ec-bca7d8976026" class="bulleted-list"><li style="list-style-type:disc"><strong>System Behavior</strong>:<ul id="176f923c-afaf-42bb-9259-d343d905ef46" class="bulleted-list"><li style="list-style-type:circle">If the buffer is full, the system shuts down to prevent inaccurate data emission.</li></ul><ul id="62546883-c0af-4457-b9b4-f3837481b7d1" class="bulleted-list"><li style="list-style-type:circle">Ensures patient safety by providing reliable data for critical health decisions.</li></ul></li></ul><p id="2e774f27-1240-4fe3-9d00-760b856060c1" class="">
+</p><hr id="a92e48ba-924f-4464-b5c1-75309b68aa21"/><p id="25cb968d-3404-47b2-8be7-b8cb7f6a88e2" class="">
+</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

@@ -1,0 +1,734 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Stateful Processing</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="2f402ce8-c173-4f76-ab45-f485ac9feb3a" class="page sans"><header><h1 class="page-title">Stateful Processing</h1><p class="page-description"></p></header><div class="page-body"><hr id="681c0153-5e54-49d2-ad19-64f60941c719"/><p id="a55625a7-f8ec-4935-a456-a84d1ac88448" class="">
+</p><p id="49a67ae4-08c0-4387-962e-b8d9d9a16467" class="">
+</p><h3 id="c7bef3fe-3f29-4323-8bbf-aaae86b668cc" class=""><strong>Slide 1: Overview of Stateful Stream Processing</strong></h3><ul id="121f3011-c390-434c-9f27-4ac325b3418c" class="bulleted-list"><li style="list-style-type:disc">Transition from stateless to stateful processing captures and uses data over time.</li></ul><ul id="e3e1676a-3085-44fe-a87d-288ead5c2d22" class="bulleted-list"><li style="list-style-type:disc">Enables complex operations like joining, aggregating, and enriching data.</li></ul><h3 id="a12416c2-2b30-4b99-b264-a73f945d332d" class=""><strong>Slide 2: Benefits of Stateful Processing</strong></h3><ul id="53b1fa6c-bd11-4d20-9ed9-86ecf983bd23" class="bulleted-list"><li style="list-style-type:disc">Recognizes patterns and behaviors across events.</li></ul><ul id="f6d7a397-89b0-402e-ad97-c3da5fb65de7" class="bulleted-list"><li style="list-style-type:disc">Facilitates sophisticated data enrichment and aggregation.</li></ul><ul id="e5154182-0c35-433d-9a40-ec72eb553a9c" class="bulleted-list"><li style="list-style-type:disc">Creates real-time, point-in-time snapshots (tables) for querying.</li></ul><h3 id="a6ad38d3-c987-4669-b7dc-6d1ea4644b54" class=""><strong>Slide 3: Stateful Operators and Their Applications</strong></h3><ul id="8d40f589-199b-4a65-b365-66cf4fc29980" class="bulleted-list"><li style="list-style-type:disc">Operators handle data with awareness of past events.</li></ul><ul id="c88a062e-fab4-4843-9dfc-3b147bba879c" class="bulleted-list"><li style="list-style-type:disc">Key operators: join, aggregate, and window for in-depth data analysis.</li></ul><h3 id="7fe5f36f-02dd-4357-bac4-997a3920438b" class=""><strong>Slide 4: State Management with KTable and GlobalKTable</strong></h3><ul id="b66bdefd-2a5d-4729-8fbe-74c4f353b0a6" class="bulleted-list"><li style="list-style-type:disc"><strong>KTable</strong>: Manages local, partitioned state for efficient processing.</li></ul><ul id="5f200b95-a23c-4ae0-914f-5a3f39d6ff87" class="bulleted-list"><li style="list-style-type:disc"><strong>GlobalKTable</strong>: Maintains a full copy of the dataset for global access in joins.</li></ul><h3 id="d850a8e0-9a03-41c2-b0bd-aa08f97712cc" class=""><strong>Slide 5: Practical Applications of Stateful Processing</strong></h3><ul id="f29bebee-e0d6-4d17-9eeb-81f8164477df" class="bulleted-list"><li style="list-style-type:disc">Supports interactive queries for dynamic, real-time data insights.</li></ul><ul id="3322294b-5b19-4e31-a169-5e9efa049ee5" class="bulleted-list"><li style="list-style-type:disc">Enables the development of low-latency, event-driven microservices.</li></ul><ul id="f09d0772-6787-4f76-bdfc-62fb4f212691" class="bulleted-list"><li style="list-style-type:disc">Example use case: Analyzing shopping cart abandonment to improve sales strategies.</li></ul><p id="2255d416-2398-4384-a349-de264f966e31" class="">
+</p><hr id="4645308d-231d-4602-b894-1ea4c162031c"/><p id="02903186-241d-48e5-9378-2fce447b6061" class="">
+</p><table id="783de35a-0ff7-43c7-8e9e-492856f7e5f7" class="simple-table"><tbody><tr id="64227e03-9f9c-4c6e-b345-d7a9b6475b63"><td id="V|Pz" class=""><strong>Use case</strong></td><td id="lvGo" class=""><strong>Purpose</strong></td><td id="&lt;i^B" class=""><strong>Operators</strong></td></tr><tr id="5634bcf3-ff44-4885-9e39-8b53db62cdb1"><td id="V|Pz" class=""><strong>Joining data</strong></td><td id="lvGo" class=""><strong>Enrich an event with additional information or context that was captured in a separate stream or table</strong></td><td id="&lt;i^B" class=""><strong>• </strong><code><strong>join</strong></code><strong> (inner join)<br/>• <br/></strong><code><strong>leftJoin</strong></code><strong><br/>• <br/></strong><code><strong>outerJoin</strong></code></td></tr><tr id="10015678-5f23-4443-9045-5bfb795be2bc"><td id="V|Pz" class=""><strong>Aggregating data</strong></td><td id="lvGo" class=""><strong>Compute a continuously updating mathematical or combinatorial transformation of related events</strong></td><td id="&lt;i^B" class=""><strong>• </strong><code><strong>aggregate</strong></code><strong><br/>• <br/></strong><code><strong>count</strong></code><strong><br/>• <br/></strong><code><strong>reduce</strong></code></td></tr><tr id="28625d2d-df77-43fc-8a04-7396ca91d260"><td id="V|Pz" class=""><strong>Windowing data</strong></td><td id="lvGo" class=""><strong>Group events that have close temporal proximity</strong></td><td id="&lt;i^B" class=""><strong>• </strong><code><strong>windowedBy</strong></code></td></tr></tbody></table><p id="9794ed47-67d4-4c1e-a2a4-c4676a53dcc6" class="">
+</p><hr id="06cb0641-d02d-4eca-a2d1-4b0fd7c47434"/><p id="0c8f1b6b-95e7-47e0-8789-afe644318c50" class="">
+</p><blockquote id="b78df64f-be6a-43d9-beda-cc6937eb0fa2" class=""><strong>Perhaps the most important place to begin is by looking at how state is stored and queried in Kafka Streams.</strong></blockquote><p id="a516f0f5-ba7a-4306-b9a1-77281ad5f38f" class="">
+</p><hr id="95b6a736-176b-4408-b8fe-d15f414a4ce9"/><p id="0c540737-abc2-4861-9e32-8e9ac8336169" class="">
+</p><h1 id="57211d66-8c21-4315-a303-66241531a5ab" class="">State Stores</h1><p id="b0ba0c24-e6fa-4b21-86be-ef1841b5bb6d" class="">
+</p><h3 id="e5d1f29f-c9af-4862-ad03-ec85d266d56b" class=""><strong>Slide 1: Introduction to State Stores</strong></h3><ul id="a590676f-e6ad-437f-8809-b661289c6612" class="bulleted-list"><li style="list-style-type:disc"><strong>Purpose</strong>: Enable memory of past events for stateful operations like counts and aggregates.</li></ul><ul id="67fb4a46-0f0b-4d6d-853c-af6e7e7e7379" class="bulleted-list"><li style="list-style-type:disc"><strong>Necessity</strong>: Essential for operations that require historical context and continuity in data processing.</li></ul><h3 id="33e8ccf6-baba-4476-8167-eabe861ab9eb" class=""><strong>Slide 2: Characteristics of State Stores</strong></h3><ul id="09c92a93-0546-45e4-b415-044655a24115" class="bulleted-list"><li style="list-style-type:disc"><strong>Embedded</strong>: Integrated directly within Kafka Streams tasks, avoiding latency and concurrency issues associated with external stores.</li></ul><ul id="9796803b-0723-4e39-81d0-18fe4e0ffa61" class="bulleted-list"><li style="list-style-type:disc"><strong>Fault Tolerance</strong>: Backed by changelog topics in Kafka to ensure data can be restored after failures.</li></ul><ul id="7c63a9a9-4a18-48f7-9189-ce7cf9ce85dd" class="bulleted-list"><li style="list-style-type:disc"><strong>Access Modes</strong>: Supports both read and write operations, with dedicated read-only access for safe external queries.</li></ul><h3 id="c0e7def9-d500-433d-b005-91e791980994" class=""><strong>Slide 3: RocksDB and Performance</strong></h3><ul id="16e2b026-1467-4ee6-80de-2c8c84b29014" class="bulleted-list"><li style="list-style-type:disc"><strong>Implementation</strong>: Utilizes RocksDB, an optimized, embedded key-value store for high performance.</li></ul><ul id="d34e86cb-6362-4e02-b5bb-fb08841bbfc8" class="bulleted-list"><li style="list-style-type:disc"><strong>Advantages</strong>: Fast read/write operations and flexible byte-stream storage compatible with Kafka’s serialization.</li></ul><h3 id="82ba6e08-311f-4507-95fc-6f12ad68f8d7" class=""><strong>Slide 4: Persistent vs. In-Memory State Stores</strong></h3><ul id="c1b83ba9-88b4-4c24-9f24-a57b918dc700" class="bulleted-list"><li style="list-style-type:disc"><strong>Persistent Stores</strong>: Data is written to disk asynchronously, allowing recovery of state without full replay of events.</li></ul><ul id="dc1cb34a-fa95-4391-b6cd-7d09db5a5a3d" class="bulleted-list"><li style="list-style-type:disc"><strong>In-Memory Stores</strong>: Stores data only in RAM for faster access but slower recovery; used when performance is critical and recovery delays can be mitigated.</li></ul><h3 id="e7e441db-f803-4003-bcbf-222d7c73c8b6" class=""><strong>Slide 5: Configuring and Using State Stores</strong></h3><ul id="35b37265-0251-44b8-8520-46a3227adfe6" class="bulleted-list"><li style="list-style-type:disc"><strong>Configuration</strong>: Can be customized for throughput, recovery times, or simplicity; Kafka Streams often selects sensible defaults.</li></ul><ul id="29a7fad3-95ea-4a78-80b2-e3202edc16de" class="bulleted-list"><li style="list-style-type:disc"><strong>Practical Tip</strong>: Prefer persistent stores for robustness and consider in-memory stores when profiling indicates significant performance benefits.</li></ul><p id="d6a1c76a-8fe0-43aa-8fe3-d3aac5103720" class="">
+</p><hr id="42787441-2bc8-4428-944b-e9d46d324cab"/><p id="881e6c03-cb80-448a-82f6-1aba7ead9c1c" class="">
+</p><h1 id="55e8e29b-c742-4955-bd55-46da513456fb" class=""><strong>Video Game Leaderboard</strong></h1><p id="cb71e1c7-9835-493e-ad9b-4acffa2cb7c6" class="">
+</p><h3 id="bbd29a38-17d0-4636-a5d4-c2a3b5538837" class=""><strong>Overview</strong></h3><ul id="ca293673-db36-4615-90b7-cac3d4e654ad" class="bulleted-list"><li style="list-style-type:disc"><strong>Context</strong>: Using Kafka Streams for real-time, low-latency processing in the video game industry.</li></ul><ul id="8418e9a4-0cb8-44e8-ad81-8585a94567d2" class="bulleted-list"><li style="list-style-type:disc"><strong>Application</strong>: Building a leaderboard that updates in real-time, a common feature in competitive gaming platforms like those managed by Activision.</li></ul><p id="12f3eec2-95b4-490d-be77-918f51814b63" class="">
+</p><h3 id="dd911b08-7b53-4a2e-a2aa-a3bb2076dbde" class=""><strong>Practical Application</strong></h3><p id="a6ae84ab-2e7c-4a52-8c27-cbb305752ca5" class="">This project showcases how to implement complex stream processing operations such as joins and aggregations in Kafka Streams, addressing advanced business problems like real-time leaderboards in video gaming.</p><p id="6ba9386d-bad4-4069-96ab-4d4ee8a80c74" class="">
+</p><p id="e0e709b4-5e0d-4f97-a384-368b79ae10f2" class="">
+</p><figure id="966c60e5-9bc9-4cb1-9b71-08391fc11fc9" class="image"><a href="Stateful%20Processing%202f402ce8c1734f76ab45f485ac9feb3a/Untitled.png"><img style="width:969px" src="Stateful%20Processing%202f402ce8c1734f76ab45f485ac9feb3a/Untitled.png"/></a></figure><hr id="aefb7c8b-6be3-4a4c-a6a4-6f6e7319315b"/><p id="8a204807-8e82-45b7-acdc-d24c8ab6436a" class="">1</p><p id="f48be252-70f4-41d3-bdb4-2593d5ee2bdd" class="">Our Kafka cluster contains three topics:</p><p id="c4430f20-70e8-4507-962b-298064f12bc9" class="">The score-events topic contains game scores. The records are unkeyed and are therefore distributed in a round-robin fashion across the topic’s partitions.</p><p id="bc8fa85d-5d0e-4087-af44-198049b54329" class="">The players topic contains player profiles. Each record is keyed by a player ID.</p><p id="58012e6e-e239-49a3-aebb-c6354b0a76ea" class="">The products topic contains product information for various video games. Each record is keyed by a product ID.</p><p id="cb8d39d7-3be4-4bab-8813-a7a3d132ed36" class="">2<br/>We need to enrich our score events data with detailed player information. We can accomplish this using a join.<br/></p><p id="71674050-060e-432e-adfe-fe5c5018022b" class="">3<br/>Once we’ve enriched the score-events data with player data, we need to add detailed product information to the resulting stream. This can also be accomplished using a join.<br/></p><p id="ed5f02e9-9d71-4613-9222-9635e1143c7b" class="">4<br/>Since grouping data is a prerequisite for aggregating, we need to group the enriched stream.<br/></p><p id="45433923-726f-4faa-8fc4-414d0e74bd8b" class="">5<br/>We need to calculate the top three high scores for each game. We can use Kafka Streams’ aggregation operators for this purpose.<br/></p><p id="d0e128e7-fb7b-4916-ab54-a53ccb1a3553" class="">6<br/>Finally, we need to expose the high scores for each game externally. We will accomplish this by building a RESTful microservice using the interactive queries feature in Kafka Streams.<br/></p><p id="456b1474-552a-4d51-b1ea-7a49b2838a44" class="">
+</p><hr id="88648723-cc53-49b1-b74c-f5ec3d4f04d5"/><p id="552fc0fd-8f47-40f6-926d-44d9ac5c7a56" class="">
+</p><p id="c1d4a56d-7174-45bf-b543-c7cc790e57e5" class=""><strong>Adding the Source Processors</strong></p><p id="0385375b-3b93-49f2-a2ee-ba89ecfd2009" class="">
+</p><table id="8af1f1bc-6e29-4ab4-b88a-c8b4a6c3da6e" class="simple-table"><tbody><tr id="a398c06c-08cc-4f4e-9e7d-707fb19f5ddc"><td id="~lxo" class=""><strong>Kafka topic</strong></td><td id="k}Zd" class=""><strong>Abstraction</strong></td></tr><tr id="f3f4f21c-d309-43e6-af0e-5dc584b9118c"><td id="~lxo" class=""><code><strong>score-events</strong></code></td><td id="k}Zd" class=""><strong>???</strong></td></tr><tr id="5f138ad8-2538-4611-a5a4-d6f4da49d2cd"><td id="~lxo" class=""><code><strong>players</strong></code></td><td id="k}Zd" class=""><strong>???</strong></td></tr><tr id="97a8fd8e-bbaa-4c77-b0cc-f96d18d91def"><td id="~lxo" class=""><code><strong>products</strong></code></td><td id="k}Zd" class=""><strong>???</strong></td></tr></tbody></table><p id="67cb0302-3f00-423d-8746-56be18da2cc3" class="">
+</p><p id="b99a79df-edc8-4414-86d5-8547541f8f48" class="">
+</p><p id="94787cef-10cf-41ad-bdb8-b37cca46d0a8" class="">our <code>score-events</code> topic contains raw score events, which are unkeyed (and therefore, distributed in a round-robin fashion) in an uncompacted topic. Since tables are key-based, this is a strong indication that we should be using a <code>KStream</code> for our unkeyed <code>score-events</code> topic</p><p id="97742fcf-23be-4b24-8dad-fabde6592d44" class="">
+</p><table id="9228ea76-d58d-4f23-9f9f-008a48d72598" class="simple-table"><tbody><tr id="333ef7d7-253c-4e4d-92a3-ab7b97e82161"><td id="bBjh" class=""><strong>Kafka topic</strong></td><td id="JroV" class=""><strong>Abstraction</strong></td></tr><tr id="03ea25e2-fd8d-464c-a384-1d4847a1af67"><td id="bBjh" class=""><code><strong>score-events</strong></code></td><td id="JroV" class=""><code><strong>KStream</strong></code></td></tr><tr id="0e44598e-b672-42f2-9407-485427895f52"><td id="bBjh" class=""><code><strong>players</strong></code></td><td id="JroV" class=""><strong>???</strong></td></tr><tr id="32a87614-5dfa-4170-9d96-709000605345"><td id="bBjh" class=""><code><strong>products</strong></code></td><td id="JroV" class=""><strong>???</strong></td></tr></tbody></table><p id="d8d8541e-5d75-434e-8842-4d741f0aa2b9" class="">
+</p><p id="dce9f896-b132-4c90-b4d4-82fcd9ef6a3d" class="">
+</p><figure id="96968818-b735-4df6-9508-21030f4c605d" class="image" style="text-align:left"><a href="Stateful%20Processing%202f402ce8c1734f76ab45f485ac9feb3a/Untitled%201.png"><img style="width:336px" src="Stateful%20Processing%202f402ce8c1734f76ab45f485ac9feb3a/Untitled%201.png"/></a></figure><p id="ea60e4f8-c62d-4248-8a44-4691f9ae05b3" class="">
+</p><p id="f2bc8a03-72f1-44d2-8087-405e7a4cfc10" class="">Our updated abstraction table now looks like this:</p><table id="229cc7c2-a00a-482f-8270-dc5cbe1e85c9" class="simple-table"><tbody><tr id="f911d761-0531-4d2a-a7a7-2fdf0192a911"><td id="FFAJ" class=""><strong>Kafka topic</strong></td><td id="m:H;" class=""><strong>Abstraction</strong></td></tr><tr id="2ba11690-d55e-4488-b82f-ad9da628a29f"><td id="FFAJ" class=""><code><strong>score-events</strong></code></td><td id="m:H;" class=""><code><strong>KStream</strong></code></td></tr><tr id="207d5b1c-383f-4e7b-aa55-50b260a766d3"><td id="FFAJ" class=""><code><strong>players</strong></code></td><td id="m:H;" class=""><code><strong>KTable</strong></code></td></tr><tr id="0e19e050-def4-4b0a-b36e-c7b2c234eb90"><td id="FFAJ" class=""><code><strong>products</strong></code></td><td id="m:H;" class=""><strong>???</strong></td></tr></tbody></table><p id="a4684508-819e-4267-a609-02a1b4528170" class="">
+</p><figure id="2973a5e3-cd5c-4295-952b-c12880cbe6cb" class="image" style="text-align:left"><a href="Stateful%20Processing%202f402ce8c1734f76ab45f485ac9feb3a/Untitled%202.png"><img style="width:336px" src="Stateful%20Processing%202f402ce8c1734f76ab45f485ac9feb3a/Untitled%202.png"/></a></figure><p id="05b56679-4c39-49ab-96a8-83c57f8d3345" class="">
+</p><table id="e318efcc-260c-4a69-b477-22190c22057f" class="simple-table"><tbody><tr id="50ad76b2-9524-40e7-b145-da078cc7400a"><td id="fikY" class=""><strong>Kafka topic</strong></td><td id="dmeO" class=""><strong>Abstraction</strong></td></tr><tr id="a5c0fb5e-d807-43f8-827c-2eb5743b38d4"><td id="fikY" class=""><code><strong>score-events</strong></code></td><td id="dmeO" class=""><code><strong>KStream</strong></code></td></tr><tr id="172dd7d7-f47e-422d-940b-63aa9b3eab59"><td id="fikY" class=""><code><strong>players</strong></code></td><td id="dmeO" class=""><code><strong>KTable</strong></code></td></tr><tr id="36c9c87d-7b27-47c8-b0fc-64fdde9724ce"><td id="fikY" class=""><code><strong>products</strong></code></td><td id="dmeO" class=""><code><strong>GlobalKTable</strong></code></td></tr></tbody></table><p id="1e78e597-3005-495a-8729-ce752e955b3e" class="">
+</p><hr id="9074b57c-2749-4aab-b41b-1fe65565bcea"/><p id="2619ef61-29ee-4f46-9dab-24b71e6f47bf" class="">
+</p><p id="f7a27f27-8628-4c05-9d2c-1eb1747c773b" class=""><strong>Joins</strong></p><p id="25eb904d-97a1-48c0-8a3f-5cd3cccc22bc" class="">
+</p><p id="a90a42e7-99c1-4703-ab64-99fa322bb80f" class="">
+</p><figure id="c10d628b-f6e9-4f1e-8ea1-c937c65a128e" class="image"><a href="Stateful%20Processing%202f402ce8c1734f76ab45f485ac9feb3a/Untitled%203.png"><img style="width:827px" src="Stateful%20Processing%202f402ce8c1734f76ab45f485ac9feb3a/Untitled%203.png"/></a></figure><p id="3901ed4a-a46f-4d19-a6c1-b5cbcecd6482" class="">
+</p><hr id="858e1503-f5de-4435-bf89-736f60830026"/><p id="872a4db4-eeb8-47fb-bec7-59a042ace721" class="">
+</p><p id="cfc6a529-1b07-46c1-b5ba-50693023e7ed" class=""><strong><strong>Join Operators</strong></strong></p><p id="74dc105c-61b4-4d32-a201-71993295793e" class="">
+</p><table id="0edfd32a-569b-49f4-b28e-790cd355579a" class="simple-table"><tbody><tr id="3be31bd2-23ae-4dc0-ba16-aac7898984b2"><td id="KF[=" class="" style="width:158px"><strong>Operator</strong></td><td id=";vSn" class="" style="width:345px"><strong>Description</strong></td></tr><tr id="01fc8d9a-e007-4795-83b0-a5fa87bf60ff"><td id="KF[=" class="" style="width:158px"><code><strong>join</strong></code></td><td id=";vSn" class="" style="width:345px"><strong>Inner join. The join is triggered when the input records on both sides of the join share the same key.</strong></td></tr><tr id="3b27a6c2-59f0-45fa-97b5-3b4f41ec6896"><td id="KF[=" class="" style="width:158px"><code><strong>leftJoin</strong></code></td><td id=";vSn" class="" style="width:345px"><strong>Left join. The join semantics are different depending on the type of join:<br/>• For stream-table joins: a join is triggered when a record on the <br/></strong><em><strong>left side</strong></em><strong> of the join is received. If there is no record with the same key on the right side of the join, then the right value is set to null.<br/>• For stream-stream and table-table joins: same semantics as a stream-stream left join, except an input on the right side of the join can also trigger a lookup. If the right side triggers the join and there is no matching key on the left side, then the join will not produce a result.<br/></strong></td></tr><tr id="a75554d5-c8ef-4436-bc02-0d2c4936cff4"><td id="KF[=" class="" style="width:158px"><code><strong>outerJoin</strong></code></td><td id=";vSn" class="" style="width:345px"><strong>Outer join. The join is triggered when a record on </strong><em><strong>either side</strong></em><strong> of the join is received. If there is no matching record with the same key on the opposite side of the join, then the corresponding value is set to null.</strong></td></tr></tbody></table><p id="05bf8ddf-3424-40f5-a3ea-134331085c73" class="">
+</p><hr id="eac678fe-542d-420e-a4fb-2b5bd3954823"/><p id="a90262c2-d7d1-4399-894f-3c14a441dc21" class="">
+</p><p id="97cd33c7-580f-4d2a-ab25-a27f03478b36" class=""><strong><strong>Join Types</strong></strong></p><p id="19a74358-9a09-4103-bae7-c1ac3f7a17b7" class="">
+</p><table id="52b5e8fc-2672-4867-92ea-4c9d841a52f5" class="simple-table"><tbody><tr id="d83f9ae8-90c2-4126-bcc4-53a71b3ae44c"><td id="LK@:" class=""><strong>Type</strong></td><td id="VaIa" class=""><strong>Windowed</strong></td><td id="[OQD" class=""><strong>Operators</strong></td><td id="h|_g" class=""><strong>Co-partitioning required</strong></td></tr><tr id="2f45f702-2f8d-4600-93f8-b74892b3a8df"><td id="LK@:" class=""><code><strong>KStream-KStream</strong></code></td><td id="VaIa" class=""><strong>Yes</strong></td><td id="[OQD" class=""><strong>• </strong><code><strong>join</strong></code><strong><br/>• <br/></strong><code><strong>leftJoin</strong></code><strong><br/>• <br/></strong><code><strong>outerJoin</strong></code></td><td id="h|_g" class=""><strong>Yes</strong></td></tr><tr id="e9384cee-5234-486c-bbdf-ab2b45e04eb0"><td id="LK@:" class=""><code><strong>KTable-KTable</strong></code></td><td id="VaIa" class=""><strong>No</strong></td><td id="[OQD" class=""><strong>• </strong><code><strong>join</strong></code><strong><br/>• <br/></strong><code><strong>leftJoin</strong></code><strong><br/>• <br/></strong><code><strong>outerJoin</strong></code></td><td id="h|_g" class=""><strong>Yes</strong></td></tr><tr id="439a54e1-ea37-41db-952f-c1df92b20edf"><td id="LK@:" class=""><code><strong>KStream-KTable</strong></code></td><td id="VaIa" class=""><strong>No</strong></td><td id="[OQD" class=""><strong>• </strong><code><strong>join</strong></code><strong><br/>• <br/></strong><code><strong>leftJoin</strong></code></td><td id="h|_g" class=""><strong>Yes</strong></td></tr><tr id="e1dc6e65-fc12-4f27-9bfb-f6ff39d9ad6d"><td id="LK@:" class=""><code><strong>KStream-GlobalKTable</strong></code></td><td id="VaIa" class=""><strong>No</strong></td><td id="[OQD" class=""><strong>• </strong><code><strong>join</strong></code><strong><br/>• <br/></strong><code><strong>leftJoin</strong></code></td><td id="h|_g" class=""><strong>No</strong></td></tr></tbody></table><p id="b7fecf06-1981-4c94-8c04-14cae17970f1" class="">
+</p><hr id="d84ae78f-ac9d-447b-bb4f-2e657024a2a2"/><p id="ff998a0b-7e5f-48d3-8c9b-8deb0a959a16" class="">
+</p><p id="76095a96-2ea9-4942-a86e-fc97bb23348e" class=""><strong><strong>Co-Partitioning</strong></strong></p><p id="8be0d5cb-b98e-4192-8173-95317e0fd8c0" class="">
+</p><p id="fa113053-8e62-4166-8d3d-58e41954db02" class=""> If we want to join related records but these records aren’t always processed by the same task, then we have an observability problem</p><p id="40f933d4-51c9-4378-900d-5ea1b9f26857" class="">
+</p><figure id="7d4df133-ab9f-4ff5-9e94-c691d7736185" class="image" style="text-align:left"><a href="Stateful%20Processing%202f402ce8c1734f76ab45f485ac9feb3a/Untitled%204.png"><img style="width:480px" src="Stateful%20Processing%202f402ce8c1734f76ab45f485ac9feb3a/Untitled%204.png"/></a></figure><p id="deb7bf9c-fd2e-41d2-9e8e-4221ae090fd8" class="">
+</p><p id="5620c2fb-9003-481e-b67d-a9aa33280c64" class="">
+</p><p id="474e760e-8282-451a-8f55-3484ff05934e" class="">Rekeying messages ensures related records appear on the same partition</p><p id="54add8b5-569b-4851-b46d-b1cbe9560745" class="">
+</p><figure id="67ac8892-b999-4458-811a-4d5c4e2ffb54" class="image" style="text-align:left"><a href="Stateful%20Processing%202f402ce8c1734f76ab45f485ac9feb3a/Untitled%205.png"><img style="width:604px" src="Stateful%20Processing%202f402ce8c1734f76ab45f485ac9feb3a/Untitled%205.png"/></a></figure><p id="7843a658-f5ea-4be7-b13f-0f37eb653de2" class="">
+</p><p id="966e63fa-ba7e-4392-82bc-813e4401434a" class="">
+</p><hr id="59a241b2-8949-4fe0-90a1-e6cdc58de11c"/><p id="36b26c53-66ad-4592-ad24-3926fd4096e6" class="">
+</p><p id="ecd436a0-dee3-41ac-a841-d83a8bffa917" class="">
+</p><p id="fd13261b-80b6-4cd0-b533-82178a6a7298" class=""><strong><strong>Value Joiners</strong></strong></p><p id="d99d5769-141b-43ea-8ad3-23c6835937ca" class="">
+</p><p id="b32628eb-1e48-430a-8d55-43611a6ea070" class="">However, in Kafka Streams, we need to use a <code>ValueJoiner</code> to specify how different records should be combined. A <code>ValueJoiner</code> simply takes each record that is involved in the join, and produces a new, combined record. Looking at the first join, in which we need to join the <code>score-events</code> <code>KStream</code> with the <code>players</code> <code>KTable</code>, the behavior of the value joiner could be expressed using the following pseudocode:</p><p id="f56cc616-8355-448a-b7d7-532580d93277" class=""><code><strong>(scoreEvent, player) -&gt; combine(scoreEvent, player);</strong></code></p><p id="b6a1a25d-cf38-4f02-8c87-74abbaf858d0" class="">
+</p><hr id="524166af-484c-4211-9284-8bdcf7963305"/><p id="5ff41293-ba42-4287-aeec-d5ea96c797d9" class="">
+</p><ul id="608e0ada-33fc-4d10-812e-d8fbbebaeccf" class="bulleted-list"><li style="list-style-type:disc"><strong><strong>KStream to KTable Join (players Join)</strong></strong></li></ul><ul id="8642aace-dde2-46bf-b703-6f83921bcdcb" class="bulleted-list"><li style="list-style-type:disc"><strong>KStream to GlobalKTable Join (products Join)</strong></li></ul><p id="5922b6c7-60d6-48ac-9a7b-0ca89f256d76" class="">
+</p><hr id="29ca2df3-113c-45b3-93b1-de14b52ae3b1"/><p id="8506518c-1a3b-4d75-8daa-7ae8d9ce8758" class="">
+</p><p id="6e6390a2-2fd9-4af4-b9ac-5685c376ab63" class=""><strong>Grouping Streams</strong></p><p id="ffac09cb-fa88-468d-9770-1c3320a195d1" class="">There are two operators that can be used for grouping a <code>KStream</code>:</p><p id="52a3ec06-c50b-433b-b185-cbe13ba9c3f3" class=""><code><strong>groupBy<br/>groupByKey<br/></strong></code></p><p id="6fbc7c5a-3aa5-481c-bd89-b66ebf201b76" class="">
+</p><hr id="d53bbfb1-711b-4555-9a20-3870b6f2b1b5"/><p id="318c58fa-9fd2-47fa-9efa-e1e92e31a111" class="">
+</p><h1 id="d7e3e674-b379-4c46-b469-7da6317423ba" class=""><strong>Interactive Queries</strong></h1><p id="bbfcd4e0-6c4b-49a1-88cc-86a31c64afb6" class="">
+</p><h3 id="a73f250c-d692-4c2f-965e-e71a28a0f932" class=""><strong>Slide 1: Introduction to Stateful Processing with Kafka Streams</strong></h3><ul id="38ad1404-546e-49be-8f95-a17c5eb3ffb1" class="bulleted-list"><li style="list-style-type:disc"><strong>Context</strong>: Using Kafka Streams for real-time leaderboard processing in video games.</li></ul><ul id="9264688f-8cd9-400b-8646-f38e4ee46a93" class="bulleted-list"><li style="list-style-type:disc"><strong>Need for Low Latency</strong>: Critical for gaming applications like those developed by Activision for instant feedback and dynamic updates.</li></ul><h3 id="e4c730f4-b19e-4a7a-9011-cc3113e58c40" class=""><strong>Slide 2: Materializing State for Interactive Queries</strong></h3><ul id="56a6a710-49c3-45e8-9001-cb5eb59c205b" class="bulleted-list"><li style="list-style-type:disc"><strong>Materialized Stores</strong>: Enhance Kafka Streams by allowing state to be persisted and queried.</li></ul><ul id="8a55ec34-71d9-493a-92a7-bf05fa72c4a8" class="bulleted-list"><li style="list-style-type:disc"><strong>Purpose</strong>: Enable read-only access to state for external queries, crucial for building event-driven microservices.</li></ul><ul id="8886ad60-8d5b-4fe6-aa9a-4fe76e69c978" class="bulleted-list"><li style="list-style-type:disc"><strong>Example</strong>: Aggregating high scores in a leaderboard where each score update adjusts the player&#x27;s standing.</li></ul><h3 id="79a15a92-8306-4372-842f-ffc9d96ef30a" class=""><strong>Slide 3: Configuring Materialized State Stores</strong></h3><ul id="4da45421-0a3d-49f1-9e09-e0290056ab8d" class="bulleted-list"><li style="list-style-type:disc"><strong>Using </strong><code><strong>Materialized</strong></code><strong> Class</strong>: Configure state stores to be explicitly named and queryable.</li></ul><ul id="e3e8cd0a-1561-4c3e-8332-c4979693cd68" class="bulleted-list"><li style="list-style-type:disc"><strong>Code Example</strong>:<ul id="674d9f99-6ea0-4794-9010-fa97a7d9f364" class="bulleted-list"><li style="list-style-type:circle">Define a KTable with aggregation using <code><strong>Materialized.as(&quot;leader-boards&quot;)</strong></code> to create a persistent key-value store.</li></ul><ul id="d22e3fef-b4b2-407f-a526-1b7fea976f4b" class="bulleted-list"><li style="list-style-type:circle">Configure serialization with <code><strong>withKeySerde(Serdes.String())</strong></code> and <code><strong>withValueSerde(JsonSerdes.HighScores())</strong></code>.</li></ul></li></ul><h3 id="9046d16f-9e16-4b8f-a58f-e22035f52a5d" class=""><strong>Slide 4: Accessing and Querying State Stores</strong></h3><ul id="bd910b7a-982c-4378-b32c-adb6fd8a1b06" class="bulleted-list"><li style="list-style-type:disc"><strong>Read-Only Access</strong>: Retrieving state in a safe, read-only mode to prevent modifications outside of stream processing.</li></ul><ul id="307b3891-d445-4c9c-974e-3a056e81db15" class="bulleted-list"><li style="list-style-type:disc"><strong>Queryable Types</strong>: Support for various store types including key-value, windowed, and session stores.</li></ul><ul id="82555409-8a53-493d-a9fe-3bd277b76ef0" class="bulleted-list"><li style="list-style-type:disc"><strong>Retrieving Stores</strong>: Use <code><strong>streams.store()</strong></code> with <code><strong>StoreQueryParameters.fromNameAndType()</strong></code> to access the materialized state.</li></ul><h3 id="d84a38df-287c-4528-afa0-b3cff515d7bf" class=""><strong>Slide 5: Interactive Queries in Action</strong></h3><ul id="53bba549-507d-412d-ba06-cc87763d9135" class="bulleted-list"><li style="list-style-type:disc"><strong>Local vs. Remote Queries</strong>: Local instances query their own state, but remote queries are needed for a complete view across distributed instances.</li></ul><ul id="b9cefd9a-6082-4f50-a060-13e735732cb2" class="bulleted-list"><li style="list-style-type:disc"><strong>Implementing RESTful Microservices</strong>: Example using Javalin for serving REST requests and OkHttp for making REST calls.</li></ul><ul id="06c3f9c9-cf6c-435f-9217-69197262ff1d" class="bulleted-list"><li style="list-style-type:disc"><strong>Dynamic State Queries</strong>: Demonstrating point lookups (<code><strong>get()</strong></code>), range scans (<code><strong>range()</strong></code>), and counting entries (<code><strong>approximateNumEntries()</strong></code>).</li></ul><p id="2fc3534e-47f1-42b2-ab11-d369543aeb48" class="">
+</p><hr id="91339bc9-8a4c-4c74-b5cb-fd9ddca3d3a1"/><p id="3650ccf7-f86d-4fdf-b410-0335ebf82fcc" class="">
+</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

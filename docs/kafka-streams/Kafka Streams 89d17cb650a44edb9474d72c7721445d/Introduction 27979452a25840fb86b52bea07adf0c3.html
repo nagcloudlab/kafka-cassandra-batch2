@@ -1,0 +1,720 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Introduction</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="27979452-a258-40fb-86b5-2bea07adf0c3" class="page sans"><header><h1 class="page-title">Introduction</h1><p class="page-description"></p></header><div class="page-body"><hr id="a226198b-3f78-45c3-b2e4-8e5bbd1fa280"/><p id="acab1d86-61dd-4eca-a586-e22032d79c99" class="">
+</p><h1 id="11b115f5-1324-46b3-9fdf-2b2f4e590a0c" class=""><strong>The Kafka Ecosystem</strong></h1><h3 id="5db18660-7914-431c-b192-6bdc82c7a902" class=""><strong>Slide 1: Introduction to the Kafka Ecosystem Before Kafka Streams</strong></h3><ul id="79780eb2-a127-4a71-89fa-715e6322085f" class="bulleted-list"><li style="list-style-type:disc">Identified a significant gap in the Kafka ecosystem for supporting stream processing.</li></ul><ul id="1d0c873a-ed70-4c7e-b124-cee8707fbe59" class="bulleted-list"><li style="list-style-type:disc">Developers faced challenges in building effective stream processing applications due to the lack of specialized library support.</li></ul><h3 id="4358ec7b-2051-4719-8168-4854f28e4e11" class=""><strong>Slide 2: Early Options for Stream Processing with Kafka</strong></h3><ul id="53749ed9-a787-490f-9899-9e82ab906ee3" class="bulleted-list"><li style="list-style-type:disc"><span style="border-bottom:0.05em solid">Option 1: Utilizing Kafka&#x27;s Consumer and Producer APIs directly to manage data flows.</span></li></ul><ul id="8b1dcaf8-d6ea-4c6d-80ff-ecd338c2fdbb" class="bulleted-list"><li style="list-style-type:disc"><span style="border-bottom:0.05em solid">Option 2: Integrating with other stream processing frameworks, such as</span><span style="border-bottom:0.05em solid"><code> Apache Spark Streaming and Apache Flink, to leverage their capabilities.</code></span></li></ul><h3 id="cda5cf8c-e526-4411-87f2-6714125a15fd" class=""><strong>Slide 3: Limitations of Consumer and Producer APIs</strong></h3><ul id="024cb77f-dc70-4552-bc88-fe389a4dcca5" class="bulleted-list"><li style="list-style-type:disc">Basic and low-level APIs lacking essential stream processing features.</li></ul><ul id="7f51bf6e-be38-4d07-88a4-789967e0fb40" class="bulleted-list"><li style="list-style-type:disc">No built-in support for managing state that is both local and fault-tolerant.</li></ul><ul id="670e6fb8-1d64-4672-baee-73a3b93a61ba" class="bulleted-list"><li style="list-style-type:disc">Sparse availability of operators for effectively transforming data streams.</li></ul><ul id="eb370264-3974-429a-abab-d7941d8f26d3" class="bulleted-list"><li style="list-style-type:disc">Inadequate handling of stream representations and time complexities.</li></ul><h3 id="a8866759-1c93-408b-a793-4baddc09cade" class=""><strong>Slide 4: Challenges with Other Streaming Frameworks</strong></h3><ul id="c8937695-846a-4358-8772-267630bfb012" class="bulleted-list"><li style="list-style-type:disc">Full-scale streaming platforms introduce unnecessary complexity and management overhead.</li></ul><ul id="0bf26e70-4c52-4568-bd94-e798056b0ed1" class="bulleted-list"><li style="list-style-type:disc">These frameworks often do not integrate seamlessly with Kafka, especially in handling data that intermediates between source and sink topics.</li></ul><h3 id="26eb8951-8259-41e5-a4dc-d74406f9109f" class=""><strong>Slide 5: Kafka Community’s Response</strong></h3><ul id="59267d3e-887c-4455-9bee-626f544f2111" class="bulleted-list"><li style="list-style-type:disc">The Kafka community acknowledged the critical need for a native stream processing API within its ecosystem.</li></ul><ul id="503d7a41-50fd-4838-8f5a-e25a3e9c0996" class="bulleted-list"><li style="list-style-type:disc">This led to the creation of Kafka Streams, designed to simplify stream processing with direct integration into Kafka, minimizing complexity and enhancing functionality.</li></ul><p id="7c55c09a-a9d3-4f37-b464-5843ab131d10" class="">
+</p><p id="40f32b1b-38e8-4063-8244-1661e2c229aa" class="">
+</p><hr id="d76d808c-11bd-4db5-895d-4c959791b30c"/><p id="bb522d41-310d-46c7-9799-f9ca30d7b930" class="">
+</p><h1 id="5539d30f-8654-4ee2-b47d-15ce1ddab9de" class=""><strong><strong>Enter Kafka Streams</strong></strong></h1><h3 id="46f8fa12-30c8-479f-864b-d632e8c32b83" class=""><strong>Slide 1: Introduction to Kafka Streams</strong></h3><ul id="393c5ff1-3eac-4fcd-9c1d-131ad9bdf5bb" class="bulleted-list"><li style="list-style-type:disc">Kafka Streams released in 2016, marking a significant evolution in the Kafka ecosystem.</li></ul><ul id="5ddfee0a-db50-4daf-b6ee-71d993c7d0f6" class="bulleted-list"><li style="list-style-type:disc">Transition from reliance on hand-rolled features to using standardized, community-developed patterns and abstractions for stream processing.</li></ul><h3 id="c6d916df-29b7-4e02-946b-ba7728ab0e4d" class=""><strong>Slide 2: Advantages of Kafka Streams Over Previous APIs</strong></h3><ul id="99560a49-55e9-4740-b0bd-5f4465cb9839" class="bulleted-list"><li style="list-style-type:disc">Unlike basic APIs (Producer, Consumer, Connect), Kafka Streams is specifically designed for processing real-time data streams.</li></ul><ul id="30fe306d-8c87-4ec8-8af5-84fd2655b77c" class="bulleted-list"><li style="list-style-type:disc">Facilitates the consumption of real-time event streams and enables complex data transformations and processing directly within Kafka.</li></ul><h3 id="ec26eddb-0937-40e3-868d-81ede36ffb62" class=""><strong>Slide 3: Kafka Streams Capabilities</strong></h3><ul id="3d0f67e1-f317-4363-81cc-a7a8278f9edb" class="bulleted-list"><li style="list-style-type:disc">Provides a robust set of stream processing operators and primitives.</li></ul><ul id="f0ee8491-d28a-4eff-8c8a-39854341b02a" class="bulleted-list"><li style="list-style-type:disc">Allows for the <span style="border-bottom:0.05em solid">transformation and enrichment of data streams</span>, supporting the creation of new data representations to be sent back to Kafka for downstream consumption.</li></ul><h3 id="4e0b70d8-146d-41e0-942f-2ae533255923" class=""><strong>Slide 4: Role of Kafka Streams in the Ecosystem</strong></h3><ul id="8ddb8211-0d94-47ab-bdbd-a255552da28c" class="bulleted-list"><li style="list-style-type:disc">Described as the &quot;brain&quot; of the Kafka ecosystem, integrating and processing data from multiple sources.</li></ul><ul id="a88c7458-7722-4980-8c65-30f38337b67a" class="bulleted-list"><li style="list-style-type:disc">Positioned at a crucial layer in the data pipeline where it enhances data value through sophisticated enrichment and transformation processes.</li></ul><p id="c11327dd-4e99-43e5-839e-8df4402b0f9f" class=""><div class="indented"><figure id="4afff0f3-06ed-4b4e-a9e2-a0596b5747fe" class="image"><a href="Introduction%2027979452a25840fb86b52bea07adf0c3/Untitled.png"><img style="width:768px" src="Introduction%2027979452a25840fb86b52bea07adf0c3/Untitled.png"/></a></figure></div></p><p id="b7a8acd2-1757-478d-81b4-cfb1eec0389d" class="">
+</p><p id="56a71b6a-1624-49ea-9fcc-40ea5bad9bf6" class="">
+</p><h3 id="14e9a367-8bd0-4371-b489-4196e331688a" class=""><strong>Slide 5: Impact of Kafka Streams on Stream Processing</strong></h3><ul id="c3f51228-5f1a-4974-97c9-b9549c7cfca2" class="bulleted-list"><li style="list-style-type:disc">Simplifies the development of stream processing applications by removing the need for custom-built solutions.</li></ul><ul id="59f6b595-e238-4454-a21c-c411eee44a6a" class="bulleted-list"><li style="list-style-type:disc">Reduces the complexity and overhead associated with using alternative stream processing frameworks.</li></ul><p id="5d26bfd7-2262-46ee-b827-407fc9022b42" class="">
+</p><hr id="e2a57a93-92ca-4c49-9761-54b29a8d8b52"/><h1 id="9fad7067-adc5-41aa-844f-ebd1e7c4495a" class=""><strong>Features at a Glance</strong></h1><p id="7611522f-274e-47bb-83b4-72c98bc37c31" class="">
+</p><ul id="e52dd84e-5158-4ef1-aa59-1e9add41279d" class="bulleted-list"><li style="list-style-type:disc"><strong>High-Level DSL</strong><ul id="44285a2e-4ef1-4d91-ad9b-7ef630860c37" class="bulleted-list"><li style="list-style-type:circle">Mimics Java’s streaming API, offering a fluent and functional approach to data stream processing.</li></ul><ul id="4d90779d-15f9-487d-b116-271b4243b8af" class="bulleted-list"><li style="list-style-type:circle">Designed to be easy to learn and use.</li></ul></li></ul><ul id="be68e060-704e-448f-98fd-eef1ed8a3ca4" class="bulleted-list"><li style="list-style-type:disc"><strong>Low-Level Processor API</strong><ul id="a7115ddd-b4a7-4f91-b68d-063ddabb8eac" class="bulleted-list"><li style="list-style-type:circle">Provides developers with fine-grained control over their stream processing applications.</li></ul><ul id="32553ec4-87e5-410a-9af2-07d2a08fb1a9" class="bulleted-list"><li style="list-style-type:circle">Ideal for complex, customized processing needs.</li></ul></li></ul><ul id="250ed42e-5b5c-49a7-a356-825c134227ac" class="bulleted-list"><li style="list-style-type:disc"><strong>Data Modeling Abstractions</strong><ul id="a2f9a33e-9964-4c85-a9b8-1b6d14c90433" class="bulleted-list"><li style="list-style-type:circle">Allows data to be modeled as either streams or tables, enhancing flexibility.</li></ul><ul id="b9385fea-8ced-4445-8ec7-f5c07730e994" class="bulleted-list"><li style="list-style-type:circle">Supports diverse processing strategies and data management approaches.</li></ul></li></ul><ul id="f8c3609d-1696-4870-8c21-0e2bdcddae3f" class="bulleted-list"><li style="list-style-type:disc"><strong>Operators and Utilities</strong><ul id="525e7d33-793d-4d7f-a683-3b211ae1197a" class="bulleted-list"><li style="list-style-type:circle">Includes a wide range of operators for building both stateless and stateful stream processing applications.</li></ul><ul id="3c31687d-06c5-4f48-bd93-633f86d74d12" class="bulleted-list"><li style="list-style-type:circle">Supports sophisticated data operations and stream manipulations.</li></ul></li></ul><ul id="1d7fa70b-6ad2-4ee5-b233-278b8d408306" class="bulleted-list"><li style="list-style-type:disc"><strong>Time-Based Operations</strong><ul id="ae7aab4c-3c4b-433e-898e-fa1d0d78c40f" class="bulleted-list"><li style="list-style-type:circle">Features support for time-based operations such as windowing and periodic functions.</li></ul><ul id="65cf3f38-55e6-448a-9338-30c955874aa6" class="bulleted-list"><li style="list-style-type:circle">Enables handling of time-sensitive data and temporal data analysis.</li></ul></li></ul><ul id="a609c735-4b66-40be-8529-de46a130c2ec" class="bulleted-list"><li style="list-style-type:disc"><strong>Easy Installation</strong><ul id="fcdc2d13-d90e-4787-b385-e4c8ef01cb19" class="bulleted-list"><li style="list-style-type:circle">Kafka Streams is just a library, making it easy to integrate into any Java application.</li></ul><ul id="a7f7f9c4-c3d4-4679-a280-2f57533b5395" class="bulleted-list"><li style="list-style-type:circle">Simplifies setup and reduces deployment overhead.</li></ul></li></ul><ul id="12e2be34-d885-4605-b8a0-070abf4773b9" class="bulleted-list"><li style="list-style-type:disc"><strong>Scalability, Reliability, Maintainability</strong><ul id="c6f42266-cc55-4ffa-9a25-3cab5349158b" class="bulleted-list"><li style="list-style-type:circle">Designed to scale with application needs and ensure reliable data processing.</li></ul><ul id="cf8eb074-faa7-41c3-a21b-b01ece0175b6" class="bulleted-list"><li style="list-style-type:circle">Focuses on maintainability, aiding long-term application stability and performance.</li></ul></li></ul><p id="0c50433f-e0c1-4c17-8470-e88a06853437" class="">
+</p><hr id="15bbca93-c5a0-441b-b430-e87d79b6b644"/><h1 id="da9e2926-6dfd-4dc1-a7c5-f95680eba680" class=""><strong>Operational Characteristics</strong></h1><p id="60392edb-e940-4579-b560-172be7a80bc3" class="">
+</p><h3 id="6affa5e4-e4f5-4733-9b53-701280d680ad" class=""><strong>Slide 1: Introduction to Operational Characteristics</strong></h3><ul id="8f76249a-9ad0-4813-8de9-7d8fcaf460d2" class="bulleted-list"><li style="list-style-type:disc">Focus on three critical goals: <span style="border-bottom:0.05em solid">Scalability, Reliability, and Maintainability.</span></li></ul><ul id="71d3af74-e845-4292-bb27-2626e359f12e" class="bulleted-list"><li style="list-style-type:disc">Framework for evaluating Kafka Streams based on these characteristics.</li></ul><h3 id="8dfc4611-6be7-4df6-8323-a4b4e4178a40" class=""><strong>Slide 2: Scalability of Kafka Streams</strong></h3><ul id="f20d84dc-4276-493a-a5f4-6a1299d37cf4" class="bulleted-list"><li style="list-style-type:disc">Scalable through partition expansion and the use of consumer groups.</li></ul><ul id="9e56d93e-0ee3-4030-8930-b680de0b6ca3" class="bulleted-list"><li style="list-style-type:disc">Ability to distribute workload across multiple application instances efficiently.</li></ul><h3 id="10352245-1538-4af8-a862-9f5984ec45d6" class=""><strong>Slide 3: Elasticity of Kafka Streams</strong></h3><ul id="1d896d91-1cf6-42d4-bf95-ec808e3b12f7" class="bulleted-list"><li style="list-style-type:disc">Kafka Streams supports dynamic scaling by adding or reducing application instances.</li></ul><ul id="64af4e9e-362d-42f1-829c-af323fc57f76" class="bulleted-list"><li style="list-style-type:disc">Scalability is limited by the number of tasks available in the application&#x27;s topology.</li></ul><h3 id="71de4a61-459e-47b5-8169-47596b343a02" class=""><strong>Slide 4: Reliability Features of Kafka Streams</strong></h3><ul id="b653025a-a05a-4566-a5ac-df09a6758b09" class="bulleted-list"><li style="list-style-type:disc">Ensures reliability through automatic failovers and consumer group partition rebalancing.</li></ul><ul id="a094015c-a084-46f7-88a4-8d833ff3b10a" class="bulleted-list"><li style="list-style-type:disc">Handles faults effectively, minimizing system downtime and maintaining service continuity.</li></ul><h3 id="424201cf-4707-4aa0-8067-f6bd1b34e7cc" class=""><strong>Slide 5: Maintainability of Kafka Streams</strong></h3><ul id="0a95f84a-5917-4a63-b74b-fac8543ecf63" class="bulleted-list"><li style="list-style-type:disc">Maintenance involves more than initial development; focus on reducing long-term costs.</li></ul><ul id="d8ba158b-3ee3-4801-9707-a9d58c53ca91" class="bulleted-list"><li style="list-style-type:disc">Java-based, simplifying troubleshooting, bug fixes, and ongoing maintenance.</li></ul><ul id="82b51a19-5b2d-46fa-84bb-b081aaae1a21" class="bulleted-list"><li style="list-style-type:disc">Streamlined codebase and intuitive API facilitate quick learning and easy upkeep.</li></ul><p id="53f33f4e-f40f-4a3e-b344-e7ee2eb22e24" class="">
+</p><hr id="2e1eeace-3b53-4cdd-94a8-8b4903190046"/><p id="65150396-25c4-4f28-b59b-90b96d8d9235" class="">
+</p><h1 id="e6c85671-a205-446f-90f8-8616d3da389e" class="">Comparison to Other Systems</h1><p id="f1089e57-1242-40f4-8c0d-1a117a4f2254" class="">
+</p><h3 id="fed3add8-650f-43d3-abd5-cbe10a0ff585" class=""><strong>Slide 1: Comparing Deployment Models</strong></h3><ul id="85fc37af-d657-4631-9839-b5b3d5564926" class="bulleted-list"><li style="list-style-type:disc"><strong>Kafka Streams</strong>: Implemented as a Java library, simplifying integration and deployment within existing Java applications.</li></ul><ul id="ebfe2ccc-abd2-4c50-a998-745313673c93" class="bulleted-list"><li style="list-style-type:disc"><strong>Other Systems (Apache Flink, Spark Streaming)</strong>: Require a dedicated processing cluster, adding complexity and overhead.</li></ul><ul id="d9087e2a-d050-42e5-bca6-33cfce4123c2" class="bulleted-list"><li style="list-style-type:disc"><strong>Real-World Adaptation</strong>: Takes months to adapt to systems like Apache Flink at large companies due to the nuances of cluster management.</li></ul><h3 id="569fa90f-637b-4442-a230-aeb1f78da4c9" class=""><strong>Slide 2: Deployment Advantages of Kafka Streams</strong></h3><ul id="3a076a3b-c93d-4154-b683-c44374e67638" class="bulleted-list"><li style="list-style-type:disc"><strong>Ease of Setup</strong>: No need for a cluster manager; just add Kafka Streams as a dependency.</li></ul><ul id="83efa138-c02e-4734-bf19-4f6b28a7d07d" class="bulleted-list"><li style="list-style-type:disc"><strong>Operational Flexibility</strong>: Applications are deployed using familiar Java application patterns, enhancing integration with existing tools and systems.</li></ul><h3 id="199b8739-c95c-490f-ab48-cc2d0d5ec9a6" class=""><strong>Slide 3: Processing Models Compared</strong></h3><ul id="358db9c7-0ed8-4058-80ec-f15272330031" class="bulleted-list"><li style="list-style-type:disc"><strong>Kafka Streams</strong>: Implements true streaming with event-at-a-time processing, handling events immediately as they arrive.</li></ul><ul id="df590b59-3c0c-43d0-a5d1-ea957801e2f7" class="bulleted-list"><li style="list-style-type:disc"><strong>Other Systems (Apache Spark Streaming, Trident)</strong>: Use micro-batching, grouping records into batches for processing at fixed intervals.</li></ul><ul id="1724e56d-1f8f-4522-8aed-0520c4cd51d4" class="bulleted-list"><li style="list-style-type:disc"><strong>Performance Consideration</strong>: Event-at-a-time processing provides lower latency, while micro-batching may optimize for throughput but with higher latency.</li></ul><p id="95454624-f754-4dd0-b67b-212866fbf2b1" class="">
+</p><figure id="dc660a9c-a8c9-49e5-9ab9-63e794d2513f" class="image"><a href="Introduction%2027979452a25840fb86b52bea07adf0c3/Untitled%201.png"><img style="width:1034px" src="Introduction%2027979452a25840fb86b52bea07adf0c3/Untitled%201.png"/></a></figure><p id="451ca281-d507-4152-b71f-54360bedc0e0" class="">
+</p><h3 id="4200a76f-6e83-4e21-98dd-df3df9a0511e" class=""><strong>Slide 4: Architectural Focus: Kappa vs. Lambda</strong></h3><ul id="72a94ecf-e06b-4c7e-b3e4-f9600d861be5" class="bulleted-list"><li style="list-style-type:disc"><strong>Kafka Streams (Kappa Architecture)</strong>: Focuses solely on streaming use cases, optimizing for simplicity in stream data operations.</li></ul><ul id="0a1fb0a6-ecca-4432-b55d-175ed675c868" class="bulleted-list"><li style="list-style-type:disc"><strong>Other Frameworks (Apache Flink, Spark)</strong>: Support both batch and stream processing (Lambda Architecture), which can introduce complexity and operational challenges.</li></ul><ul id="b60ccff7-51e5-4bbc-b187-7cbb6c917e9e" class="bulleted-list"><li style="list-style-type:disc"><strong>Hybrid Systems</strong>: Often carry high operational burdens and are limited to the features that intersect between batch and stream processing capabilities.</li></ul><h3 id="0a648c34-ca9e-45fd-a61f-94d940255108" class=""><strong>Slide 5: Comparison with Apache Beam</strong></h3><ul id="59098501-a8c7-4354-ba07-02271a5e12ac" class="bulleted-list"><li style="list-style-type:disc"><strong>Kafka Streams</strong>: Described as a stream-relational processing platform, integrating streams and tables as first-class entities.</li></ul><ul id="3622d182-2340-4b8f-9c69-0c6ac327a901" class="bulleted-list"><li style="list-style-type:disc"><strong>Apache Beam</strong>: A stream-only processing platform, relying on execution engines like Flink or Spark for processing.</li></ul><ul id="0c647b05-c833-4675-9053-79e57e8ca2af" class="bulleted-list"><li style="list-style-type:disc"><strong>Feature Comparison</strong>: Kafka Streams offers powerful features such as ad-hoc query capabilities for stream states, which are typically lacking in Apache Beam.</li></ul><h3 id="a85e5b5d-6bdf-4931-9a53-3360191046fb" class=""><strong>Slide 6: Advantages of Kafka Streams in Stream Processing</strong></h3><ul id="28370e9f-9adf-4e53-8b59-3488375ad74c" class="bulleted-list"><li style="list-style-type:disc">Offers a more streamlined and focused approach to stream processing, enhancing development and operational simplicity.</li></ul><ul id="0dd77eea-f070-4974-ad72-2839a99a77f7" class="bulleted-list"><li style="list-style-type:disc">Ideal for use cases that do not require the integration of batch processing, avoiding the complexity of hybrid systems.</li></ul><p id="9e8ad3c5-1700-4c90-8b2e-4fd7402f04f0" class="">
+</p><hr id="cc862cdf-ae2d-4cf9-95e0-870957834d76"/><p id="d1a4550a-60d5-4f48-90a6-95cb7cd3be0e" class="">
+</p><h1 id="2763d4e1-24c5-456c-a2dc-3e019f3e2ffd" class=""><strong>Use Cases</strong></h1><p id="b35859e2-9370-4601-91f6-2d2bf320eaa8" class="">
+</p><h3 id="6f6c1459-835f-4049-822a-89f171755abf" class=""><strong>Slide 1: Introduction to Kafka Streams Use Cases</strong></h3><ul id="ea4b88a4-31fb-4399-ac4a-cb78f25e760a" class="bulleted-list"><li style="list-style-type:disc">Kafka Streams excels in processing unbounded datasets rapidly and efficiently.</li></ul><ul id="fbe18e09-8968-4ce2-868c-e49030499fd9" class="bulleted-list"><li style="list-style-type:disc">Optimized for low-latency, time-critical applications across various domains.</li></ul><h3 id="907657d6-27e1-4338-9462-4e76e7c6ae18" class=""><strong>Slide 2: Financial and Trading Applications</strong></h3><ul id="a9748b71-7495-426e-9d6a-0a40845ccc36" class="bulleted-list"><li style="list-style-type:disc"><strong>Financial Data Processing</strong>: Used by companies like Flipkart for monitoring purchases and detecting fraud.</li></ul><ul id="ef9aef7e-4946-4a3f-a3cd-d10c6fe4b5c8" class="bulleted-list"><li style="list-style-type:disc"><strong>Algorithmic Trading</strong>: Facilitates real-time data analysis for automated trading systems.</li></ul><ul id="c421a21e-a876-43da-ba11-e8c246793d08" class="bulleted-list"><li style="list-style-type:disc"><strong>Market Monitoring</strong>: Critical for real-time tracking of stock and cryptocurrency markets.</li></ul><h3 id="e200803f-fe54-4d58-b0ee-d2b4f2cb08b9" class=""><strong>Slide 3: Retail and Event Management</strong></h3><ul id="fc679a2b-be9c-4b56-9b92-3d377561657f" class="bulleted-list"><li style="list-style-type:disc"><strong>Inventory Management</strong>: Real-time tracking and replenishment systems, exemplified by Walmart.</li></ul><ul id="332ddcf4-2c39-468f-a029-a35ad6a0483f" class="bulleted-list"><li style="list-style-type:disc"><strong>Event Ticketing</strong>: Manages bookings and seat selections, utilized by Ticketmaster for real-time updates.</li></ul><h3 id="0d61c249-8bcb-45ec-ace0-490f9961037a" class=""><strong>Slide 4: Media and Communication</strong></h3><ul id="ffcb537a-1c42-4ac3-9b42-2717a36fc499" class="bulleted-list"><li style="list-style-type:disc"><strong>Email Tracking</strong>: Monitors email delivery, used by Mailchimp to track performance and issues.</li></ul><ul id="d5b933ae-3477-4a70-920d-d7d2cde0cc82" class="bulleted-list"><li style="list-style-type:disc"><strong>Game Telemetry</strong>: Processes gaming data in real time, used by Activision for titles like Call of Duty.</li></ul><ul id="ecd84f28-7180-4217-8120-1ea58f4b54a0" class="bulleted-list"><li style="list-style-type:disc"><strong>Sports Broadcasting</strong>: Supports real-time sports data widgets and broadcasting enhancements (Gracenote).</li></ul><h3 id="7c94beff-0e9b-4bd3-973c-7c437797b00a" class=""><strong>Slide 5: Technology and Innovation</strong></h3><ul id="c601bb21-037f-4e8a-a97b-b610e7019d42" class="bulleted-list"><li style="list-style-type:disc"><strong>Search and Geospatial Tracking</strong>: Powers real-time search indexing for Yelp and performs complex geospatial calculations.</li></ul><ul id="b69e95be-f1f1-448a-9cdb-a8c150be27b4" class="bulleted-list"><li style="list-style-type:disc"><strong>Smart Home/IoT</strong>: Processes data from IoT devices, enhancing smart home systems with real-time analytics.</li></ul><h3 id="ce3d4f51-df73-4019-a5d0-b6bc146b8ceb" class=""><strong>Slide 6: Healthcare and Advertising</strong></h3><ul id="17055fa9-6e45-4444-97d6-a689fe51bab8" class="bulleted-list"><li style="list-style-type:disc"><strong>Healthcare Monitoring</strong>: Supports predictive healthcare and real-time vitals monitoring at institutions like Children’s Healthcare of Atlanta.</li></ul><ul id="ecb4fd06-57fb-4620-a64d-6b447cac6d90" class="bulleted-list"><li style="list-style-type:disc"><strong>Advertising</strong>: Powers real-time ad platforms, improving targeting and performance metrics (Pinterest).</li></ul><h3 id="da15933c-199b-4a70-ae8c-0e27507ec864" class=""><strong>Slide 7: Communication and Machine Learning</strong></h3><ul id="d7a2ace6-c6b5-4b4d-b7b9-42e012b59c28" class="bulleted-list"><li style="list-style-type:disc"><strong>Communication Infrastructure</strong>: Underpins chat systems and virtual assistants, used by companies like Slack.</li></ul><ul id="23529cfb-fcb0-465b-b3bf-e3223ff3bd12" class="bulleted-list"><li style="list-style-type:disc"><strong>Machine Learning Pipelines</strong>: Facilitates real-time data processing for machine learning applications, including Twitter and Kafka Graphs.</li></ul><h3 id="7fade298-c08b-4b1e-a6f8-2f54d4ef083e" class=""><strong>Slide 8: Extending Kafka Streams Capabilities</strong></h3><ul id="265e0523-c77d-4eea-9751-5013db9924c0" class="bulleted-list"><li style="list-style-type:disc"><strong>Microservices</strong>: Ideal for building microservices on real-time event streams.</li></ul><ul id="f77ed679-4675-485e-87e0-da3fd98b6912" class="bulleted-list"><li style="list-style-type:disc"><strong>Interactive Queries</strong>: Capable of exposing stream state for dynamic query handling and real-time data aggregation.</li></ul><p id="373b6e44-8a66-4411-9c01-c6d3873d06d7" class="">
+</p><hr id="30b3d319-48ab-4b10-b027-8a65bb0026d6"/><p id="9722d82f-18e2-4f5e-842e-14468945175d" class="">
+</p><p id="5e2682ce-38ee-40ad-b2d8-da1674ef5b4b" class="">Financial data processing (Flipkart), purchase monitoring, fraud detection</p><p id="c1c09ffd-ace9-4b47-9f9d-6e4b5188873e" class="">Algorithmic trading</p><p id="eee7c87d-c9e5-4e3e-b71a-0683490308e0" class="">Stock market/crypto exchange monitoring</p><p id="31c37f2f-42d5-417b-9168-463b0550a008" class="">Real-time inventory tracking and replenishment (Walmart)</p><p id="fc65c5fe-c58a-4c3d-af52-058bcd61a4f6" class="">Event booking, seat selection (Ticketmaster)</p><p id="0e13f826-12ef-4c81-b9a4-7f7aee98dec2" class="">Email delivery tracking and monitoring (Mailchimp)</p><p id="22bfd457-9d1a-439e-b588-edee079c8c32" class="">Video game telemetry processing (Activision, the publisher of Call of Duty)</p><p id="a5eb0bab-f966-4564-9bcc-bc6def5e5448" class="">Search indexing (Yelp)</p><p id="885ee5e3-135c-4e5f-ac79-4aef83bb642f" class="">Geospatial tracking/calculations (e.g., distance comparison, arrival projections)</p><p id="c3833b2a-56af-4876-805b-fbf084575d3c" class="">Smart Home/IoT sensor processing (sometimes called AIOT, or the Artificial Intelligence of Things)</p><p id="5cc7b533-8955-4e5f-8671-d86a9d899ddc" class="">Change data capture (Redhat)</p><p id="d419509c-095c-40e4-bf77-3713a5676685" class="">Sports broadcasting/real-time widgets (Gracenote)</p><p id="6de23ccc-e2e2-411d-aa78-5c70b0eaf211" class="">Real-time ad platforms (Pinterest)</p><p id="bb7506f1-a0f9-43af-8312-5b4111eeec93" class="">Predictive healthcare, vitals monitoring (Children’s Healthcare of Atlanta)</p><p id="4df2a12b-1bc1-42f1-99cc-3198c608f916" class="">Chat infrastructure (Slack), chat bots, virtual assistants</p><p id="ecca41de-2e42-432f-bc87-ac7afe8d18c2" class="">Machine learning pipelines (Twitter) and platforms (Kafka Graphs)</p><p id="0fab9eda-2558-4572-bf3e-39afae321ca8" class="">
+</p><hr id="e9597590-a13e-4e27-a85e-d0e0a84cfb82"/><p id="96c4a44a-2f06-4db3-a979-555ee3d7ebc8" class="">
+</p><h1 id="0a789804-6456-4a5b-aabf-cfddb595e2c2" class=""><strong>Processor Topologies</strong></h1><p id="3bf97909-e572-44f7-aacd-cd7a83d2916e" class="">
+</p><h3 id="e12ce4c4-93a2-48c9-859e-a2a9c99015d8" class=""><strong>Slide 1: Introduction to Processor Topologies</strong></h3><ul id="5658bb30-b33e-4946-9945-c54033d341f2" class="bulleted-list"><li style="list-style-type:disc">Kafka Streams uses dataflow programming (DFP), representing programs as a series of inputs, outputs, and processing stages.</li></ul><ul id="3d7c32ba-b4b5-4a98-b50d-61a04e2288a5" class="bulleted-list"><li style="list-style-type:disc">This model is intuitive and beginner-friendly, structuring logic as a directed acyclic graph (DAG).</li></ul><h3 id="4bb54a03-1217-4810-8453-2b5023564c0e" class=""><strong>Slide 2: Basic Processor Types</strong></h3><ul id="1260c0c4-2492-400a-bf8d-979832c4bbdf" class="bulleted-list"><li style="list-style-type:disc"><strong>Source Processors</strong>: Input points where data flows into the application from Kafka topics.</li></ul><ul id="44d91e3d-45c6-4c59-8cf5-a587af752cc8" class="bulleted-list"><li style="list-style-type:disc"><strong>Stream Processors</strong>: Perform transformations and apply logic to incoming data. Common operations include filter, map, and join.</li></ul><ul id="499fb801-e9e5-4b0b-b845-a73b2990eb51" class="bulleted-list"><li style="list-style-type:disc"><strong>Sink Processors</strong>: Output points where processed data is sent back to Kafka or to downstream systems.</li></ul><p id="df3a11f9-328b-45eb-a7dc-8166de641687" class="">
+</p><figure id="c0683d83-98d9-4abe-9697-d5a120320a07" class="image" style="text-align:left"><a href="Introduction%2027979452a25840fb86b52bea07adf0c3/Untitled%202.png"><img style="width:432px" src="Introduction%2027979452a25840fb86b52bea07adf0c3/Untitled%202.png"/></a></figure><p id="5feb993b-e327-415b-a4ca-035a7249476b" class=""><strong><strong>Kafka Streams borrows some of its design from dataflow programming, and structures stream processing programs as a graph of processors through which data flows</strong></strong></p><p id="d737ae70-7e3c-4c27-95a6-ce0e5c9d184f" class="">
+</p><h3 id="edec68d4-6041-4715-a11a-dc7861f829ec" class=""><strong>Slide 3: Designing a Processor Topology</strong></h3><ul id="e7469da6-a303-445c-866c-33bae293df03" class="bulleted-list"><li style="list-style-type:disc">Example of designing a topology: Creating a chatbot that filters valid and invalid commands from Slack messages.</li></ul><ul id="40c62a4b-cd6d-4354-9550-8b9d8bb401b5" class="bulleted-list"><li style="list-style-type:disc">Source topic reads messages, stream processor validates them, and sink processors route them to either &#x27;valid-mentions&#x27; or &#x27;invalid-mentions&#x27;.</li></ul><p id="ac428051-2086-4b3b-bed5-8eaf732eaeb3" class="">
+</p><figure id="142ee38f-885a-404f-bb67-8a3ff149b393" class="image" style="text-align:left"><a href="Introduction%2027979452a25840fb86b52bea07adf0c3/Untitled%203.png"><img style="width:432px" src="Introduction%2027979452a25840fb86b52bea07adf0c3/Untitled%203.png"/></a></figure><p id="3b663a6f-5a0a-4871-a1b4-ab9af3448156" class=""><strong>An example processor topology that contains a single source processor for reading Slack messages from Kafka (</strong><code>slack-mentions</code><strong>), a single stream processor that checks the validity of each message (</strong><code>isValid</code><strong>), and two sink processors that route the message to one of two output topics based on the previous check (</strong><code>valid-mentions</code><strong>, </strong><code>invalid-mentions</code><strong>)</strong></p><p id="423b5d45-89a8-43a8-9266-87f66362df9c" class="">
+</p><h3 id="65b6883d-b0bd-48cf-b38d-e894ad9985c3" class=""><strong>Slide 4: Understanding Sub-Topologies</strong></h3><ul id="53156d97-6133-45c3-896f-421753d59107" class="bulleted-list"><li style="list-style-type:disc">Sub-topologies allow Kafka Streams to handle multiple source topics and partition workloads more efficiently.</li></ul><ul id="c127303b-e1d4-4d79-ba82-c365896cf122" class="bulleted-list"><li style="list-style-type:disc">Each sub-topology can operate independently, increasing the application&#x27;s scalability and fault tolerance.</li></ul><p id="9c1e0a1d-1ee7-4d17-abd9-702679dd3863" class="">
+</p><figure id="2e3e28a3-97b8-41b9-a63f-d39b26d57c76" class="image" style="text-align:left"><a href="Introduction%2027979452a25840fb86b52bea07adf0c3/Untitled%204.png"><img style="width:384px" src="Introduction%2027979452a25840fb86b52bea07adf0c3/Untitled%204.png"/></a></figure><p id="bae2288b-142f-4844-a0e0-d01b300e5697" class="">
+</p><h3 id="4baf1cb2-4963-42dd-a049-0461647aeee9" class=""><strong>Slide 5: Depth-First Processing in Kafka Streams</strong></h3><ul id="8df27ef3-87cc-4529-8ab7-f12899fc48b7" class="bulleted-list"><li style="list-style-type:disc">Kafka Streams processes each event completely in one go through the topology before moving to the next (depth-first).</li></ul><ul id="c6c46656-a47f-468e-83a0-79a13354f511" class="bulleted-list"><li style="list-style-type:disc">Ensures straightforward data flow and consistency but can be slowed by intensive operations in the stream.</li></ul><p id="22ffa0da-8344-4dda-a623-05dbde48148c" class="">
+</p><p id="4d3e1ef7-4e02-44c2-9554-1fa4e31c928e" class=""><strong><strong>In depth-first processing, a single record moves through the entire topology before another record is processed</strong></strong></p><figure id="831d7fdb-5758-4787-8ffc-fc97d5d8b449" class="image" style="text-align:left"><a href="Introduction%2027979452a25840fb86b52bea07adf0c3/Untitled%205.png"><img style="width:432px" src="Introduction%2027979452a25840fb86b52bea07adf0c3/Untitled%205.png"/></a></figure><p id="48fc1158-725a-4153-84ec-da47b0c2bb6b" class="">
+</p><p id="7c8108df-23c6-4f6d-be27-aaa82464360a" class="">
+</p><p id="7f492b1c-09c3-4888-957d-426e95ef3710" class=""><strong><strong>Multiple records will never go through the topology at the same time</strong></strong></p><figure id="20133d4c-636d-4dbc-b0e3-879c6d306bd0" class="image" style="text-align:left"><a href="Introduction%2027979452a25840fb86b52bea07adf0c3/Untitled%206.png"><img style="width:432px" src="Introduction%2027979452a25840fb86b52bea07adf0c3/Untitled%206.png"/></a></figure><h3 id="c409abb0-a4b3-4798-98ea-ad87ec9717f9" class=""><strong>Slide 6: Benefits of Dataflow Programming</strong></h3><ul id="919e3547-21f2-42b5-9f06-f0afaf94760d" class="bulleted-list"><li style="list-style-type:disc">Simplifies understanding of how data moves and is transformed within the application.</li></ul><ul id="3c38f9a2-4f59-433d-8452-65cced5c6e2a" class="bulleted-list"><li style="list-style-type:disc">Helps in visualizing and communicating application design to non-technical stakeholders.</li></ul><ul id="8b9b76c6-dbce-4c13-bb79-3de329fe14c8" class="bulleted-list"><li style="list-style-type:disc">Supports GDPR compliance and data privacy management by clearly defining data pathways.</li></ul><h3 id="a1fda97f-c8f0-42c9-aa4c-eecbc133e01c" class=""><strong>Slide 7: Tasks and Stream Threads</strong></h3><ul id="4ecbafd8-9a9d-4e42-bba0-4ea1d3410b58" class="bulleted-list"><li style="list-style-type:disc"><strong>Tasks</strong>: Smallest units of parallel execution in Kafka Streams, dependent on the number of partitions in source topics.</li></ul><ul id="cd90483f-05cb-44d6-9174-ffd9f01083e0" class="bulleted-list"><li style="list-style-type:disc"><strong>Threads</strong>: Execute tasks and can be configured to optimize resource utilization and performance.</li></ul><h3 id="dcafdcf1-21f3-468b-8412-8834798da1cd" class=""><strong>Slide 8: Configuring Tasks and Threads</strong></h3><ul id="bd23b2d6-4ade-4a4b-ad2d-cf81287ee374" class="bulleted-list"><li style="list-style-type:disc">Tasks are tied to partitions, determining the maximum parallelism.</li></ul><ul id="d33ded48-0a2e-4181-9b84-fac1c6e3e37f" class="bulleted-list"><li style="list-style-type:disc">Threads can be adjusted to balance performance and resource usage, with strategies varying based on the application&#x27;s scale and complexity.</li></ul><p id="1f7969ec-beeb-4a4c-925a-d05186947a0b" class="">
+</p><p id="dd74a8c9-5233-4ff3-b9dd-6792bb7fe123" class="">
+</p><p id="b83850e8-b388-4663-a80e-d50c0507426d" class=""><strong><strong>Four Kafka Streams tasks running in two threads</strong></strong></p><figure id="5975efee-29a5-45df-9d66-859914fca5bd" class="image"><a href="Introduction%2027979452a25840fb86b52bea07adf0c3/Untitled%207.png"><img style="width:708px" src="Introduction%2027979452a25840fb86b52bea07adf0c3/Untitled%207.png"/></a></figure><p id="9be9f7fd-0e6e-4aa9-a1bc-46c9562c7a10" class="">
+</p><p id="d864e805-2fcc-43fe-abe6-d25839268524" class=""><strong>Four Kafka Streams tasks running in four threads</strong></p><figure id="1b546726-28e7-4703-8c27-71fc46d74f70" class="image"><a href="Introduction%2027979452a25840fb86b52bea07adf0c3/Untitled%208.png"><img style="width:1427px" src="Introduction%2027979452a25840fb86b52bea07adf0c3/Untitled%208.png"/></a></figure><p id="fd34c521-0061-47b6-8bc9-ebd2c3e58da0" class="">
+</p><hr id="8b3cb36e-2418-4b56-a65e-abee08926c70"/><p id="9ca0f102-7bc2-4489-b00d-54cafaa0fea0" class="">
+</p><h1 id="b642b600-61e9-4a4b-9890-6d580ea1a3d7" class=""><strong>High-Level DSL Versus Low-Level Processor API</strong></h1><p id="2a853b04-368a-4e6d-bbcc-92533ba225b4" class="">
+</p><h3 id="222b9e67-00e8-461f-9563-95fc1f58f3c8" class=""><strong>Slide 1: High-Level DSL</strong></h3><ul id="9e570a4f-ef53-4808-aea5-f3f74d749b10" class="bulleted-list"><li style="list-style-type:disc">Built on top of the Processor API, offering a more abstract, user-friendly interface.</li></ul><ul id="b7dd356a-1736-405b-90ea-389ea9be3393" class="bulleted-list"><li style="list-style-type:disc">Ideal for developers preferring a functional style of programming and higher-level abstractions like streams and tables.</li></ul><ul id="ea77e392-0f7d-47fe-90aa-3cd0ebc2d608" class="bulleted-list"><li style="list-style-type:disc">Simplifies common stream processing tasks, reducing the need to manage complex details.</li></ul><h3 id="e03343ae-c77c-4fb0-b87d-590b08c12beb" class=""><strong>Slide 2: Low-Level Processor API</strong></h3><ul id="9a8c692d-5e18-4217-8ed9-978831a01834" class="bulleted-list"><li style="list-style-type:disc">Provides granular control over stream processing operations.</li></ul><ul id="a70db3e9-237c-4979-b247-2b570281615c" class="bulleted-list"><li style="list-style-type:disc">Allows access to record metadata, scheduling of periodic functions, and detailed state management.</li></ul><ul id="4db99e85-09a7-4fe2-90c3-8a0d3c9d5246" class="bulleted-list"><li style="list-style-type:disc">Suitable for scenarios requiring fine-grained control over data handling and process timing.</li></ul><h3 id="4e373232-8afd-4ec5-8252-99c5ee25b88a" class=""><strong>Slide 50: Choosing the Right API</strong></h3><ul id="da397959-a368-4c51-bcfe-b115a0356a4f" class="bulleted-list"><li style="list-style-type:disc">The choice depends on the project requirements, developer experience, and desired level of control.</li></ul><ul id="555cf447-e77f-4bd2-a15d-4a34f9691b4f" class="bulleted-list"><li style="list-style-type:disc">High-Level DSL simplifies development with pre-built operations and constructs.</li></ul><ul id="6d3cd0b8-0032-407f-8d33-e19f3bebb21c" class="bulleted-list"><li style="list-style-type:disc">Low-Level Processor API offers customization and precise control, suitable for complex, bespoke processing needs.</li></ul><p id="7c76abad-086a-4ebe-8a1a-062b5d4931ae" class="">
+</p><p id="62217277-91d1-4910-9698-d74fb8f19968" class="">
+</p><p id="3e648422-f08b-4f7d-9d51-cb5f1292c76b" class="">
+</p><figure id="58be9b63-83cc-49aa-bc37-b9865af9d8e4" class="image"><a href="Introduction%2027979452a25840fb86b52bea07adf0c3/Untitled%209.png"><img style="width:725px" src="Introduction%2027979452a25840fb86b52bea07adf0c3/Untitled%209.png"/></a></figure><p id="e8c372bd-8386-40ce-99d7-cb1bebfc003c" class="">
+</p><hr id="44237d8a-a12d-4b0e-96db-7b680363b2d5"/><p id="0b54718e-d28f-4d95-ab38-8f8f8d8fcd86" class="">
+</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
