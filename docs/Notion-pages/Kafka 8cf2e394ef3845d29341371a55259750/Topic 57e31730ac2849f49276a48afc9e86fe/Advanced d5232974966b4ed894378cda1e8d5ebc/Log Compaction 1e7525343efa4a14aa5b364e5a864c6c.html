@@ -1,0 +1,736 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Log Compaction</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="1e752534-3efa-4a14-aa5b-364e5a864c6c" class="page sans"><header><h1 class="page-title"><strong><strong>Log Compaction</strong></strong></h1><p class="page-description"></p></header><div class="page-body"><hr id="f4f534a1-7558-4d81-86b2-bf46a429924c"/><p id="4aaed511-4738-4226-8aa8-6b7542ab4153" class="">
+</p><p id="c3e99e09-4ab7-408a-83eb-3d0b4fb0b1aa" class=""><strong><strong>Kafka Log Cleanup Policies</strong></strong></p><p id="4d4394e5-5426-4a35-97f8-7cf45c707f6d" class="">Kafka stores messages for a set amount of time and purge messages older than the retention period. This expiration happens due to a policy called <code><strong>log.cleanup.policy</strong></code>. There are two cleanup policies:</p><ul id="5a674a2d-c851-46e5-9468-9b41428f7d43" class="bulleted-list"><li style="list-style-type:disc"><code><strong>log.cleanup.policy=delete</strong></code><p id="6c2a8d7e-a06f-450e-bb4f-60dc90160498" class="">This is the default for all the user topics. With this policy configured for a topic, Kafka deletes events older than the configured retention time. The default retention period is a week. </p></li></ul><ul id="b37add91-3a6c-4dc9-9600-db8f84b99563" class="bulleted-list"><li style="list-style-type:disc"><code><strong>log.cleanup.policy=compact</strong></code><p id="c0a9b05b-9f22-484c-8836-344cf0ea5455" class="">This policy is the default for Kafka&#x27;s <code>__consumer_offsets</code> topic. With this policy on a topic, Kafka only stores the most recent value for each key in the topic. Setting the policy to compact only makes sense on topics for which applications produce events that contain both a key and a value.</p></li></ul><p id="b7ff88a4-9cdf-4d5c-9da8-f6ed552e8d2e" class="">
+</p><hr id="286b9d2a-6b9d-47ee-be42-455d54ac777f"/><p id="fbf3c58a-a5c1-46a4-bc27-8e3cad87ffb1" class="">
+</p><p id="76c1b58d-f630-4177-ae00-daa9b03a1d28" class=""><strong><strong>Purpose of Log Cleanup</strong></strong></p><p id="bae21b3e-58a1-4523-b1ec-91cedcb471ec" class="">Kafka was not initially meant to keep data forever (although now some people are going in that direction with large disks or <a href="https://cwiki.apache.org/confluence/display/KAFKA/KIP-405%3A+Kafka+Tiered+Storage"><strong>Tiered Storage</strong></a>), nor does it wait for all consumers to read a message before deleting it. By configuring a retention policy for each topic, it allows administrators to:</p><ul id="3c8729b3-1b35-4f3b-a5b8-a0bc44284269" class="bulleted-list"><li style="list-style-type:disc">Control the size of the data on the disk and delete obsolete data</li></ul><ul id="b6bb3324-916a-4287-836d-4c6acee9a3bb" class="bulleted-list"><li style="list-style-type:disc">Limit maintenance work on the Kafka Cluster</li></ul><ul id="26bc3b47-a5cf-4bf8-a67d-8a0639470d86" class="bulleted-list"><li style="list-style-type:disc">Limit the amount of historical data a consumer may have to consume to catch up on the topic</li></ul><p id="95512e35-3c73-4b70-96c9-20f4f8d57ee0" class="">
+</p><hr id="b953f3fa-6329-4fdf-bd0b-4e2d21e69888"/><p id="9d5fb960-a516-438d-91aa-1e6152ed86ec" class="">
+</p><p id="c7f808ff-9959-4046-90b8-29696f38a059" class=""><strong><strong>Kafka Log Cleanup frequency</strong></strong></p><p id="1939d951-bc20-43dd-9bd7-a3568fe4f8e5" class="">Log cleanup happens on the partition segments. Segments divide partition data into smaller files that can be managed better and cleaned independently.</p><p id="2f386a55-9f80-43cd-bf1c-c478a2a92ca0" class="">
+</p><p id="7191e932-b375-4a7b-b636-9fb5bba8c902" class="">Cleanup should happen often enough to ensure the files are deleted, but not so often as to affect the broker and disk performance. Smaller log retention sizes might require more frequent checks.</p><p id="eed4b0db-cd7f-4e2f-8a79-f4972dbc8c73" class="">
+</p><hr id="8cabd342-7b62-49ce-9df3-a78abba58eec"/><p id="d5556f9e-82c2-448b-b0db-5c12577c5687" class="">
+</p><p id="5fa490a5-ecae-4bd2-a3aa-c1acda73e5ba" class=""><strong><strong>Kafka Log Compaction Theory</strong></strong></p><p id="734a7a7c-8687-47c8-9e8a-6a96d7a7adc2" class="">As we learned in the section on <strong>Kafka Log Cleanup Policies</strong>, Kafka will store messages for a set amount of time and purge messages older than the retention period. However, imagine a case where Kafka is used for storing the salary information about all the employees in a company. In that case, it makes sense to store only the latest salary for each employee rather than the historical data for a limited period of time.</p><p id="7c7ad071-08c2-4f3c-8307-afb8e2188c67" class="">
+</p><p id="bf2f28f2-54eb-446f-8013-499ca599cf29" class="">Kafka supports such use cases by allowing the retention policy on a topic to be set to<strong> </strong><code>compact</code>, <strong>with the property to only retain at least the most recent value for each key in the partition</strong>. It is very useful if we just require a SNAPSHOT instead of full history.</p><p id="4b2e7e88-1889-4cc7-8d92-6bd990d03bd7" class="">
+</p><hr id="1700c03f-c87e-4627-af85-7f75f1565082"/><p id="918376f5-3445-4949-b7ab-48fbe6e68e59" class="">
+</p><p id="0c786ad7-5039-40b4-8e05-1a281519219f" class=""><strong><strong>Kafka Log Compaction Example</strong></strong></p><p id="1e4901ea-c730-4f31-b32a-0705bbb13c59" class="">We want to keep the most recent salary for our employees. We create a topic named <code>employee-salary</code> for the purpose. We don&#x27;t want to know about the old salaries of the employees.</p><figure id="be26c7dc-6f9b-428e-9d39-b60e63c23178" class="image"><a href="https://www.conduktor.io/kafka/_next/image/?url=https%3A%2F%2Fimages.ctfassets.net%2Fo12xgu4mepom%2FTgidROVeU03NupMlMWSUP%2F3ace538273eedb30bf15bc0b02cb2039%2FAdv_Kafka_Topic_Log_Comp_2.png&amp;w=3840&amp;q=75"><img style="width:700px" src="https://www.conduktor.io/kafka/_next/image/?url=https%3A%2F%2Fimages.ctfassets.net%2Fo12xgu4mepom%2FTgidROVeU03NupMlMWSUP%2F3ace538273eedb30bf15bc0b02cb2039%2FAdv_Kafka_Topic_Log_Comp_2.png&amp;w=3840&amp;q=75"/></a></figure><p id="0b05ad5f-5891-44be-9e82-4391b90b54f5" class=""><em>Kafka Log Compaction Example</em></p><p id="d264ede6-d178-4ba3-bdbf-fece82070b4a" class="">
+</p><p id="3fb1b863-4f72-42bc-933f-7bfd2f938c69" class="">
+</p><p id="71e3d8d3-87ba-4e6e-a6b0-9ac020da53d2" class="">
+</p><hr id="347f4960-01be-4494-9ddf-53ba549a7a0d"/><p id="ea219601-ffd4-4170-9c1f-c0ded0c25faf" class="">
+</p><p id="d0168272-6a47-464e-8db7-1d315f882492" class=""><strong><strong>Kafka Log Compaction Guarantees</strong></strong></p><p id="f23982d0-70e1-4e3c-8e80-67c22db64a2e" class="">There are some important guarantees that Kafka provides for messages produced on the log-compacted topics.</p><ul id="14c207af-574d-4d4b-ac46-c2ff1fa1ee5a" class="bulleted-list"><li style="list-style-type:disc">Any consumer that is reading from the tail of a log, i.e., the most current data, will still see all the messages sent to the topic. It does not matter whether a topic is log-compacted or not, consumers subscribed to the topic will see messages as they are produced on the topic.</li></ul><ul id="a3e6c455-c566-4a83-a388-67bc450d6168" class="bulleted-list"><li style="list-style-type:disc">Ordering of messages at the key level and partition level is kept, log compaction only removes some messages, but does not re-order them. The offsets are kept, only some messages are deleted.</li></ul><ul id="f7109493-4e1c-403e-b086-042fea185b33" class="bulleted-list"><li style="list-style-type:disc">The offset of a message is immutable (it never changes). Offsets are just skipped if a message is missing</li></ul><ul id="a6f93775-c8ab-47bf-b3a1-a718f25a42af" class="bulleted-list"><li style="list-style-type:disc">Deleted records can still be seen by consumers for a period of <code>log.cleaner.delete.retention.ms</code> (default is 24 hours). This gives some heads-up time for the consumers to catch up on the messages that will be deleted.</li></ul><p id="96a8efcd-8108-4cad-8420-d9bbf942a487" class="">
+</p><hr id="bf8f960f-ef11-47ea-bfba-c1ccffe749a7"/><p id="987f4446-002b-4b8f-802d-084a89aca7f0" class="">
+</p><p id="10482063-97e9-476a-82bd-df0c7ea7083a" class=""><strong><strong>Kafka Log Compaction Myth Busting</strong></strong></p><p id="27d81693-d79e-4a78-b281-8b63c9df25e7" class="">Let us look at some of the misconceptions around log compaction and clear them.</p><ul id="b082d7c0-d554-4629-81b4-8ca074d2d2ed" class="bulleted-list"><li style="list-style-type:disc"><strong>It doesn’t prevent you from pushing duplicate data to Kafka.</strong><p id="47a9c455-c72d-41bf-840c-b0d16ab6819c" class="">De-duplication is done after a segment is committed. Your consumers will still read from the tail of a log segment as soon as the data arrives. It is not a way to perform de-duplication of messages.</p></li></ul><ul id="d018c79c-5704-4005-ae83-a431d6a331d7" class="bulleted-list"><li style="list-style-type:disc"><strong>It doesn’t prevent you from reading duplicate data from Kafka.</strong><p id="8324d906-96dd-4aee-b980-bc61d6a2d64b" class="">If a consumer re-starts, it may see duplicate data, based on the at-least-once reading semantics we have seen before</p></li></ul><p id="63f89c4f-36be-49f7-b719-1265cff526a2" class="">
+</p><hr id="a6979fd9-a0a5-43e5-b652-7c883c11286a"/><p id="a3e1605c-3770-432b-a7c5-ea883c1c2567" class="">
+</p><p id="881692cc-9d10-43c9-bd23-1f28454813c0" class=""><strong><strong>How Kafka Log Compaction Works</strong></strong></p><p id="838500fa-71f0-49e9-9118-6adf590370e3" class="">
+</p><p id="c597bad2-59a8-40c6-a509-ef13036d23d0" class="">If compaction is enabled when Kafka starts, each broker will start a compaction manager thread and a number of compaction threads. These are responsible for performing the compaction tasks.</p><figure id="fbc1c810-041a-467c-a0ff-35ff4a87f8d4" class="image"><a href="https://www.conduktor.io/kafka/_next/image/?url=https%3A%2F%2Fimages.ctfassets.net%2Fo12xgu4mepom%2F1I3rXzEXxylIEmsUGHFWdl%2Fe924ffd0357e92014f085b80e403f072%2FAdv_Kafka_Topic_Log_Comp_3.png&amp;w=3840&amp;q=75"><img style="width:700px" src="https://www.conduktor.io/kafka/_next/image/?url=https%3A%2F%2Fimages.ctfassets.net%2Fo12xgu4mepom%2F1I3rXzEXxylIEmsUGHFWdl%2Fe924ffd0357e92014f085b80e403f072%2FAdv_Kafka_Topic_Log_Comp_3.png&amp;w=3840&amp;q=75"/></a></figure><p id="334a96f8-9774-4835-bfa7-4515f4e7b3b4" class=""><em>Kafka Log Compaction Cleaner Threads</em></p><ul id="32db5802-3209-427c-8f77-341dfa5cd616" class="bulleted-list"><li style="list-style-type:disc">Cleaner threads start with the oldest segment and check their contents. The active segments are left untouched by the cleaner threads.</li></ul><ul id="bf0f607a-42ac-4fab-926e-8dd4eac7be61" class="bulleted-list"><li style="list-style-type:disc">If the message it has just read is still the latest for a key, it copies over the message to a replacement segment. Otherwise it omits the message because there is a message with an identical key but a newer value later in the partition.</li></ul><ul id="77b9662f-516e-4636-97e9-2035b535b995" class="bulleted-list"><li style="list-style-type:disc">Once the cleaner thread has copied over all the messages that still contain the latest value for their key, we swap the replacement segment for the original and move on to the next segment.</li></ul><ul id="c3da0699-8036-4053-b87f-3b9f18a8a474" class="bulleted-list"><li style="list-style-type:disc">At the end of the process, we are left with one message per key - the one with the latest value.</li></ul><p id="8961b775-46af-40e0-849d-c3a3ed8b9e05" class="">
+</p><hr id="a3f476b8-74c8-4e5e-81bf-9b1eb1e70c28"/><p id="1d595571-a919-4d02-b972-bc1d890bcdd4" class="">
+</p><p id="6e0e36d5-f632-4169-9465-8a3469e6246b" class=""><strong><strong>Log Compaction Practice</strong></strong></p><p id="3d450161-4a42-44a0-a3ef-89355fb5c780" class="">We want to keep the most recent salary for our employees. We create a topic named <code>employee-salary</code> for this purpose. We don&#x27;t want to know about the old salaries of the employees.</p><figure id="e4060a4a-34e7-4693-81aa-eed30a42cdee" class="image"><a href="https://www.conduktor.io/kafka/_next/image/?url=https%3A%2F%2Fimages.ctfassets.net%2Fo12xgu4mepom%2FTgidROVeU03NupMlMWSUP%2F3ace538273eedb30bf15bc0b02cb2039%2FAdv_Kafka_Topic_Log_Comp_2.png&amp;w=3840&amp;q=75"><img style="width:700px" src="https://www.conduktor.io/kafka/_next/image/?url=https%3A%2F%2Fimages.ctfassets.net%2Fo12xgu4mepom%2FTgidROVeU03NupMlMWSUP%2F3ace538273eedb30bf15bc0b02cb2039%2FAdv_Kafka_Topic_Log_Comp_2.png&amp;w=3840&amp;q=75"/></a></figure><p id="c72c80de-1672-4801-a620-3458fc14df04" class=""><em>Kafka Log Compaction Example</em></p><p id="9e86dfbc-14b1-495d-8f99-497d1c9fb7b8" class="">
+</p><hr id="01371c7c-f3f1-4db9-b0d3-3f62c0594bf2"/><p id="ca555c3a-90f8-4eb9-82a2-179580f32001" class="">
+</p><p id="0710e4ac-bffc-456f-b1bf-7ffc665f959e" class="">Create a log-compacted topic named <code>employee-salary</code> with a single partition and a replication factor of 1. Use Kafka topics CLI and pass appropriate configs as shown below.</p><ul id="85e7b6b0-400a-4323-9a28-1129528f81a9" class="bulleted-list"><li style="list-style-type:disc">Number of partitions=1. This is to ensure all messages go the same partition.</li></ul><ul id="c1056804-df7b-473a-8429-f5bcffdfe322" class="bulleted-list"><li style="list-style-type:disc"><code>cleanup.policy=compact</code>. This enables log compaction for the topic.</li></ul><ul id="c3e885c8-a120-4a86-a396-f745ce97f910" class="bulleted-list"><li style="list-style-type:disc"><code>min.cleanable.dirty.ratio=0.001</code>. This is just to ensure log cleanup is triggered always.</li></ul><ul id="426d5293-c96e-438e-b69e-a2a28e4adf28" class="bulleted-list"><li style="list-style-type:disc"><code>segment.ms=5000</code>. New segment will be created every 5 seconds. Log compaction will happen on closed segments only</li></ul><p id="86567fda-6d63-4382-ab85-e19deb85c9d4" class="">
+</p><hr id="5d47a9ad-7497-416b-aff1-8961eb5ce668"/><p id="fc0503ec-4a00-4a2a-9246-8a6bc413dda2" class="">
+</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a3975d74-852f-4fa5-9f01-453f59f7b787" class="code"><code class="language-Bash">kafka-topics.sh --bootstrap-server localhost:9092 --create --topic employee-salary \
+    --partitions 1 --replication-factor 1 \
+    --config cleanup.policy=compact \
+    --config min.cleanable.dirty.ratio=0.001 \
+    --config segment.ms=5000</code></pre><p id="99bee1c1-e25a-4a13-b8f8-4e3df52b2059" class="">
+</p><p id="ac898d60-522b-4d50-ba17-6c32c5abfd6c" class="">Describe the topic to make sure the configurations have been applied correctly.</p><p id="5893efd8-9854-4ad9-aefb-ec692a254700" class="">
+</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="3a6f745b-e5b2-4db7-8354-eef7072e0b44" class="code"><code class="language-Bash">kafka-topics.sh --bootstrap-server localhost:9092 --describe \
+                --topic employee-salary</code></pre><p id="646bd296-390a-43b0-a189-3f29d4c01366" class="">
+</p><p id="89fd6ef9-b436-41bc-84a7-a00b08058d42" class="">Start a Kafka console consumer.</p><p id="0a6fea9c-e919-41e4-9b72-1897adaf8d92" class="">Use the following command to show both the key and value, separated by a comma.</p><p id="aeff3b7a-14e4-43bf-b1c2-b1c827733fd1" class="">
+</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="cdb3be0f-5205-47e6-a51f-d4aa7a892c91" class="code"><code class="language-Bash">kafka-console-consumer.sh --bootstrap-server localhost:9092 \
+    --topic employee-salary \
+    --from-beginning \
+    --property print.key=true \
+    --property key.separator=,</code></pre><p id="65bd3b3b-596e-4cc2-a9a4-20b3357819dd" class="">
+</p><p id="48af10ad-ddf0-4978-8d0c-cf8adbba31bf" class="">Launch another shell to create a Kafka console producer. We want to send keys for the messages. The separator between the key and the value is a comma.</p><p id="89a60af4-ce7d-48e9-a038-b8b31a7132c3" class="">
+</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="11b8f2c7-5ea9-41a6-bf65-2b1623beb252" class="code"><code class="language-Bash">kafka-console-producer.sh --bootstrap-server localhost:9092 \
+    --topic employee-salary \
+    --property parse.key=true \
+    --property key.separator=,</code></pre><p id="2d03e179-2af1-4904-a3b5-a51aa6351a70" class="">
+</p><p id="045892fd-bf48-4a77-b9f7-e9fd359df90c" class="">Produce a few messages with duplicate keys. In the first message shown below, the key is <code>Mark</code> and the value is <code>salary: 1000</code>.</p><p id="2cc542af-b054-4f14-8ec0-dddb356c225e" class="">
+</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="bee07e18-f5c7-4cc2-ae85-c858f4598c25" class="code"><code class="language-Bash">Patrick,salary: 10000
+Lucy,salary: 20000
+Bob,salary: 20000
+Patrick,salary: 25000
+Lucy,salary: 30000
+Patrick,salary: 30000</code></pre><p id="2ebcd4b9-b2b8-44da-ba12-bcf02207e9f9" class="">
+</p><p id="dcc698b9-dd66-477f-822d-72d60f59a05e" class="">Wait a minute, and produce a few more messages (it could be the same messages)</p><p id="6e64a050-e02e-425f-8109-8d7247f492eb" class="">
+</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="4ba9bcbc-a1cc-47ff-8987-a00c5ad511ef" class="code"><code class="language-Bash">Stephane,salary: 0</code></pre><p id="4b0f7b70-4f5d-4398-9931-f2966ca01c5c" class="">
+</p><p id="7c252e4d-e66a-4ebc-a2b5-963fde1a5036" class="">Stop the Kafka console consumer and start a new one. We are fetching all the messages from the beginning. <strong>We&#x27;ll see only the unique keys with their corresponding latest values.</strong></p><p id="c863f8e7-29f7-446d-b7b9-d414cd318468" class="">
+</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ea9fd939-7e55-432b-b17c-b573e8d57579" class="code"><code class="language-Bash">Bob,salary: 20000
+Lucy,salary: 30000
+Patrick,salary: 30000
+Stephane,salary: 0</code></pre><p id="dd78f96a-8f2a-4219-9d42-40d4168e91b2" class="">
+</p><p id="541db3f6-0c54-4a3d-8df3-e7c876bd560e" class="">Log compaction will take place in the background automatically. We cannot trigger it explicitly. However, we can control how often it is triggered with the log compaction properties.</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

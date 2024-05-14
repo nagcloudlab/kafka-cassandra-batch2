@@ -1,0 +1,696 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Kafka Connect</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="d63fb488-9bb4-4f6c-b046-070247c3e98b" class="page sans"><header><h1 class="page-title">Kafka Connect</h1><p class="page-description"></p></header><div class="page-body"><hr id="93caffc0-ef41-467f-b19b-87f38e000cf5"/><p id="38504790-f6b6-4e22-a59a-a2e7e9e82960" class="">
+</p><p id="7cba3f80-1976-4997-84c8-84581c3c085f" class="">
+</p><hr id="55bc6a27-685e-4e8f-bd8d-031c9afd2c48"/><p id="6118efe5-c1f0-4046-a137-1ece6ab45059" class=""><strong>Meet Kafka Connect</strong></p><hr id="d0eac6e3-254e-44c1-b051-b17ac269d2d7"/><p id="b0d65616-5d76-4650-8efa-b64e592ba465" class="">
+</p><h3 id="4fbd7c88-d11c-4b69-912d-114e51e48992" class=""><strong>Slide 1: Introduction to Data Challenges</strong></h3><ul id="88d0d0a9-06ac-4444-975c-2ee1ddce9ac9" class="bulleted-list"><li style="list-style-type:disc"><strong>Title:</strong> The Growing Data Challenge</li></ul><ul id="ae6711db-d9be-4823-b14b-6231c6261ef4" class="bulleted-list"><li style="list-style-type:disc"><strong>Points:</strong><ul id="0473f52a-e603-42f4-a047-9ff46f7404bb" class="bulleted-list"><li style="list-style-type:circle">Exponential growth in data creation (2.5 quintillion bytes daily in 2018)</li></ul><ul id="06bc1b40-e57d-484f-bcba-ab42a20b9711" class="bulleted-list"><li style="list-style-type:circle">Expected data doubling from 2022 to 2025 (IDC forecast)</li></ul></li></ul><h3 id="6ae91b0f-7fd7-432a-b7c5-10abdb33ef71" class=""><strong>Slide 2: Big Data and System Evolution</strong></h3><ul id="3482bdef-e0b4-4f6d-9ca7-3ee4a347d640" class="bulleted-list"><li style="list-style-type:disc"><strong>Title:</strong> Evolution of Systems for Big Data</li></ul><ul id="977933a8-14ec-4020-a1f8-de4df560c84e" class="bulleted-list"><li style="list-style-type:disc"><strong>Points:</strong><ul id="100ebc66-c2f6-4456-aa5b-3f3e834c40fb" class="bulleted-list"><li style="list-style-type:circle">Growth in the variety and number of databases, data stores, and tools</li></ul><ul id="fed9dbf0-d80d-49fa-9748-d12b9859e493" class="bulleted-list"><li style="list-style-type:circle">Typical organizations operate multiple systems due to different reasons (acquisitions, optimizations, management by various teams)</li></ul></li></ul><h3 id="8a34f9a4-5dc9-4f5a-ba9c-5181563f3cd5" class=""><strong>Slide 3: The Need for Data Pipelines</strong></h3><ul id="f722f054-3e80-44e2-b4af-7be5ab91fa7d" class="bulleted-list"><li style="list-style-type:disc"><strong>Title:</strong> Importance of Data Pipelines</li></ul><ul id="ef954921-e744-4d0d-a4ed-5cd38c1905d5" class="bulleted-list"><li style="list-style-type:disc"><strong>Points:</strong><ul id="4a72a67b-c82a-4542-9dda-9ee59f21cd22" class="bulleted-list"><li style="list-style-type:circle">Raw data collection is insufficient for competitive advantage</li></ul><ul id="a3b74ab7-243d-43cd-ba38-e1e61fbca1f8" class="bulleted-list"><li style="list-style-type:circle">Data must be refined and analyzed from multiple sources</li></ul><ul id="8e1ae745-db42-4d09-bc41-f089ef0ae1a2" class="bulleted-list"><li style="list-style-type:circle">Use cases: combining marketing and sales data, building personalized programs</li></ul></li></ul><h3 id="9bae12d0-b4d6-46bd-a121-e55559b5a581" class=""><strong>Slide 4: Introduction to Apache Kafka</strong></h3><ul id="6020224d-2a57-470b-8daa-03964abe2128" class="bulleted-list"><li style="list-style-type:disc"><strong>Title:</strong> Apache Kafka: The Data Streaming Standard</li></ul><ul id="0754cbfb-c094-47da-bca6-6e93e9aea04b" class="bulleted-list"><li style="list-style-type:disc"><strong>Points:</strong><ul id="6c0e5bf3-349d-4d03-9b5b-0e5cee682b9d" class="bulleted-list"><li style="list-style-type:circle">Emergence of Apache Kafka as a key platform for real-time large data processing</li></ul><ul id="f1a01f31-ddf7-413a-97c2-e181a3aad4c1" class="bulleted-list"><li style="list-style-type:circle">Used by over 80% of Fortune 100 companies</li></ul><ul id="8bbd0e1c-ea34-4dd5-a8b6-6af4fc4d37d1" class="bulleted-list"><li style="list-style-type:circle">Central to many data deployments</li></ul></li></ul><h3 id="4814b5c8-e8fb-4a52-b15a-436ee2b20a7d" class=""><strong>Slide 5: Data Integration Challenges</strong></h3><ul id="5adfdce7-b8a6-4c8a-b158-9c7b1b61e71d" class="bulleted-list"><li style="list-style-type:disc"><strong>Title:</strong> Challenges in Data Integration</li></ul><ul id="c28842fe-803c-4cd1-be22-5b4d355208f3" class="bulleted-list"><li style="list-style-type:disc"><strong>Points:</strong><ul id="48cc48e6-858d-46b5-8b05-7d1548c2018b" class="bulleted-list"><li style="list-style-type:circle">Complexity in aggregating data across systems with diverse APIs and formats</li></ul><ul id="95c69ad5-0edf-4d48-bb41-c94eacc3d379" class="bulleted-list"><li style="list-style-type:circle">Increased burden in maintenance and developer time</li></ul></li></ul><h3 id="d9df1f41-7738-41ae-b41f-7f56502cc1e2" class=""><strong>Slide 6: Introduction to Kafka Connect</strong></h3><ul id="6abfdfc5-ccb9-44d7-9787-2ec07b329bb8" class="bulleted-list"><li style="list-style-type:disc"><strong>Title:</strong> Kafka Connect: Simplifying Data Integration</li></ul><ul id="1fead6f4-5974-4e9a-868e-3309884523e2" class="bulleted-list"><li style="list-style-type:disc"><strong>Points:</strong><ul id="6664be37-bc12-457a-895a-e84441d55602" class="bulleted-list"><li style="list-style-type:circle">Part of the Apache Kafka ecosystem</li></ul><ul id="847877a3-5e74-4d58-b2d3-fdc32f3af1ef" class="bulleted-list"><li style="list-style-type:circle">Specializes in integrating systems with Kafka for efficient data movement and processing</li></ul><ul id="4f77b635-97f7-42e9-8079-19206d1d5aa6" class="bulleted-list"><li style="list-style-type:circle">Use cases: streaming data out of databases into Kafka, moving processed data to long-term storage</li></ul></li></ul><p id="8e62f578-91d0-4ed7-a5da-f630cb13aacc" class="">
+</p><p id="b9b433d3-b358-44f3-b0b6-c135cc6dca66" class="">
+</p><hr id="732cc343-46ad-41c7-bee9-b1c18b549953"/><p id="c3156435-f559-42ac-a18a-3f5ff23b8c96" class=""><strong>Kafka Connect Features</strong></p><hr id="2139a692-a853-4924-860d-70a0f8af8398"/><p id="c7d9298f-d05b-4d78-8c9d-0cb3fc45a374" class="">
+</p><h3 id="f0ae3b70-21b5-446d-b74a-312c2028ed85" class=""><strong>Slide 7: Overview of Kafka Connect</strong></h3><ul id="668c33c7-a3e6-42fd-9083-9efe9d8de8cd" class="bulleted-list"><li style="list-style-type:disc"><strong>Title:</strong> Kafka Connect: Building and Running Data Pipelines</li></ul><ul id="2fc35ea7-c382-4bc3-a104-71222fedaff9" class="bulleted-list"><li style="list-style-type:disc"><strong>Points:</strong><ul id="81377d9d-8a68-49f1-861d-d8b93a823611" class="bulleted-list"><li style="list-style-type:circle">Introduced in Kafka 0.10.0.0 (2016) via KIP-26</li></ul><ul id="61617c91-af9f-4ff5-b20e-7cd5e4b4f12f" class="bulleted-list"><li style="list-style-type:circle">Provides a runtime and framework for robust, scalable data pipelines</li></ul><ul id="203ba2c1-74b3-43ba-a6c2-681f6c03ff7b" class="bulleted-list"><li style="list-style-type:circle">Includes a single control plane for managing all pipelines</li></ul><ul id="328b843e-16f5-47a7-abea-136e2c7cad78" class="bulleted-list"><li style="list-style-type:circle">Often allows building pipelines without coding, focusing engineers on use cases</li></ul></li></ul><h3 id="cf6edd94-be76-4f0e-b122-4a540bd597c3" class=""><strong>Slide 8: Source and Sink Pipelines</strong></h3><ul id="78d735b1-26fe-402b-a2e2-0ef254b18a55" class="bulleted-list"><li style="list-style-type:disc"><strong>Title:</strong> Understanding Source and Sink Pipelines</li></ul><ul id="915c72c8-b2a3-4f6c-93fa-bbcb06cfbd36" class="bulleted-list"><li style="list-style-type:disc"><strong>Points:</strong><ul id="b46d4238-1e75-4b5a-9989-90b9aa8b8cd5" class="bulleted-list"><li style="list-style-type:circle"><strong>Source Pipelines:</strong> Data flows from external systems to Kafka</li></ul><ul id="cc98f664-6890-4fb5-a626-b2669f73b989" class="bulleted-list"><li style="list-style-type:circle"><strong>Sink Pipelines:</strong> Data moves from Kafka to external systems</li></ul><ul id="277307b3-aa9a-4e8e-a8cd-4e00741af689" class="bulleted-list"><li style="list-style-type:circle">Pipelines ensure one side is always connected to Kafka, simplifying integration</li></ul></li></ul><h3 id="e2e46ec1-9fe2-4d2c-ae56-5810bc805233" class=""><strong>Slide 9: Kafka Connect Architecture</strong></h3><ul id="027a9e7e-1ffa-43de-8bc7-7ff85fe7cf99" class="bulleted-list"><li style="list-style-type:disc"><strong>Title:</strong> Key Features of Kafka Connect</li></ul><ul id="48911920-2a0a-4cc6-9504-06f0ec27d50e" class="bulleted-list"><li style="list-style-type:disc"><strong>Points:</strong><ul id="1d93fdc9-b36e-416a-8a57-9a32cacff5c0" class="bulleted-list"><li style="list-style-type:circle"><strong>Pluggable Architecture:</strong> Easily extendable with custom plugins and connectors</li></ul><ul id="080c832b-d5e2-42d5-8c14-bfc72e5dc9f8" class="bulleted-list"><li style="list-style-type:circle"><strong>Scalable and Reliable:</strong> Proven resilience under heavy loads and large-scale deployments</li></ul><ul id="cb3dc696-d367-4018-96c1-fb7d8b47bc88" class="bulleted-list"><li style="list-style-type:circle"><strong>Declarative Pipeline Definition:</strong> Simplifies the setup and management of data flows</li></ul></li></ul><h3 id="4232a8ff-a09a-4886-b08d-a14c3a372272" class=""><strong>Slide 10: Example of Kafka Connect in Action</strong></h3><ul id="684ac0b2-d713-413a-9f81-ba846130f151" class="bulleted-list"><li style="list-style-type:disc"><strong>Title:</strong> Example: Source Pipeline from Database to Kafka</li></ul><ul id="c233fb4b-67cd-410f-942b-cf02fd39a128" class="bulleted-list"><li style="list-style-type:disc"><strong>Points:</strong><ul id="e5b2c186-9001-49fd-bee0-6c291866ae5e" class="bulleted-list"><li style="list-style-type:circle">Demonstrates a simple use case of importing data from a database into Kafka</li></ul><ul id="acb58af0-5bf0-4285-b833-944f0ca5c113" class="bulleted-list"><li style="list-style-type:circle">Figure: Illustration of a basic source pipeline setup with Kafka Connect</li></ul><p id="5adef577-7b87-4772-8485-06d236cb7bd1" class="">For example, <a href="https://learning.oreilly.com/library/view/kafka-connect/9781098126520/ch01.html#a_basic_source_pipeline_with_kafka_conn">Figure 1-1</a> shows a source pipeline that imports data from a database into Kafka.</p><p id="1ee004e2-381c-423a-bb83-155f3061a221" class=""><strong><strong>Figure 1-1. A basic source pipeline with Kafka Connect.</strong></strong></p><figure id="ae5d42e4-8adc-4ff7-9976-60f440b6a93b" class="image"><a href="https://learning.oreilly.com/api/v2/epubs/urn:orm:book:9781098126520/files/assets/kfco_0101.png"><img style="width:700px" src="https://learning.oreilly.com/api/v2/epubs/urn:orm:book:9781098126520/files/assets/kfco_0101.png"/></a></figure><p id="9539f7e2-1b5d-4217-8be8-a32f15edeb73" class="">
+</p><p id="bd5ba4d2-dc66-45c6-bf38-41dd784432f6" class="">
+</p></li></ul><hr id="a27a01c8-df5d-44ae-bf70-b32c6676f494"/><p id="8e41d49e-071d-44d3-9729-ec3c09f13aa9" class=""><strong><strong>Pluggable Architecture</strong></strong></p><hr id="8537d5a3-e64b-432e-9d94-80db7c7083ed"/><p id="58c9c5d9-adca-4e8d-b774-dea677c1448c" class="">
+</p><h3 id="decae3e5-7425-4460-810a-b7449ba83944" class=""><strong>Slide 11: Pluggable Architecture of Kafka Connect</strong></h3><ul id="2d4e2d17-7fc9-436b-8570-c3635b68ddff" class="bulleted-list"><li style="list-style-type:disc"><strong>Title:</strong> Pluggable Architecture: Flexibility and Extensibility</li></ul><ul id="9074de21-569d-47ec-9cc7-0c81f72b2be1" class="bulleted-list"><li style="list-style-type:disc"><strong>Points:</strong><ul id="62c2e93c-0b1a-4af0-b741-431ba26a7315" class="bulleted-list"><li style="list-style-type:circle">Provides common logic and APIs for resilient data transfer into and out of Kafka</li></ul><ul id="577ce9e0-ee5d-4d9e-8cfc-b12ee08ed6d8" class="bulleted-list"><li style="list-style-type:circle">Uses plug-ins to manage system-specific logic</li></ul><ul id="f025cbc0-a740-48db-935e-f9d77afe7d36" class="bulleted-list"><li style="list-style-type:circle">Extensive community-created plug-ins for various databases, storage systems, and protocols</li></ul><ul id="ee6d1a80-9476-4eeb-999a-76a867046295" class="bulleted-list"><li style="list-style-type:circle">API availability for creating custom plug-ins for unique needs</li></ul></li></ul><h3 id="41e678e7-affd-4221-812c-3e9d1f4276cf" class=""><strong>Slide 12: Types of Connector Plug-ins</strong></h3><ul id="b965bc29-c33e-4f84-94d2-a7a2c726fdf7" class="bulleted-list"><li style="list-style-type:disc"><strong>Title:</strong> Connector Plug-ins in Kafka Connect</li></ul><ul id="d9316a54-046e-4ffe-ba3e-81848f7bedaf" class="bulleted-list"><li style="list-style-type:disc"><strong>Points:</strong><ul id="b1471d6f-b5a3-4334-9f8d-33bccaf24caf" class="bulleted-list"><li style="list-style-type:circle"><strong>Source Connectors:</strong> Import data from external systems to Kafka</li></ul><ul id="6255642d-9ffa-4012-9217-fc9e828b2176" class="bulleted-list"><li style="list-style-type:circle"><strong>Sink Connectors:</strong> Export data from Kafka to external systems</li></ul><ul id="53318f94-b2d2-43cb-9fbc-40a38d046f2f" class="bulleted-list"><li style="list-style-type:circle"><strong>Converters:</strong> Handle data format conversions between Kafka Connect and external systems</li></ul><ul id="7b125a70-c1cc-44b1-9dc2-43da276edbbd" class="bulleted-list"><li style="list-style-type:circle"><strong>Transformations:</strong> Modify data as it passes through the pipeline</li></ul><ul id="5af9cd40-e8b8-4067-b449-076b812def69" class="bulleted-list"><li style="list-style-type:circle"><strong>Predicates:</strong> Conditionally apply transformations based on data characteristics</li></ul></li></ul><h3 id="8ca9f0e5-4d3f-423b-8098-803e2a7fc84e" class=""><strong>Slide 13: Designing Data Pipelines</strong></h3><ul id="f1f5e749-56ae-4456-a1b5-744aee9659db" class="bulleted-list"><li style="list-style-type:disc"><strong>Title:</strong> Building Data Pipelines with Kafka Connect</li></ul><ul id="a822e3fe-ddcb-4434-938c-e0c2eedcad40" class="bulleted-list"><li style="list-style-type:disc"><strong>Points:</strong><ul id="5aa94999-f620-40c3-a584-4ba34c652f54" class="bulleted-list"><li style="list-style-type:circle">Pipelines consist of connectors, converters, and optionally transformations and predicates</li></ul><ul id="e434a48a-8142-40fc-b113-e3e227022ef9" class="bulleted-list"><li style="list-style-type:circle">Supports both ELT (Extract-Load-Transform) and ETL (Extract-Transform-Load) pipelines</li></ul><ul id="17593863-4973-41dc-b640-57614acc7296" class="bulleted-list"><li style="list-style-type:circle">Example: ETL pipeline with a source connector, a transformation (record filter), and a converter</li></ul></li></ul><h3 id="e0b8272b-f704-4892-81b0-8433d1f33795" class=""><strong>Slide 14: Customizing Kafka Connect</strong></h3><ul id="2595361f-114e-4240-95d5-3c9aa10ccb31" class="bulleted-list"><li style="list-style-type:disc"><strong>Title:</strong> Enhancing Kafka Connect with Worker Plug-ins</li></ul><ul id="0848430e-c043-4fb2-a413-2fcb09fb2990" class="bulleted-list"><li style="list-style-type:disc"><strong>Points:</strong><ul id="d3ca071f-79bf-4e59-8d92-6e70adf11ea1" class="bulleted-list"><li style="list-style-type:circle"><strong>REST Extensions:</strong> Customize the REST API for enhanced interaction</li></ul><ul id="e3b9a684-a7c6-40d1-b927-2d323475dfe2" class="bulleted-list"><li style="list-style-type:circle"><strong>Configuration Providers:</strong> Dynamically retrieve pipeline configurations at runtime</li></ul><ul id="240d95cb-8eca-4786-affe-e047f908b672" class="bulleted-list"><li style="list-style-type:circle"><strong>Connector Client Override Policies:</strong> Manage configuration settings for Kafka clients used by connectors</li></ul></li></ul><h3 id="1656823a-2151-4842-8032-219b5cab6e83" class=""><strong>Slide 15: Example of Kafka Connect Pipeline</strong></h3><ul id="b67f1e6f-ffb6-451f-9681-b1d4f58e771f" class="bulleted-list"><li style="list-style-type:disc"><strong>Title:</strong> Example: Simple ETL Pipeline Configuration</li></ul><ul id="8668ddfe-cefd-4a40-942d-71dfd6e1271a" class="bulleted-list"><li style="list-style-type:disc"><strong>Points:</strong><ul id="4ae7024a-585d-465d-b7e6-5e9be0a7aec3" class="bulleted-list"><li style="list-style-type:circle">Illustration of a basic ETL pipeline with a source connector, a transformation, and a converter</li></ul><ul id="42e3d3e4-a221-4b79-a2fa-fd3c8c71f92c" class="bulleted-list"><li style="list-style-type:circle">Figure: Diagram of Kafka Connect plug-ins forming a source pipeline</li></ul><figure id="a080843e-19e5-4614-862d-acb9c0bd826b" class="image"><a href="Kafka%20Connect%20d63fb4889bb44f6cb046070247c3e98b/Untitled.png"><img style="width:1226px" src="Kafka%20Connect%20d63fb4889bb44f6cb046070247c3e98b/Untitled.png"/></a></figure></li></ul><p id="32f9b302-8111-4510-b063-4649fedc6633" class="">
+</p><p id="23375229-ae91-4fef-8519-4ad9ca350b7c" class="">
+</p><hr id="c1695ca4-05fc-4623-a3b3-fb01880c5881"/><p id="68435b18-e6cd-41e0-a235-c0045e6f3797" class=""><strong><strong>Scalability and Reliability</strong></strong></p><hr id="8f749692-3e1a-4ce4-9b0f-fac45e71c110"/><p id="8394b631-017e-4024-afc2-22bb6a10c1fd" class="">
+</p><h3 id="53253041-6233-49ac-bdd5-d64ffb38bdfd" class=""><strong>Slide 16: Scalability of Kafka Connect</strong></h3><ul id="f03227a1-9c2d-437f-95bc-203236e60e2a" class="bulleted-list"><li style="list-style-type:disc"><strong>Title:</strong> Scalability Features of Kafka Connect</li></ul><ul id="1cccbb45-c16f-4b68-b91c-645be3c8329f" class="bulleted-list"><li style="list-style-type:disc"><strong>Points:</strong><ul id="9140b970-149b-41f2-b260-45e7ce0bccde" class="bulleted-list"><li style="list-style-type:circle">Can be deployed as a standalone application or distributed across multiple hosts</li></ul><ul id="23aa19c9-8908-468b-bb3d-132d1c495d0c" class="bulleted-list"><li style="list-style-type:circle">Supports a wide range of workloads, from small to handling millions of events per second</li></ul><ul id="d0ba2425-7038-4b59-b6be-25da4d8275f0" class="bulleted-list"><li style="list-style-type:circle">Allows dynamic scaling by adding or removing workers at runtime to match demand</li></ul></li></ul><h3 id="273604d7-6de2-40dd-a825-56e9b9266a00" class=""><strong>Slide 17: Reliability and Fault Tolerance</strong></h3><ul id="25e4c0af-6bfd-4560-8fc4-8e155a4e0fd3" class="bulleted-list"><li style="list-style-type:disc"><strong>Title:</strong> Ensuring Reliability in Kafka Connect</li></ul><ul id="8584b372-e5ea-46eb-ac15-77450b8ccb55" class="bulleted-list"><li style="list-style-type:disc"><strong>Points:</strong><ul id="86b257d6-599a-44fe-aa5b-8a43dd2b2e5b" class="bulleted-list"><li style="list-style-type:circle">Workers in a cluster share the workload, enhancing overall system resilience</li></ul><ul id="3dd7cc39-d9d3-4aac-9b92-05d41dd83950" class="bulleted-list"><li style="list-style-type:circle">Automatic workload redistribution if a worker fails, ensuring continuous operation</li></ul><ul id="77c87601-310c-43a6-9513-944fe55720df" class="bulleted-list"><li style="list-style-type:circle">High fault tolerance makes it suitable for critical data processing tasks</li></ul></li></ul><h3 id="1db26d7d-fd87-4d97-919c-e1f422e1208f" class=""><strong>Slide 18: Kafka Connect Cluster Example</strong></h3><ul id="dfe405dc-df9d-4189-b4bc-ddfcf0498c07" class="bulleted-list"><li style="list-style-type:disc"><strong>Title:</strong> Example: Kafka Connect Cluster Operation</li></ul><ul id="4e45fbc6-2293-48de-8c7d-ab16bc779a6d" class="bulleted-list"><li style="list-style-type:disc"><strong>Points:</strong><ul id="8cd2c985-76de-4e02-9ea5-32c05f4f63e0" class="bulleted-list"><li style="list-style-type:circle">Illustration of a cluster with three workers handling two pipelines: from Database 1 to Kafka, and from Database 2 to Kafka</li></ul><ul id="b8cf88c8-af73-4ac1-9dd1-7de7e1dda824" class="bulleted-list"><li style="list-style-type:circle">Demonstrates workload distribution and collaboration among workers</li></ul><ul id="4c1ad679-ec73-49b5-a56c-2fb2503b1644" class="bulleted-list"><li style="list-style-type:circle">Figure: Diagram of a Kafka Connect cluster with three workers managing two data pipelines</li></ul><figure id="d8b184e0-eee7-41a0-a815-f0a499a55edd" class="image"><a href="Kafka%20Connect%20d63fb4889bb44f6cb046070247c3e98b/Untitled%201.png"><img style="width:843px" src="Kafka%20Connect%20d63fb4889bb44f6cb046070247c3e98b/Untitled%201.png"/></a></figure><p id="8f894e23-92c0-4246-b0a3-b295fd948911" class="">
+</p><hr id="fbd05770-1ccf-4010-8a7b-22dd69682cea"/><p id="ee2c2a6f-f24d-45a1-a04d-fe97551b74d5" class=""><strong><strong>Declarative Pipeline Definition</strong></strong></p><hr id="1d261e01-2934-4816-a9fb-afc1f5214521"/><p id="a0ad33b5-0738-4845-9fd1-9eb223007b7f" class="">
+</p><h3 id="88ae3ae1-4ea7-44eb-b3c5-665f33dad4aa" class=""><strong>Slide 19: Declarative Pipeline Definition</strong></h3><ul id="ba2c1254-615b-4543-a9ea-d9941a29579e" class="bulleted-list"><li style="list-style-type:circle"><strong>Title:</strong> Declarative Definition of Data Pipelines</li></ul><ul id="67aff7f2-920b-45f8-9758-d331241e2ee7" class="bulleted-list"><li style="list-style-type:circle"><strong>Points:</strong><ul id="727db0ec-29ef-487e-ba13-8e6639b48b78" class="bulleted-list"><li style="list-style-type:square">Pipelines are defined using JSON or properties files without the need for coding</li></ul><ul id="9aec5dd0-582d-44ca-98ad-c3d3929deb72" class="bulleted-list"><li style="list-style-type:square">Simplifies the creation and management of data pipelines by abstracting complex system interactions</li></ul><ul id="8f13e9b0-19a5-4d0f-8443-b10eac866410" class="bulleted-list"><li style="list-style-type:square">Allows data engineers to focus on use cases rather than data movement logistics</li></ul></li></ul><h3 id="1053e217-3952-4408-bd96-3fc90e990bcc" class=""><strong>Slide 20: Using the REST API with Kafka Connect</strong></h3><ul id="3a1c0ff5-dea0-4294-b1dc-74b4d13a5074" class="bulleted-list"><li style="list-style-type:circle"><strong>Title:</strong> Managing Pipelines with the Kafka Connect REST API</li></ul><ul id="2a576bd7-605d-4ae3-b5bc-2d4c4459341e" class="bulleted-list"><li style="list-style-type:circle"><strong>Points:</strong><ul id="58a14a73-351f-4005-bcfc-1339d4e489a7" class="bulleted-list"><li style="list-style-type:square">REST API facilitates starting, stopping, and configuring pipelines</li></ul><ul id="e20c935f-2721-4f0c-9945-e71144351753" class="bulleted-list"><li style="list-style-type:square">Enables monitoring of pipeline health and status from a central location</li></ul><ul id="4b1fc481-cb24-4389-808f-47c845212567" class="bulleted-list"><li style="list-style-type:square">Simplifies the integration and management of data pipelines in enterprise environments</li></ul></li></ul><h3 id="e9734609-196a-4523-93d4-6e5ead7b691f" class=""><strong>Slide 21: Pipeline Instantiation and Operation</strong></h3><ul id="4adbd41a-bc7e-4b6a-bf15-5da2ccb010d1" class="bulleted-list"><li style="list-style-type:circle"><strong>Title:</strong> Automatic Pipeline Operation in Kafka Connect</li></ul><ul id="88bc8fb4-1fb7-4b44-9cbd-ff109b314b79" class="bulleted-list"><li style="list-style-type:circle"><strong>Points:</strong><ul id="9e769fa1-151e-46eb-8647-c66225c3b510" class="bulleted-list"><li style="list-style-type:square">Upon pipeline creation, Kafka Connect automatically instantiates the necessary plug-ins</li></ul><ul id="f1629f82-2c5c-4e46-b3a0-0b8cd6f071a9" class="bulleted-list"><li style="list-style-type:square">Distributes pipeline operations across available workers in the cluster</li></ul><ul id="437afeb7-4dfa-40dc-92fa-b2a9bedfd5f1" class="bulleted-list"><li style="list-style-type:square">Ensures efficient management and scalability of data pipelines</li></ul></li></ul><p id="eede833a-a3d1-4642-9590-9993c5bd2a92" class="">
+</p><h3 id="26b6882c-3523-4b43-af40-5b0648a7de09" class=""><strong>Slide 22: Integration with Apache Kafka</strong></h3><ul id="d4ef0e21-8ab0-40d1-a61e-792d6a1f7ea3" class="bulleted-list"><li style="list-style-type:circle"><strong>Title:</strong> Kafka Connect within the Apache Kafka Ecosystem</li></ul><ul id="056ac203-19b9-490d-8541-7611ff9739cf" class="bulleted-list"><li style="list-style-type:circle"><strong>Points:</strong><ul id="36987362-b4f3-4147-8213-d2c07ed61b9e" class="bulleted-list"><li style="list-style-type:square">Integral part of Apache Kafka, designed to work seamlessly with Kafka systems</li></ul><ul id="007f5c3d-eac2-4bd5-a2dc-7cd8fef77a27" class="bulleted-list"><li style="list-style-type:square">Benefits from the innovations and features of each Kafka release</li></ul><ul id="3c2bbfab-d7a9-45cc-a9a7-9208b58ae482" class="bulleted-list"><li style="list-style-type:square">Utilizes regular Kafka clients and inherits Kafka&#x27;s configuration settings and operational practices</li></ul></li></ul><h3 id="59c8c08b-3f4b-4266-95cc-d47794ed5500" class=""><strong>Slide 23: Community and Compatibility</strong></h3><ul id="e02fc3ac-299a-4bbf-8d0a-f1435c802bfa" class="bulleted-list"><li style="list-style-type:circle"><strong>Title:</strong> Community Support and Compatibility</li></ul><ul id="365afdeb-c478-4a15-a196-7d83bebec883" class="bulleted-list"><li style="list-style-type:circle"><strong>Points:</strong><ul id="ee850961-3903-43e4-a514-944bb1b03293" class="bulleted-list"><li style="list-style-type:square">Strong support from an active open source community</li></ul><ul id="9cf70b7a-9cc2-4c26-b73a-524ded295a72" class="bulleted-list"><li style="list-style-type:square">Regular updates with improvements and new features by the Kafka community</li></ul><ul id="3437745c-5d4c-472b-b47c-25ad43cf0b20" class="bulleted-list"><li style="list-style-type:square">Compatibility with older versions of Kafka ensures smooth upgrades and integration flexibility</li></ul></li></ul><h3 id="43935e00-4b04-46cb-b790-e3a7436341f3" class=""><strong>Slide 24: Configuration and Status Storage</strong></h3><ul id="35358404-c866-4da3-bc1e-05e377903d51" class="bulleted-list"><li style="list-style-type:circle"><strong>Title:</strong> Distributed Mode: Configuration and Status Management</li></ul><ul id="62669407-9148-4413-99a4-374c23db8038" class="bulleted-list"><li style="list-style-type:circle"><strong>Points:</strong><ul id="9193c2ce-5148-4f4d-81c8-4bc86079260d" class="bulleted-list"><li style="list-style-type:square">In distributed mode, uses Kafka itself to store configuration and status data</li></ul><ul id="bd0ccae9-de9a-47cf-a430-9439c016e23a" class="bulleted-list"><li style="list-style-type:square">Eliminates the need for a separate storage system for Kafka Connect</li></ul><ul id="fd3cf6fa-30b7-4bdd-8f4d-b1a10430ebbf" class="bulleted-list"><li style="list-style-type:square">Enhances the simplicity and maintainability of the deployment</li></ul></li></ul><p id="c2b2f7c4-3b5a-42d0-a81a-ab8724c037a1" class="">
+</p><hr id="1cec6848-c02e-43db-8401-0c15e4e69f6f"/><p id="0f59d0cc-e7bf-4301-8c88-83836f0a9cbe" class=""><strong>Use Cases</strong></p><hr id="50cbe5c9-9a26-4c16-8c83-2191bb5d6457"/><p id="64bd2c07-f269-4cb6-97ce-d0ff36b8cc52" class="">
+</p><h3 id="69b67a21-1724-4259-a8da-985312c63512" class=""><strong>Slide 26: Diverse Use Cases of Kafka Connect</strong></h3><ul id="c583c2c9-eea8-4c3f-913c-6560ab0b9a42" class="bulleted-list"><li style="list-style-type:circle"><strong>Title:</strong> Kafka Connect Use Cases Overview</li></ul><ul id="5c727562-321b-4647-95ce-bfeaf40562dc" class="bulleted-list"><li style="list-style-type:circle"><strong>Points:</strong><ul id="5d8f766e-4374-4f29-b459-60392437a9ec" class="bulleted-list"><li style="list-style-type:square">Capturing database changes</li></ul><ul id="71b368a8-52e4-4841-a159-9887e661c037" class="bulleted-list"><li style="list-style-type:square">Mirroring Kafka clusters</li></ul><ul id="395c5cdc-003e-438c-b225-e4167e936656" class="bulleted-list"><li style="list-style-type:square">Building data lakes</li></ul><ul id="2ec59e44-5235-4548-9376-9a989b35a9e8" class="bulleted-list"><li style="list-style-type:square">Aggregating logs</li></ul><ul id="bbb4ec18-1dc8-464f-9ea8-2dda9e4f1c6f" class="bulleted-list"><li style="list-style-type:square">Modernizing legacy systems</li></ul></li></ul><h3 id="b7292c36-d1cd-4c5e-ad11-65973aa12ca9" class=""><strong>Slide 27: Capturing Database Changes</strong></h3><ul id="07c913eb-c7c7-4b2c-8782-716e9815ea98" class="bulleted-list"><li style="list-style-type:circle"><strong>Title:</strong> Use Case: Change Data Capture (CDC)</li></ul><ul id="059d2d0c-17e7-4db1-b98c-20e9fbc87a1c" class="bulleted-list"><li style="list-style-type:circle"><strong>Points:</strong><ul id="712b6373-a32e-4a65-8c71-d951c708ddb7" class="bulleted-list"><li style="list-style-type:square">Tracks real-time changes in databases</li></ul><ul id="0022cb06-ebc5-4ac9-aad0-66ad7693acf5" class="bulleted-list"><li style="list-style-type:square">Reduces database load and allows schema evolution</li></ul><ul id="930ab482-9889-4a07-92b9-a923b99ed97f" class="bulleted-list"><li style="list-style-type:square">Data transformation capabilities (schema imposition, data validation, sensitive data removal)</li></ul><ul id="9d2f2013-a2d7-432e-b926-188b1044a29f" class="bulleted-list"><li style="list-style-type:square">Example connectors: Debezium for database logs, JDBC for query-based CDC</li></ul></li></ul><h3 id="9cff2d23-c860-4260-acd1-aeeb7a8b5579" class=""><strong>Slide 28: Mirroring Kafka Clusters</strong></h3><ul id="36a0d800-05b0-4a7e-adfe-cfaf466a7d6d" class="bulleted-list"><li style="list-style-type:circle"><strong>Title:</strong> Use Case: Mirroring Kafka Clusters</li></ul><ul id="d9f8543a-c69a-4ce9-b45f-713bb3c8ebf2" class="bulleted-list"><li style="list-style-type:circle"><strong>Points:</strong><ul id="0ff24fb9-d0a1-48ac-ab47-5c88d53d14c2" class="bulleted-list"><li style="list-style-type:square">Essential for disaster recovery, cluster migration, and geo-replication</li></ul><ul id="43c14c9f-f850-450c-b2da-582314daebe9" class="bulleted-list"><li style="list-style-type:square">Synchronizes data and metadata between clusters</li></ul><ul id="175cdee2-ac01-40ee-9aa5-4a086849c7fd" class="bulleted-list"><li style="list-style-type:square">Utilizes MirrorMaker for effective data mirroring</li></ul><ul id="4ccf943d-3b18-4910-a313-3dc30bbf4d24" class="bulleted-list"><li style="list-style-type:square">Supports data availability in diverse scenarios</li></ul></li></ul><h3 id="d759d592-d69b-42f3-8feb-0f5fecd4a3d9" class=""><strong>Slide 29: Building Data Lakes</strong></h3><ul id="e5e9e981-2e01-4e9f-ba5f-47360be60d73" class="bulleted-list"><li style="list-style-type:circle"><strong>Title:</strong> Use Case: Building Data Lakes</li></ul><ul id="ee5b0dd0-0fdb-492f-90ff-09081f053a16" class="bulleted-list"><li style="list-style-type:circle"><strong>Points:</strong><ul id="a9e78e72-f970-4607-a842-4fb86f9d3098" class="bulleted-list"><li style="list-style-type:square">Facilitates long-term data storage and management</li></ul><ul id="ff240b79-218f-4d96-8dbc-5d4661051486" class="bulleted-list"><li style="list-style-type:square">Integration with storage solutions like Amazon S3</li></ul><ul id="6f8e14ef-60aa-4dab-bbab-22047e9dcb3e" class="bulleted-list"><li style="list-style-type:square">Useful for auditing, ML, and AI training data</li></ul><ul id="5ca814b6-ba11-4694-8af8-e243fd399936" class="bulleted-list"><li style="list-style-type:square">Future Kafka enhancements will support tiered storage</li></ul></li></ul><h3 id="27317164-9bcd-4391-b09c-182ce050cc9f" class=""><strong>Slide 30: Aggregating Logs</strong></h3><ul id="ea361c48-02ab-4aa2-b59e-a6b4944b6ad2" class="bulleted-list"><li style="list-style-type:circle"><strong>Title:</strong> Use Case: Aggregating Logs</li></ul><ul id="fb5613ae-3ece-4887-af16-ea46b7d0b0ae" class="bulleted-list"><li style="list-style-type:circle"><strong>Points:</strong><ul id="7edccea2-37c5-4541-9767-7902cba8c3a7" class="bulleted-list"><li style="list-style-type:square">Centralizes logs, metrics, and events for easier analysis</li></ul><ul id="e98b9b79-fc41-4867-a651-d3890f142c8f" class="bulleted-list"><li style="list-style-type:square">Integrates with logging libraries like Apache Log4j2</li></ul><ul id="79f04bb7-65c0-4d2d-8d9e-6e0878a37b4d" class="bulleted-list"><li style="list-style-type:square">Reduces system complexity and overhead for data collection</li></ul></li></ul><h3 id="97acd5dc-47ef-4b95-a677-da9b97e48b44" class=""><strong>Slide 31: Modernizing Legacy Systems</strong></h3><ul id="d93a53c4-8c19-4d20-b49f-0ea5828a559f" class="bulleted-list"><li style="list-style-type:circle"><strong>Title:</strong> Use Case: Modernizing Legacy Systems</li></ul><ul id="8a828506-24f7-4163-90a9-322c080bf0dc" class="bulleted-list"><li style="list-style-type:circle"><strong>Points:</strong><ul id="d5241714-c595-426f-a566-07dd33fe2220" class="bulleted-list"><li style="list-style-type:square">Facilitates integration of legacy systems with modern applications</li></ul><ul id="b19c43e1-436f-4285-b9b8-b0ef38afaf71" class="bulleted-list"><li style="list-style-type:square">Uses Kafka as an intermediary for batch and real-time data processing</li></ul><ul id="3a00b0d2-931a-41b1-9a2c-f130efb1bf45" class="bulleted-list"><li style="list-style-type:square">Simplifies architecture without extensive system overhauls</li></ul></li></ul><h3 id="8e58c81b-501f-4ea0-a435-41e252d1f7f4" class=""><strong>Slide 32: Alternatives to Kafka Connect</strong></h3><ul id="20ef2736-ac97-49be-83b6-af48d9ed2c30" class="bulleted-list"><li style="list-style-type:circle"><strong>Title:</strong> Exploring Alternatives to Kafka Connect</li></ul><ul id="54300fa2-b11e-4dcf-bca8-49b72b9434af" class="bulleted-list"><li style="list-style-type:circle"><strong>Points:</strong><ul id="3c771225-8721-494f-93d1-b97a64369f25" class="bulleted-list"><li style="list-style-type:square">Apache Camel, Apache NiFi, Apache Flume, LinkedIn Hoptimator</li></ul><ul id="c7792a2c-ef15-4d5c-ae04-44abdac6fd45" class="bulleted-list"><li style="list-style-type:square">Each offers unique features for data integration</li></ul><ul id="cb42705d-3c86-4f8a-a140-f7710920b614" class="bulleted-list"><li style="list-style-type:square">Considerations for choosing include specific requirements, existing expertise, and integration needs</li></ul></li></ul><p id="2671f0eb-8dbf-43e5-b556-b6db57ef8de4" class="">
+</p><hr id="e10df27e-91fa-4027-a7db-0a7864407e54"/><p id="423a9604-5028-46f1-a1aa-49b475ad786a" class="">
+</p></li></ul></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

@@ -1,0 +1,712 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Choosing the Partition Count and Replication Factor</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="6d4f53c0-1371-4a81-9307-c2e7ad4f3c96" class="page sans"><header><h1 class="page-title"><strong><strong>Choosing the Partition Count and Replication Factor</strong></strong></h1><p class="page-description"></p></header><div class="page-body"><hr id="cd0ebf25-f6dd-4a8c-855e-4541173905bc"/><p id="ce406449-eaf6-48c8-bd4d-0dee873ea2e7" class="">
+</p><p id="2e728e20-cdc1-4f62-aea7-2cff9804e2d8" class="">When creating a topic, we have to provide a partition count and the replication factor. These two are very important to set correctly as they impact the <strong>performance and durability</strong> in the system. </p><p id="7d337cd4-a582-4c61-b925-b086d878e52b" class="">Starting with one set of values and changing them later will have an adverse impact on the system as depicted below.</p><p id="973601c6-d046-4cf8-b03d-de8b0b63ef8e" class="">
+</p><ul id="dfa4ecff-f6d5-433c-8f9c-88f1e4d6dbe6" class="bulleted-list"><li style="list-style-type:disc">If the partitions count increases during a topic lifecycle, you will break your keys ordering guarantees</li></ul><p id="260a91c5-84a5-4b69-909f-ca03c4d9f1c2" class="">
+</p><ul id="4feae233-e200-4711-abec-59a714b6f23a" class="bulleted-list"><li style="list-style-type:disc">If the replication factor increases during a topic lifecycle, you put more pressure on your cluster, which can lead to an unexpected performance decrease due to more network traffic and additional space used on your brokers. Proceed with caution</li></ul><p id="b813d955-377b-460e-8e64-e9b827de5ddd" class="">
+</p><figure id="898f84bd-482f-4617-bec5-dd33ee36e213" class="image"><a href="https://www.conduktor.io/kafka/_next/image/?url=https%3A%2F%2Fimages.ctfassets.net%2Fo12xgu4mepom%2FfKI10LJZGUY0e16UiW88n%2Fa6b33e737a91e2a23cbebf3c0b0f37f3%2FAdv_KT_Choosing_Rep_Factor_1.png&amp;w=3840&amp;q=75"><img style="width:700px" src="https://www.conduktor.io/kafka/_next/image/?url=https%3A%2F%2Fimages.ctfassets.net%2Fo12xgu4mepom%2FfKI10LJZGUY0e16UiW88n%2Fa6b33e737a91e2a23cbebf3c0b0f37f3%2FAdv_KT_Choosing_Rep_Factor_1.png&amp;w=3840&amp;q=75"/></a></figure><p id="c15c5ba3-9e94-4da0-9540-5e61fd609cf1" class=""><em>Adding replicas uses more space and adds more network traffic</em></p><p id="f8558884-9e96-47c5-a4c9-021a25e31d8a" class="">
+</p><p id="feb845ca-69d9-4e61-b27a-0147a634bff5" class=""><strong>Right First Time</strong></p><p id="4b1406eb-802e-4d05-b664-a69204ed3dae" class="">It is best to get the partition count and replication factor right the first time!</p><p id="1986950b-8cda-423f-b1b0-2e8118add1c8" class="">
+</p><hr id="21e790f5-bf72-424d-adde-d2c507a579f4"/><p id="65531030-6dad-4832-beb8-bd1034a95b4b" class="">
+</p><p id="d804614b-43b7-477b-9711-ad4f2f972699" class="">The number of partitions per topic is a million-dollar question and there’s no one answer. In this section, we&#x27;ll learn a few rules of thumb guidelines that will help us set these parameters correctly.</p><p id="b2cf5fe9-e85f-444a-a712-fc797c5d5b9e" class="">
+</p><p id="736014ac-2f0a-4214-ba9f-fb8de77b2c9f" class="">
+</p><p id="10a995e4-eee8-42aa-902d-a18dc4e7228d" class=""><strong><strong>How to choose the number of partitions in a Kafka topic</strong></strong></p><p id="0220c389-f2cd-4619-8451-983b93b83469" class="">
+</p><h3 id="98b38da8-8772-4092-a071-2f33c203f370" class=""><strong>1. Throughput Requirements</strong></h3><p id="4464fa29-3801-4e25-8fcd-e4507e3e8ef9" class="">The number of partitions in a topic is a major driver of the topic’s capacity to handle high volumes of data. More partitions mean more parallelism, thus higher throughput. Consider:</p><ul id="41b24c24-81ca-43f4-b0da-4f1ac0f6f321" class="bulleted-list"><li style="list-style-type:disc"><strong>Producer Throughput</strong>: If you have high-volume producers, increasing the number of partitions allows more producers to write in parallel, increasing overall throughput.</li></ul><ul id="61eec5f9-fbb8-499d-a828-d7ab600a8c9b" class="bulleted-list"><li style="list-style-type:disc"><strong>Consumer Throughput</strong>: More partitions allow more consumers to read in parallel, which is especially important in a consumer group. Each consumer in a group can read from one or more partitions but a single partition can only be read by one consumer from a group at a time.</li></ul><p id="b885453c-33c6-4c3e-9ae9-bdaf6de280c9" class="">
+</p><h3 id="bdebfcc8-39b6-481f-abde-0bb93de7de01" class=""><code><strong>2. Latency Considerations</strong></code></h3><p id="b23193b1-ef32-405c-8624-e2ac2383411a" class=""><code>While more partitions can increase throughput, they can also lead to higher end-to-end latency due to increased overhead in managing more partitions and possible imbalances in workload across partitions.</code></p><p id="1b63bba8-291e-4ee0-95a7-da258ec283ed" class="">
+</p><h3 id="411f8687-7c74-4507-b465-149d17d5475a" class=""><strong>3. Topic and Data Size</strong></h3><p id="ad90316b-3354-485a-81a9-196dfe8045a7" class="">If your topic is expected to handle a large amount of data, having more partitions can help in managing this data more efficiently. More partitions can also help in faster data compaction and retention operations.</p><p id="cc9238c4-c72f-4abd-aed8-8667f936b5c6" class="">
+</p><h3 id="cfb4d467-4215-4d8e-8b90-01d9af5e948c" class=""><strong>4. Future Scaling</strong></h3><p id="9aabb9c2-5afa-4b38-9572-819d6e7ac0bc" class="">Anticipating future growth is important. While you can increase the number of partitions later, it is a disruptive process and can lead to temporary performance degradation. It&#x27;s often better to start with a slightly higher number of partitions than currently needed to accommodate future growth.</p><p id="a41f49fe-df22-40fa-82fa-058c3a2f7de7" class="">
+</p><h3 id="3560cdb9-d9c0-4bed-8f32-2fa0316b720e" class=""><strong>5. Broker and Cluster Capacity</strong></h3><p id="fdcf5a63-27c8-4801-8714-813d58537f54" class="">The number of partitions is also constrained by the capacity of your Kafka brokers and the cluster:</p><ul id="426a3377-0d2d-4b6c-be9b-f1f5e240897f" class="bulleted-list"><li style="list-style-type:disc"><strong>Broker Limits</strong>: Each broker can handle a certain number of partitions. While Kafka can handle thousands of partitions per broker, a very high number of partitions can cause issues in terms of memory overhead, file handles, and replication traffic.</li></ul><ul id="eed97818-bca4-440c-ab32-dbf2c7d519ce" class="bulleted-list"><li style="list-style-type:disc"><strong>Cluster Configuration</strong>: The overall size and configuration of your Kafka cluster also play a role. Larger clusters can handle more partitions.</li></ul><p id="58875909-f41e-4de9-8c8d-fd7a1cc2e573" class="">
+</p><h3 id="82875e6d-6b8c-4b3b-8b30-6685fa538223" class=""><strong>6. Replication Factor</strong></h3><p id="b4b82a00-12f5-4731-8f9a-9608ea391cb0" class="">The replication factor multiplies the effect of partitions on the Kafka brokers. For example, a topic with 10 partitions and a replication factor of 3 results in a total of 30 partitions that must be managed across the cluster.</p><p id="888e2410-de12-45fb-ac5c-bcfcda60017b" class="">
+</p><h3 id="f5261b42-7310-4717-bbd9-f8f944bad9dc" class=""><strong>7. Practical Rule of Thumb</strong></h3><p id="de55df58-4d39-44c4-a6a8-8c7668458630" class="">A common heuristic used in the industry is:</p><ul id="07f2052a-d01b-4478-8596-69359f6d6dda" class="bulleted-list"><li style="list-style-type:disc">Aim for partitions that can handle between 1,000 and 2,000 writes per second.</li></ul><ul id="c9c05b5b-c9c1-42cc-9c27-7ebed1b417cd" class="bulleted-list"><li style="list-style-type:disc">Each partition should ideally handle between 10 MB/s and 100 MB/s throughput.</li></ul><p id="ad4c7959-7127-4abc-abf4-fe0e1439eb7d" class="">
+</p><p id="584c073e-799c-410c-8ac2-ad116bd5aaa4" class=""><strong>Example Calculation</strong></p><p id="8ba0a671-4106-4fbc-912c-c5f4945a322d" class="">If you expect your system to handle 1 GB of writes per second and aim for each partition to handle 100 MB/s, you might start with approximately 10 partitions.</p><p id="0671b884-6fef-4b92-b851-d104d36cf29d" class="">
+</p><h3 id="454522d8-c8b4-44d0-9ca6-f5c7d97db87e" class=""><strong>Tools and Metrics</strong></h3><p id="336faa0d-38fc-4abd-a65f-7c01670b9779" class="">Utilize Kafka’s built-in monitoring tools and metrics to assess the performance impact of the number of partitions and adjust accordingly based on actual system behavior and performance.</p><p id="b867621b-90f0-42d7-8654-406f3548f4b0" class="">
+</p><p id="9232bed9-cd9e-4bdb-8178-0b7274df1673" class="">
+</p><hr id="2a5382de-8057-4fe8-91e2-47fa85869e70"/><p id="d2d34066-e199-4b8a-bcdf-76d24e77faa7" class="">
+</p><p id="e59d8f6b-b08a-4cc0-98cb-177d6ae0acee" class="">There are several factors to consider when choosing the number of partitions:</p><ul id="0fbb423b-b858-4b18-bb06-51341e14ab5d" class="bulleted-list"><li style="list-style-type:disc">What is the maximum throughput (in MB/s) you expect to achieve when consuming from a single partition? Measure it for your environment.</li></ul><ul id="0ed8a023-98fd-4c06-b76d-0121f6bd23d2" class="bulleted-list"><li style="list-style-type:disc">If you are sending messages to partitions based on keys, adding partitions later can be very challenging, so calculate throughput based on your expected future usage.</li></ul><ul id="8be51702-739f-4651-a554-4440a94847c2" class="bulleted-list"><li style="list-style-type:disc">Having more partitions has advantages. It implies:<ul id="f44adf4b-b312-43c9-9eda-13c7a80e29fa" class="bulleted-list"><li style="list-style-type:circle">Better parallelism and better throughput. A partition is a unit of parallelism, so creating more partitions implies more parallelism.</li></ul><ul id="5c4434f4-94b6-4475-9526-a4c782f86220" class="bulleted-list"><li style="list-style-type:circle">It also gives us the ability to run more consumers in a group to scale. For example, if we have 3 partitions, we can have at most 3 consumers active, others will remain inactive.</li></ul><ul id="94ab67a6-d9d4-43d3-9ab8-71fc5e1b84ad" class="bulleted-list"><li style="list-style-type:circle">If the cluster contains a high number of brokers, having more partitions will leverage these brokers. For example, if you have a topic with 2 partitions, they can be hosted on two brokers only, and the other brokers will remain idle which is an inefficient usage of resources.</li></ul></li></ul><ul id="d67ecf3f-f823-4f3e-b150-e40cee574104" class="bulleted-list"><li style="list-style-type:disc">However, there are downsides to having more partitions (which are slowly disappearing)<ul id="26d537b5-5713-4619-867b-6700e195ba90" class="bulleted-list"><li style="list-style-type:circle">Each partition will have a partition leader to be elected by Zookeeper. Hence there will be more load on Zookeeper which will increase the time for leader elections.</li></ul><ul id="ebc980ee-55b7-491b-a458-57081cd6b2a4" class="bulleted-list"><li style="list-style-type:circle">This problem is going to be solved in a Zookeeper-less Kafka, which can you can <a href="https://www.conduktor.io/kafka/kafka-kraft-mode/"><strong>learn about here</strong></a> and <a href="https://www.conduktor.io/kafka/starting-kafka/"><strong>practice while starting Kafka</strong></a>.</li></ul><ul id="7f3ab3f3-e6a7-4f0d-8794-0f0033e813f3" class="bulleted-list"><li style="list-style-type:circle">More files opened by Kafka. There is an OS limit to the number of files that can be opened, although you can and should change it to a high value on your OS settings.</li></ul><ul id="cff98208-5cca-4ee7-ae47-93a6971bcc23" class="bulleted-list"><li style="list-style-type:circle"></li></ul></li></ul><p id="1525496f-4c71-4ccc-be9a-01c73c9632ab" class="">With all this in mind, the following are a few guidelines that will help you choose wisely.</p><ul id="e3c39b29-15e8-4c23-a8d1-b939cda0f496" class="bulleted-list"><li style="list-style-type:disc">If you have a <strong>small cluster of fewer than 6 brokers</strong>, create <strong>three times, i.e., 3X,</strong> the number of brokers you have. The reasoning behind it is that if you have more brokers over time, you will have enough partitions to cover that.</li></ul><ul id="60628515-df1a-4a3c-9288-c714073bae66" class="bulleted-list"><li style="list-style-type:disc">If you have a <strong>big cluster of over 12 brokers</strong>, create <strong>two times i.e.</strong>, <strong>2X,</strong> the number of brokers you have.</li></ul><ul id="143d7d68-b1a0-459e-9fbf-e28fa03de050" class="bulleted-list"><li style="list-style-type:disc">You also want to take into account the <strong>number of consumers</strong> you need to run in a group at the desired peak throughput. If, for example, you need 20 consumers at peak time, you need at least 20 partitions in your topic, regardless of the size of your cluster.</li></ul><ul id="311dbad9-44e9-40bc-aa03-267a9438a630" class="bulleted-list"><li style="list-style-type:disc">You also need to consider the <strong>producer throughput</strong>. If you have a high throughput producer or if it is going to increase in the next couple of years, keep the partition count to <strong>3 times the number of brokers</strong>.</li></ul><p id="51170a9f-781d-4db7-a43c-996e2dd64004" class="">
+</p><blockquote id="ea5bc70d-1fc5-4594-b6ce-7e845eb014d2" class="">It is good to have a high number of partitions per topic, but do not pick an absurdly high number like 1000 unless you know you will need all these partitions.</blockquote><p id="676ff9c6-b094-45dd-95a3-6da04bed162a" class="">
+</p><hr id="d61e0e03-fa6a-4096-bddc-0b8430f3b551"/><p id="2c2da5da-c84c-4aa4-8d66-bf5488292263" class="">
+</p><p id="87e720b5-cb8e-44c6-8847-9867529fac98" class="">topic-1 : 10</p><p id="15148a4f-2db3-4b28-b9dc-f9b3d95a6704" class="">topic-2 : 20</p><p id="1681892f-5954-4fc1-abbf-f763f95fb902" class="">topic3 : 3</p><p id="80054882-ade2-4990-8f1b-8c65a50ec352" class="">
+</p><p id="d69dfe1d-ebcd-4394-b59c-3a7cacdada30" class="">brokers : 3</p><p id="ddef31d1-b1a9-4028-9c15-558d092edbc0" class="">11 partitions / brokers</p><p id="20d25b00-4222-4881-8ada-b74cf812087d" class="">
+</p><hr id="acb037eb-1eef-432b-b013-3140f36cafe0"/><p id="2ab13ec9-c7c9-41a0-8efc-ffe6029a5f69" class="">
+</p><p id="dcdb18b9-f31c-4b81-92d0-5579d0a1e511" class="">throughput</p><p id="5671b841-0e75-46e1-929c-5eb9ffea3448" class="">latency</p><p id="b800a0a6-9ddb-48a5-800e-7798e2c97bc3" class="">availability</p><p id="1d5a51fb-8284-46b4-9203-1ea30c038019" class="">durability</p><p id="abaa7fd5-2686-49bc-bfc6-061f72e3f96e" class="">
+</p><hr id="49df216f-2712-41dd-928f-e97ed9303388"/><p id="e52ed3dd-bb7d-4e23-8f4a-7ae9bca58ba5" class="">
+</p><p id="6cc1e3ca-7ddd-478b-b64e-b96c36e4e132" class=""><strong><strong>How to choose the replication factor of a Kafka topic?</strong></strong></p><p id="6a967144-daa5-4158-9748-98039ed52a23" class="">
+</p><p id="772031d7-591a-492a-b50c-1df8d33accdb" class="">To increase the reliability and fault tolerance, replications of the partitions are necessary. Remember that topic replication does not increase the consumer parallelism. The factors to consider while choosing replication factor are:</p><ul id="4c6a038c-f058-44d4-a3ec-e468e34ea9d6" class="bulleted-list"><li style="list-style-type:disc">It should be at least 2 and a maximum of 4. The recommended number is 3 as it provides the right balance between performance and fault tolerance, and usually cloud providers provide 3 data centers / availability zones to deploy to as part of a region.</li></ul><ul id="173445aa-8e0e-4c98-8856-5e3dbab81db0" class="bulleted-list"><li style="list-style-type:disc">The advantage of having a higher replication factor is that it provides a better resilience of your system. If the replication factor is <code>N</code>, up to <code>N-1</code> broker may fail without impacting availability if <code>acks=0</code> or <code>acks=1</code> or <code>N-min.insync.replicas</code> brokers may fail if <code>acks=all</code></li></ul><ul id="b471637d-d55e-4a35-a55e-47a3dde9377c" class="bulleted-list"><li style="list-style-type:disc">The disadvantages of having a higher replication factor:<ul id="8bd9cdfe-9d59-4c7c-bfc5-14353369ba52" class="bulleted-list"><li style="list-style-type:circle">Higher latency experienced by the producers, as the data needs to be replicated to all the replica brokers before an ack is returned if <code>acks=all</code></li></ul><ul id="9b1742b0-0fe1-4471-afa1-55bb35e9984c" class="bulleted-list"><li style="list-style-type:circle">More disk space required on your system</li></ul></li></ul><p id="0311d5d4-0031-4c61-b36a-c213442843b4" class="">With all this in mind, the following are a few guidelines that will help you choose wisely.</p><ul id="b64b432b-e6ac-4897-9bd4-7b78f4eb5cf9" class="bulleted-list"><li style="list-style-type:disc"><strong>Set it to 3 </strong>to get started (you must have at least 3 brokers for that)</li></ul><ul id="1b2836b5-9af4-483c-a232-11c2f2ce3fd3" class="bulleted-list"><li style="list-style-type:disc">If there is a performance issue due to a higher replication factor, you should get a better broker instead of lowering the replication factor.</li></ul><ul id="1ee439b6-f062-4fa1-ad8d-b1c4250ef770" class="bulleted-list"><li style="list-style-type:disc">Never set it to 1 in production, as it means no fault tolerance. If the partition is lost, you will have data loss.</li></ul><p id="d542ecea-b824-4941-b970-0410277246df" class="">
+</p><hr id="d3eabb5a-a870-4556-83e2-815e2db5348d"/><p id="3b548657-ee17-4a9a-889e-6678e356fb9c" class="">
+</p><p id="9c895ab8-8734-45a9-aad8-607b31eec436" class="">
+</p><p id="6d184690-2d21-4518-b149-11a48adfa525" class=""><strong><strong>Cluster guidelines</strong></strong></p><p id="eb48d296-8085-4827-a8b7-ac297558d4db" class="">The appropriate size for a Kafka cluster is determined by several factors.<strong> </strong>Following are some general guidelines:</p><ul id="933d6bda-118f-474b-a734-518e47cbbb08" class="bulleted-list"><li style="list-style-type:disc">A Kafka cluster should have a <em><strong>maximum of </strong></em><a href="https://blogs.apache.org/kafka/entry/apache-kafka-supports-more-partitions"><em><strong>200,000 partitions</strong></em></a><em><strong> </strong></em>across all brokers when managed by Zookeeper. The reason is that if brokers go down, Zookeeper needs to perform <em><strong>a lot </strong></em><strong>of </strong><em><strong>leader elections</strong></em>. Confluent still recommends up to 4,000 partitions per broker in your cluster.</li></ul><ul id="f9da2dcf-64fe-4137-bd5c-e64070c80040" class="bulleted-list"><li style="list-style-type:disc">This problem should be solved by Kafka in a Zookeeper-less mode (<a href="https://www.conduktor.io/kafka/kafka-kraft-mode/"><strong>Kafka KRaft</strong></a>)</li></ul><ul id="647e8df3-d9f6-47dc-9aa8-975d0247c782" class="bulleted-list"><li style="list-style-type:disc">If you need more than 200,000 partitions in your cluster, follow the <em><strong>Netflix model</strong></em> and create more Kafka clusters</li></ul><p id="752094f3-7b11-47c4-8995-a950f82548a0" class="">
+</p><hr id="16232f8e-ef49-4f91-8c95-8fa47fe34b9b"/><p id="f6e37ff3-ef6f-4eb2-91fe-30392ccfed61" class="">
+</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
