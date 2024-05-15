@@ -1,0 +1,38 @@
+
+
+
+- Kafka Clients with 'Kafka-client lib'
+
+    - Producer ( On Any language )
+    - Consumer ( On Any language )
+    - Stream   ( Java Only ) / KsqlDB with SQL syntax
+    - connector ( Node code , provide config with plugins)
+
+
+For Java developers, Frameworks
+
+    - Spring-boot
+    - Quarkus
+
+
+------------------------------------
+
+to create Kafa-Consumer
+    - poll-thread with Kafka-consumer
+
+
+In Spring
+
+    - ConsumerFactory
+    - MessageListenerContainer 
+      - ConcurrentMessageListenerContainer 
+
+        component
+            @KafkaListener()
+            public void handleMessage(message){
+
+            }
+
+
+------------------------------------
+
