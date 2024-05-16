@@ -1,9 +1,12 @@
+# https://github.com/provectus/kafka-ui/blob/master/kafka-ui-api/src/main/resources/application-local.yml
+
 kafka:
   clusters:
     - name: local-cluster
       bootstrapServers: localhost:9092
-      # schemaRegistry: http://localhost:8081
+      schemaRegistry: http://localhost:8081
       # kafkaConnect:
       #   - name: second
       #     address: http://localhost:8083
+
 dynamic.config.enabled: true

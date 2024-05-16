@@ -58,7 +58,7 @@ public class KafkaProducerClient {
         try(KafkaProducer<String,String> producer=new KafkaProducer<>(props)){
             String topic="greetings";
             List<String> languages=List.of("en","es","fr","de","it","pt","ru","zh","ja","ko");
-            for (int i = 0; i < Integer.MAX_VALUE; i++) {
+            for (int i = 0; i < 1; i++) {
                 String key = languages.get(i % languages.size());
                 String value = "Hey Kafka!".repeat(100); // 1kb message
                 ProducerRecord<String, String> record = new ProducerRecord<>(topic,1,key, value);
