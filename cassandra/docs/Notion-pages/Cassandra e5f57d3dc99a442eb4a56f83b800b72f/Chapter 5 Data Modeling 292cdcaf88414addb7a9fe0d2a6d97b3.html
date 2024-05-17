@@ -1,0 +1,811 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Chapter 5. Data Modeling</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="292cdcaf-8841-4add-b7a9-fe0d2a6d97b3" class="page sans"><header><h1 class="page-title"><strong>Chapter 5. Data Modeling</strong></h1><p class="page-description"></p></header><div class="page-body"><hr id="9d8056a3-0ab9-4d10-b049-38fc6855ff8e"/><p id="bfe97381-0dc0-41d6-8be7-0d3e4978655a" class="">
+</p><h3 id="efdd962c-fcc2-4678-85db-08827771af31" class=""><strong>Importance of Data Modeling</strong></h3><ul id="7376dc39-db90-42f9-b5a8-ae11dbfde68a" class="bulleted-list"><li style="list-style-type:disc">Crucial for application performance and cluster maintenance</li></ul><ul id="6bc04ef6-7b17-4b15-af29-7e1eeffd9800" class="bulleted-list"><li style="list-style-type:disc">Determines success with Cassandra</li></ul><h3 id="2c6fb72b-21b6-4455-96ed-64d9e44d5064" class=""><strong>Conceptual Data Modeling</strong></h3><ul id="c20d162e-2dd7-4b71-9502-b3c07ae3bb53" class="bulleted-list"><li style="list-style-type:disc">Use familiar domain: <code>hotel reservations</code></li></ul><ul id="3e38b26c-2fc3-4bd9-943c-b8a0ab09721f" class="bulleted-list"><li style="list-style-type:disc">Entities: hotels, guests, rooms, rates, availability, reservations, points of interest</li></ul><p id="8316d556-79ec-4617-af54-b5ec2a806470" class="">
+</p><hr id="adbcb6b7-b043-4aef-a2e0-d4917620de47"/><p id="97a89051-9d65-468b-981c-d3756478d37f" class="">
+</p><p id="45f36918-ea43-4b02-b972-86575bcd75cf" class="">Entity-relationship model: attributes, relationships, unique identifiers</p><p id="df49d927-599a-41bf-be7e-928d4e474112" class="">
+</p><p id="a1340b00-cb2a-4472-8228-bd2d62d913cf" class="">Hotel domain entity-relationship diagram</p><p id="3c2ed03a-dd8f-4ede-8996-092d4dd2c1aa" class="">
+</p><figure id="19dd549a-bdd2-4e8a-b398-9b92befed33e" class="image" style="text-align:left"><a href="Chapter%205%20Data%20Modeling%20292cdcaf88414addb7a9fe0d2a6d97b3/Untitled.png"><img style="width:528px" src="Chapter%205%20Data%20Modeling%20292cdcaf88414addb7a9fe0d2a6d97b3/Untitled.png"/></a></figure><hr id="03dd767e-bdc1-4395-a69a-65c49bd44d9e"/><p id="c37a124b-cc47-400d-bc6a-f9d28753aa6e" class="">
+</p><p id="88ca31ee-9e2e-4752-b2b8-712313ead36a" class=""><strong>RDBMS Design</strong></p><p id="be36d338-9245-4740-be31-d9a34ea45c04" class=""> A simple hotel search system using RDBMS</p><figure id="e037c17e-9a6a-4dcc-a9be-be8c6b81a2f3" class="image" style="text-align:left"><a href="Chapter%205%20Data%20Modeling%20292cdcaf88414addb7a9fe0d2a6d97b3/Untitled%201.png"><img style="width:432px" src="Chapter%205%20Data%20Modeling%20292cdcaf88414addb7a9fe0d2a6d97b3/Untitled%201.png"/></a></figure><hr id="b4fa0b99-8650-433f-b3b2-c71fad699daa"/><p id="b4d3cf2d-8bcf-4d5c-8f90-93d7ac4e0220" class="">
+</p><h3 id="1e04e19f-7b00-45bb-b46b-306078ce3986" class=""><strong>RDBMS vs. Cassandra Design</strong></h3><ul id="7debc3f8-927a-4885-833b-61234131af2b" class="bulleted-list"><li style="list-style-type:disc"><strong>No joins</strong>: Denormalize data instead of performing joins</li></ul><ul id="62df371a-4cad-44a6-bc4e-c0f3fdd11235" class="bulleted-list"><li style="list-style-type:disc"><strong>No referential integrity</strong>: No enforcement of foreign keys</li></ul><ul id="2364811d-cb33-491a-b2b3-9c99c5c49c2f" class="bulleted-list"><li style="list-style-type:disc"><strong>Denormalization</strong>: Standard practice for optimal performance</li></ul><ul id="8b7df67a-0db8-4bf7-a4b6-5af4bc8cfd10" class="bulleted-list"><li style="list-style-type:disc"><code><strong>Query-first design</strong></code><code>: Design queries first, then data model</code></li></ul><ul id="13c8111a-6a55-4d7f-9add-e355cd4f3b9f" class="bulleted-list"><li style="list-style-type:disc"><strong>Optimal storage</strong>: Related columns together in same table</li></ul><ul id="23b25774-3776-427d-8fa3-7af2f5ff269c" class="bulleted-list"><li style="list-style-type:disc"><strong>Sorting</strong>: Determined by clustering columns, not queries</li></ul><p id="daa5e78f-9c0b-4fb6-9d4f-165c86f6e8ca" class="">
+</p><h3 id="9af8b85e-a0cc-48e3-8eb7-9fdba418fae6" class=""><strong>Defining Application Queries</strong></h3><ul id="521403d6-0a6d-46e4-a179-2f3f4b790158" class="bulleted-list"><li style="list-style-type:disc">Identify key queries based on application workflow<ul id="66c04ddc-1f9f-4181-8ab0-163584f73d41" class="bulleted-list"><li style="list-style-type:circle">Q1: Find hotels near a given point of interest</li></ul><ul id="b1908c57-8a9f-42b5-b976-b5ca9a5fa992" class="bulleted-list"><li style="list-style-type:circle">Q2: Find information about a given hotel</li></ul><ul id="9aa5c8db-5522-4691-bf2d-fd8d9afe30e9" class="bulleted-list"><li style="list-style-type:circle">Q3: Find points of interest near a given hotel</li></ul><ul id="e34dd6a7-f29d-407b-ab9b-72b1d96b2123" class="bulleted-list"><li style="list-style-type:circle">Q4: Find an available room in a given date range</li></ul><ul id="c1956e64-1a86-435a-8fda-8a0b8ecd0bff" class="bulleted-list"><li style="list-style-type:circle">Q5: Find the rate and amenities for a room</li></ul></li></ul><p id="a058dc20-668d-477f-a3fe-7d2c066415f0" class="">
+</p><p id="09229355-cc0c-4bbe-91f9-9b477be391f1" class="">Hotel application queries</p><figure id="ce40ee09-7ca4-4a0a-835a-662991134040" class="image"><a href="Chapter%205%20Data%20Modeling%20292cdcaf88414addb7a9fe0d2a6d97b3/Untitled%202.png"><img style="width:708px" src="Chapter%205%20Data%20Modeling%20292cdcaf88414addb7a9fe0d2a6d97b3/Untitled%202.png"/></a></figure><p id="6f0bbad6-b26b-420c-a4f2-a5a524ed2d5e" class="">
+</p><hr id="33869b02-b508-4f8c-ba01-b9a2696d533c"/><p id="dd93ddf9-dba3-4b22-abcd-3a315a4c4e62" class="">
+</p><h3 id="77d6ba04-b1eb-4440-9e41-299a0367eb13" class=""><strong>Logical Data Modeling</strong></h3><ul id="2485af0e-4c71-416e-822c-bfe6344498a7" class="bulleted-list"><li style="list-style-type:disc">Create logical model for each query</li></ul><ul id="ae0ddb3e-6f03-4dad-80ad-427f8b208198" class="bulleted-list"><li style="list-style-type:disc">Use Chebotko diagrams for visualization<ul id="c0db05e6-c168-4ab7-aa40-9abdb05cade1" class="bulleted-list"><li style="list-style-type:circle">Table name, columns, primary key (partition, clustering columns)</li></ul><ul id="fa7b3f24-1ed2-4900-84b2-d772231610e9" class="bulleted-list"><li style="list-style-type:circle">Example: <code><strong>hotels_by_poi</strong></code>, <code><strong>hotels</strong></code>, <code><strong>pois_by_hotel</strong></code>, <code><strong>available_rooms_by_hotel_date</strong></code>, <code><strong>amenities_by_room</strong></code></li></ul></li></ul><figure id="9b52d92e-dfb1-4d03-b9a3-499db3229c33" class="image" style="text-align:left"><a href="Chapter%205%20Data%20Modeling%20292cdcaf88414addb7a9fe0d2a6d97b3/Untitled%203.png"><img style="width:384px" src="Chapter%205%20Data%20Modeling%20292cdcaf88414addb7a9fe0d2a6d97b3/Untitled%203.png"/></a></figure><p id="3dfd34c2-4f98-4eb4-9663-58fc21943ee9" class="">
+</p><hr id="d1112d22-992b-4b23-b7d1-4bd801b958b8"/><p id="35c00049-4c81-41c7-93ca-dd379cda0ed0" class="">
+</p><p id="30f57995-82f6-4d3e-90a3-bd4324b70273" class=""><strong><strong>Hotel domain logical model</strong></strong></p><figure id="0a6f6380-3e93-4c25-85eb-ff1bfa88ef3d" class="image"><a href="Chapter%205%20Data%20Modeling%20292cdcaf88414addb7a9fe0d2a6d97b3/Untitled%204.png"><img style="width:1440px" src="Chapter%205%20Data%20Modeling%20292cdcaf88414addb7a9fe0d2a6d97b3/Untitled%204.png"/></a></figure><p id="4b406497-ce98-427f-8ca5-d88b77039bb9" class="">
+</p><hr id="194ffa46-3540-4020-94cc-0e5a94d5d652"/><p id="b2c58539-cdbc-4364-a0a7-a67430a03c1c" class="">
+</p><h3 id="39cec386-48e1-4909-bc42-558cdb337e7b" class=""><strong>Reservation Logical Data Model</strong></h3><ul id="f4452c39-89d3-45b3-a7a4-9c85e94734cd" class="bulleted-list"><li style="list-style-type:disc">Support reservation queries<ul id="2ac93b65-45d1-4f19-8343-bee9b490b757" class="bulleted-list"><li style="list-style-type:circle">Q6: Look up reservation by confirmation number</li></ul><ul id="dc1d5547-d208-4845-b002-f4c652500d46" class="bulleted-list"><li style="list-style-type:circle">Q7: Look up reservation by hotel, date, guest name</li></ul><ul id="a4a64d21-976f-4c68-8d0d-ea31c9906d80" class="bulleted-list"><li style="list-style-type:circle">Q8: Look up all reservations by guest name</li></ul><ul id="0bbe89b5-200d-4b29-8a9d-00b07a5544c9" class="bulleted-list"><li style="list-style-type:circle">Q9: View guest details</li></ul></li></ul><ul id="fb4f55f8-169d-44a3-87c4-74829744589b" class="bulleted-list"><li style="list-style-type:disc">Denormalized tables for efficient querying</li></ul><ul id="89187f81-ba9d-495a-9782-ce987189f6d4" class="bulleted-list"><li style="list-style-type:disc">Example tables: <code><strong>reservations_by_confirmation</strong></code>, <code><strong>reservations_by_hotel_date</strong></code>, <code><strong>reservations_by_guest</strong></code>, <code><strong>guests</strong></code></li></ul><p id="c51392b5-ade9-4358-8a9e-df5fd288341b" class="">
+</p><p id="7366d753-2888-4cd8-bf9d-a5ae690b2306" class=""><strong><strong>A denormalized logical model for reservations</strong></strong></p><figure id="0f974d26-d1dc-4c3a-bb5e-0ccabd0b22c1" class="image"><a href="Chapter%205%20Data%20Modeling%20292cdcaf88414addb7a9fe0d2a6d97b3/Untitled%205.png"><img style="width:708px" src="Chapter%205%20Data%20Modeling%20292cdcaf88414addb7a9fe0d2a6d97b3/Untitled%205.png"/></a></figure><hr id="5cb3d84b-5e03-4261-a006-7b09d4b27ec2"/><p id="55f17c16-6ef7-4f23-a425-bf19e11693d2" class="">
+</p><h3 id="a74e80d9-d43f-47d3-995a-484bbeee7372" class=""><strong>Data Modeling Patterns and Anti-Patterns</strong></h3><ul id="e2ea87b8-edd7-4810-b89b-fd8582c0a0bf" class="bulleted-list"><li style="list-style-type:disc"><strong>Patterns</strong>:<ul id="78defd40-016c-4815-ae54-c3da2775190c" class="bulleted-list"><li style="list-style-type:circle">Wide partition pattern</li></ul><ul id="4f00984f-6517-40ae-9b7b-fbd29588ad7d" class="bulleted-list"><li style="list-style-type:circle">Time series pattern</li></ul></li></ul><ul id="799cda13-77ed-47bb-a877-5bb65598d68c" class="bulleted-list"><li style="list-style-type:disc"><strong>Anti-pattern</strong>:<ul id="50bf5c39-4407-4ab4-9a2f-8dc555f6ee66" class="bulleted-list"><li style="list-style-type:circle">Queue pattern (due to tombstones and performance degradation)</li></ul></li></ul><h3 id="940af903-6b44-49aa-8e2a-03bd09bd6fa3" class=""><strong>Physical Data Modeling</strong></h3><ul id="d363c0c5-b3b7-44bf-8fdf-76172ce1b68d" class="bulleted-list"><li style="list-style-type:disc">Convert logical model to physical model</li></ul><ul id="17ce8575-62e6-4b35-84f6-7d8c2ed41096" class="bulleted-list"><li style="list-style-type:disc">Assign data types to columns</li></ul><ul id="937a4fff-6aab-43f7-8f42-0348b44a6e7f" class="bulleted-list"><li style="list-style-type:disc">Use Chebotko diagrams for physical models<ul id="e87b5704-8e4a-4458-895c-238998c8f8b3" class="bulleted-list"><li style="list-style-type:circle">Example: <code><strong>hotel</strong></code> and <code><strong>reservation</strong></code> keyspaces</li></ul></li></ul><p id="28413d79-d53b-4de3-b18c-9196e711f828" class="">
+</p><figure id="d3609767-cfdc-49da-aad5-61fb46f61d67" class="image" style="text-align:left"><a href="Chapter%205%20Data%20Modeling%20292cdcaf88414addb7a9fe0d2a6d97b3/Untitled%206.png"><img style="width:480px" src="Chapter%205%20Data%20Modeling%20292cdcaf88414addb7a9fe0d2a6d97b3/Untitled%206.png"/></a></figure><p id="325cee3a-dfaf-464a-af80-7a67ee4ad478" class="">
+</p><hr id="50625006-6c60-4c12-a3ce-8005321f4e33"/><p id="26edb030-4f83-469e-b640-d00ee1dec896" class="">
+</p><p id="c2ae1230-44f3-42bb-99f4-1dcca27af697" class=""> Hotel physical model</p><figure id="f768be96-f70e-4baf-803d-d0355b18edf0" class="image"><a href="Chapter%205%20Data%20Modeling%20292cdcaf88414addb7a9fe0d2a6d97b3/Untitled%207.png"><img style="width:708px" src="Chapter%205%20Data%20Modeling%20292cdcaf88414addb7a9fe0d2a6d97b3/Untitled%207.png"/></a></figure><p id="6a5c8d49-00b4-43c0-869c-0e51d949eae7" class="">
+</p><hr id="23851995-4984-42d7-9868-2802f1d98cc3"/><p id="9aa33dbf-ba27-4687-ad06-58264856de40" class="">
+</p><p id="35624f08-f1bd-434d-b237-ca980a131f3f" class="">Reservation physical model</p><figure id="9c6c036a-f822-4fb2-a163-6f089787c65a" class="image"><a href="Chapter%205%20Data%20Modeling%20292cdcaf88414addb7a9fe0d2a6d97b3/Untitled%208.png"><img style="width:708px" src="Chapter%205%20Data%20Modeling%20292cdcaf88414addb7a9fe0d2a6d97b3/Untitled%208.png"/></a></figure><p id="27a28f52-39ac-455b-9bc3-5ffc077bf7d9" class="">
+</p><hr id="1aa2fd9a-ba1b-4fb9-8032-e9366d9fefbb"/><p id="035b1536-6aaf-4c1f-a6e6-aa050ee7b68a" class="">
+</p><h3 id="0b118f66-fabd-43f2-81bb-867ccb491874" class=""><strong>Evaluating and Refining Models</strong></h3><ul id="7884860b-9cd0-4f28-84ed-ed184976c971" class="bulleted-list"><li style="list-style-type:disc"><strong>Partition size</strong>: Calculate number of cells (recommend &lt; 100,000 cells)</li></ul><ul id="ecf56964-2704-448a-b5c7-0206e166cb29" class="bulleted-list"><li style="list-style-type:disc"><strong>Disk space</strong>: Estimate storage requirements<ul id="b1bf92af-026d-42cc-bb69-9f6ffe572dfb" class="bulleted-list"><li style="list-style-type:circle">Example formula: size on disk</li></ul></li></ul><ul id="61eaa516-1725-490d-b60b-cec1303a3131" class="bulleted-list"><li style="list-style-type:disc"><strong>Breaking up large partitions</strong>: Add columns to partition key, use bucketing</li></ul><p id="77113cae-9e7b-48f4-8698-ceb1a89bbb69" class="">
+</p><p id="e362dc9e-f7f2-4f13-8b64-5c1b0c314cdc" class="">Adding a month bucket to the <code>available_rooms_by_hotel_date</code> table</p><figure id="4502f635-ac21-4412-b3dc-4d89b52f9710" class="image"><a href="Chapter%205%20Data%20Modeling%20292cdcaf88414addb7a9fe0d2a6d97b3/Untitled%209.png"><img style="width:627px" src="Chapter%205%20Data%20Modeling%20292cdcaf88414addb7a9fe0d2a6d97b3/Untitled%209.png"/></a></figure><p id="c87e96ad-4753-4b99-94db-e73c2baffefa" class="">
+</p><hr id="b54d9248-226d-4c3d-8186-3c3c2ca621d3"/><h3 id="16c6fbaa-00f6-4fb4-9c83-eb30b103b6d4" class=""><strong>Defining Database Schema</strong></h3><ul id="96a76977-3cad-4997-8e25-ec31a18e68f9" class="bulleted-list"><li style="list-style-type:disc">Implement schema in CQL</li></ul><ul id="80efa16e-f272-4755-a88f-6affc813fa04" class="bulleted-list"><li style="list-style-type:disc">Schema for hotel and reservation keyspaces<ul id="83d42dea-f867-4d87-b120-47f721b70f2a" class="bulleted-list"><li style="list-style-type:circle">Example: <code><strong>hotels_by_poi</strong></code>, <code><strong>hotels</strong></code>, <code><strong>pois_by_hotel</strong></code>, <code><strong>available_rooms_by_hotel_date</strong></code>, <code><strong>amenities_by_room</strong></code></li></ul><ul id="7f1b9f0a-2339-49c6-9a85-bc286e375ace" class="bulleted-list"><li style="list-style-type:circle">Example: <code><strong>reservations_by_confirmation</strong></code>, <code><strong>reservations_by_hotel_date</strong></code>, <code><strong>reservations_by_guest</strong></code>, <code><strong>guests</strong></code></li></ul></li></ul><p id="36fa439a-fda5-43ec-b802-711ad80d3829" class="">
+</p><p id="64a359a9-ecc1-4890-ad94-1449753c3030" class="">
+</p><ul id="b3d0157c-2bfb-46cc-b8ac-78384b83a2c6" class="toggle"><li><details open=""><summary></summary><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="41ad03ab-92e4-4f0a-9990-6cc5983ccc39" class="code"><code class="language-SQL">CREATE KEYSPACE hotel
+    WITH replication = {&#x27;class&#x27;: &#x27;SimpleStrategy&#x27;, &#x27;replication_factor&#x27; : 3};
+
+CREATE TYPE hotel.address (
+    street text,
+    city text,
+    state_or_province text,
+    postal_code text,
+    country text
+);
+
+CREATE TABLE hotel.hotels_by_poi (
+    poi_name text,
+    poi_description text STATIC,
+    hotel_id text,
+    name text,
+    phone text,
+    address frozen&lt;address&gt;,
+    PRIMARY KEY ((poi_name), hotel_id)
+) WITH comment = &#x27;Q1. Find hotels near given poi&#x27;
+AND CLUSTERING ORDER BY (hotel_id ASC) ;
+
+CREATE TABLE hotel.hotels (
+    id text PRIMARY KEY,
+    name text,
+    phone text,
+    address frozen&lt;address&gt;,
+    pois set&lt;text&gt;
+) WITH comment = &#x27;Q2. Find information about a hotel&#x27;;
+
+CREATE TABLE hotel.pois_by_hotel (
+    poi_name text,
+    hotel_id text,
+    description text,
+    PRIMARY KEY ((hotel_id), poi_name)
+) WITH comment = &#x27;Q3. Find pois near a hotel&#x27;;
+
+CREATE TABLE hotel.available_rooms_by_hotel_date (
+    hotel_id text,
+    date date,
+    room_number smallint,
+    is_available boolean,
+    PRIMARY KEY ((hotel_id), date, room_number)
+) WITH comment = &#x27;Q4. Find available rooms by hotel / date&#x27;;
+
+CREATE TABLE hotel.amenities_by_room (
+    hotel_id text,
+    room_number smallint,
+    amenity_name text,
+    description text,
+    PRIMARY KEY ((hotel_id, room_number), amenity_name)
+) WITH comment = &#x27;Q5. Find amenities for a room&#x27;;</code></pre></details></li></ul><ul id="3b4c0332-b8f8-48ad-8c43-6ab8fac1b858" class="toggle"><li><details open=""><summary></summary><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="99c0ca6a-1954-4160-a352-cdafe7e6669e" class="code"><code class="language-SQL">CREATE KEYSPACE reservation
+    WITH replication = {&#x27;class&#x27;: &#x27;SimpleStrategy&#x27;, &#x27;replication_factor&#x27; : 3};
+
+CREATE TYPE reservation.address (
+    street text, city text,
+    state_or_province text,
+    postal_code text,
+    country text
+);
+
+CREATE TABLE reservation.reservations_by_confirmation (
+    confirm_number text,
+    hotel_id text,
+    start_date date,
+    end_date date,
+    room_number smallint,
+    guest_id uuid,
+    PRIMARY KEY (confirm_number)
+) WITH comment = &#x27;Q6. Find reservations by confirmation number&#x27;;
+
+CREATE TABLE reservation.reservations_by_hotel_date (
+    hotel_id text,
+    start_date date,
+    room_number smallint,
+    end_date date,
+    confirm_number text,
+    guest_id uuid,
+    PRIMARY KEY ((hotel_id, start_date), room_number)
+) WITH comment = &#x27;Q7. Find reservations by hotel and date&#x27;;
+
+CREATE TABLE reservation.reservations_by_guest (
+    guest_last_name text,
+    guest_id uuid,
+    confirm_number text,
+    hotel_id text,
+    start_date date,
+    end_date date,
+    room_number smallint,
+    PRIMARY KEY ((guest_last_name), guest_id, confirm_number)
+) WITH comment = &#x27;Q8. Find reservations by guest name&#x27;;
+
+CREATE TABLE reservation.guests (
+    guest_id uuid PRIMARY KEY,
+    first_name text,
+    last_name text,
+    title text,
+    emails set&lt;text&gt;,
+    phone_numbers list&lt;text&gt;,
+    addresses map&lt;text, frozen&lt;address&gt;&gt;
+) WITH comment = &#x27;Q9. Find guest by ID&#x27;;</code></pre></details></li></ul><p id="ee38d38b-e9b8-4d13-b57d-f452ffb9ddec" class="">
+</p><hr id="19f50f48-f4c1-468d-88ea-5d0b6f46564b"/><p id="ea94c2fb-a91d-425a-9385-2934459dba60" class="">
+</p><h3 id="b25c8311-bfbc-448c-ad4e-63ea1fe18fc5" class=""><strong>Cassandra Data Modeling Tools</strong></h3><ul id="71bb2f06-3959-4402-895f-b5d24dee943e" class="bulleted-list"><li style="list-style-type:disc"><strong>Hackolade</strong>: Schema design for Cassandra and NoSQL databases</li></ul><ul id="204a06fa-81a9-4450-ad18-4fe8e1f4d1bc" class="bulleted-list"><li style="list-style-type:disc"><strong>Kashlev Data Modeler</strong>: Automates data modeling process</li></ul><ul id="909d835d-dd12-47ae-93b7-d1649b948f66" class="bulleted-list"><li style="list-style-type:disc"><strong>DataStax DevCenter</strong>: Manage schema, execute queries, view results</li></ul><ul id="7a0ee074-89fa-4d73-9ce4-3721e0c5dc82" class="bulleted-list"><li style="list-style-type:disc"><strong>IDE plug-ins</strong>: Support for CQL in IDEs (e.g., IntelliJ IDEA, Apache NetBeans)</li></ul><p id="f3c2cebb-0e02-4e6d-a327-8ab44de58d57" class="">
+</p><hr id="2b28ca71-fce2-4cba-b190-826a4c42a68e"/><p id="fe46e9e5-ad8b-4d5e-8786-4e6095542da8" class="">
+</p><h3 id="fed6219c-46a3-440b-a95b-46fc8cfb199a" class=""><strong>Summary</strong></h3><ul id="76ed7011-9c7a-476d-b852-9af8c4e1c45c" class="bulleted-list"><li style="list-style-type:disc">Create data model: logical and physical forms</li></ul><ul id="6e453b3d-4322-4189-a4b4-f4e91a6cbdd4" class="bulleted-list"><li style="list-style-type:disc">Use tools to manage CQL scripts</li></ul><ul id="92942445-61ef-4c21-a4a5-9e9e5b941734" class="bulleted-list"><li style="list-style-type:disc">Ready to build hotel application with Cassandra data model</li></ul><p id="00195579-4811-4760-ba7c-25f19bce134c" class="">
+</p><hr id="0ea4ccf7-5a99-467a-8f09-b85c9da44bed"/><p id="ba5d45d7-e715-4687-9fa4-a3e17f267d72" class="">
+</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

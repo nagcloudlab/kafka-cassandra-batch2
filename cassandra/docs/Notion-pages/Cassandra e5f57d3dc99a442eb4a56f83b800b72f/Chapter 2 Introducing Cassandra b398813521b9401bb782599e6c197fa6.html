@@ -1,0 +1,680 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Chapter 2. Introducing Cassandra</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="b3988135-21b9-401b-b782-599e6c197fa6" class="page sans"><header><h1 class="page-title"><strong>Chapter 2. Introducing Cassandra</strong></h1><p class="page-description"></p></header><div class="page-body"><hr id="20c425e6-e022-45f3-acb8-5001a5cb5cb2"/><p id="7c943d54-1209-4d66-b5c9-d1b38c541305" class="">
+</p><h3 id="f16a4a2a-1f22-4308-a4ef-34d95e83e449" class=""><strong>Introducing Cassandra</strong></h3><ul id="e26864c6-b6b4-420d-9ef1-9214dc5846c2" class="bulleted-list"><li style="list-style-type:disc"><strong>Objective</strong>: Understanding Cassandra&#x27;s value proposition and key tenets.</li></ul><ul id="2d7269ef-0848-41fd-825e-7659d5eccc32" class="bulleted-list"><li style="list-style-type:disc"><strong>Focus</strong>: Cassandra&#x27;s history and the open-source community.</li></ul><h3 id="fde1f017-ca6a-4b25-9987-ce5b6caa88ad" class=""><strong>Cassandra Elevator Pitch</strong></h3><ul id="d9fcfed0-cbc1-4cad-9369-a7f0c6007a07" class="bulleted-list"><li style="list-style-type:disc"><strong>50 Words Summary</strong>:<ul id="e463567f-659c-407e-bc8c-8c16b46608b9" class="bulleted-list"><li style="list-style-type:circle">&quot;Apache Cassandra is an open source, distributed, decentralized, elastically scalable, highly available, fault-tolerant, tuneably consistent, row-oriented database. Cassandra bases its distribution design on Amazon’s Dynamo and its data model on Google’s Bigtable, with a query language similar to SQL. Created at Facebook, it now powers cloud-scale applications across many industries.&quot;</li></ul></li></ul><h3 id="1565b0e5-1284-4913-a462-6b981ef7f26e" class=""><strong>Key Points Breakdown</strong></h3><h3 id="4bbee772-82f1-47a9-8673-672026c1c730" class=""><strong>Distributed and Decentralized</strong></h3><ul id="4ced725c-6254-4c33-b521-665beee862dc" class="bulleted-list"><li style="list-style-type:disc"><strong>Distributed</strong>:<ul id="bb5fa762-e94c-43c7-9027-2331988b46fb" class="bulleted-list"><li style="list-style-type:circle">Runs on multiple machines, appearing as a unified whole.</li></ul><ul id="67871e3f-8de5-408d-93e6-63afd1666422" class="bulleted-list"><li style="list-style-type:circle">Optimized for performance across multiple data centers.</li></ul></li></ul><ul id="e79f2ef8-60c5-411d-adba-7ba9eac5108f" class="bulleted-list"><li style="list-style-type:disc"><strong>Decentralized</strong>:<ul id="893e3367-c3b9-49d1-9bb4-f901015cd04a" class="bulleted-list"><li style="list-style-type:circle">Every node is identical; no single point of failure.</li></ul><ul id="ebdc1e32-bc40-472e-ae87-12ba4ac8cf35" class="bulleted-list"><li style="list-style-type:circle">Peer-to-peer architecture using a gossip protocol.</li></ul><ul id="6d65a980-83e4-4e43-a6b3-4f0a43850108" class="bulleted-list"><li style="list-style-type:circle">Simpler to operate and maintain than primary/secondary stores.</li></ul></li></ul><h3 id="69bb9690-5435-41af-8f0f-5fa53acc0ba4" class=""><strong>Elastic Scalability</strong></h3><ul id="bc8edb4b-33ed-4874-b6ad-20fad5f026d1" class="bulleted-list"><li style="list-style-type:disc"><strong>Horizontal Scaling</strong>:<ul id="06c96776-cd07-4a4b-bb56-c07f4b0e7a48" class="bulleted-list"><li style="list-style-type:circle">Add more machines to share the load.</li></ul><ul id="ded08690-f53e-408f-8f2a-0e5423dad135" class="bulleted-list"><li style="list-style-type:circle">Seamless scaling up and down without major reconfiguration.</li></ul></li></ul><ul id="052abf16-0360-425c-ac58-823c70ea922e" class="bulleted-list"><li style="list-style-type:disc"><strong>Elastic Scalability</strong>:<ul id="28ab5f84-55ed-4e68-9b6f-041aabed4593" class="bulleted-list"><li style="list-style-type:circle">New nodes can start participating with minimal disruption.</li></ul><ul id="0a5d4417-29e6-4d78-b57a-3c85f0f28cd2" class="bulleted-list"><li style="list-style-type:circle">Supports seasonal workloads and platform migrations.</li></ul></li></ul><h3 id="1f2f6c65-c585-4110-9e61-5fe12107058b" class=""><strong>High Availability and Fault Tolerance</strong></h3><ul id="48470cad-8797-4d0a-8d68-69078d6ff209" class="bulleted-list"><li style="list-style-type:disc"><strong>High Availability</strong>:<ul id="3a21c8e6-26eb-452a-8dd9-94fe0b8fd443" class="bulleted-list"><li style="list-style-type:circle">Replace failed nodes without downtime.</li></ul><ul id="b8a7d4b8-bb47-478d-83c8-2828108a3a1e" class="bulleted-list"><li style="list-style-type:circle">Replicate data to multiple data centers.</li></ul></li></ul><ul id="f2bda09c-4c05-432c-a25b-088f8927d4d2" class="bulleted-list"><li style="list-style-type:disc"><strong>Fault Tolerance</strong>:<ul id="2a34876f-b7ad-4daa-bdd1-d8e1f89fe5ad" class="bulleted-list"><li style="list-style-type:circle">Handles hardware failures, network disruptions, and data corruption.</li></ul></li></ul><h3 id="b564f789-06c6-4768-9415-95ce32abf3d6" class=""><strong>Tuneable Consistency</strong></h3><ul id="70ad30c6-2ac9-4d33-8cc5-211573123abd" class="bulleted-list"><li style="list-style-type:disc"><strong>Consistency Definition</strong>: A read always returns the most recently written value.</li></ul><ul id="9a65853c-8179-40dd-ab97-366b26324b89" class="bulleted-list"><li style="list-style-type:disc"><strong>Consistency Models</strong>:<ul id="a7a85b44-f04e-49f3-a4ed-1d1ba95e9263" class="bulleted-list"><li style="list-style-type:circle"><strong>Strict Consistency</strong>: Every read returns the latest write.</li></ul><ul id="4b029af2-0bbb-4bee-9056-58ced338a9f7" class="bulleted-list"><li style="list-style-type:circle"><strong>Causal Consistency</strong>: Writes that are related must be read in sequence.</li></ul><ul id="adabaab2-446d-4676-8b11-2272f49452df" class="bulleted-list"><li style="list-style-type:circle"><strong>Weak (Eventual) Consistency</strong>: All replicas will eventually be consistent.</li></ul></li></ul><ul id="60c8a372-5d0d-4d60-85da-76d894aa71be" class="bulleted-list"><li style="list-style-type:disc"><strong>Tuneable Consistency in Cassandra</strong>:<ul id="c0bd8c5d-127b-432d-ab25-d35006910d67" class="bulleted-list"><li style="list-style-type:circle">Clients can control the consistency level.</li></ul><ul id="545d431c-1c2c-4de3-8f3a-ad4db194bff6" class="bulleted-list"><li style="list-style-type:circle">Balance between consistency and availability.</li></ul><ul id="b8571ad4-a569-44e2-a82b-0a1dc0b69535" class="bulleted-list"><li style="list-style-type:circle">Always writable, conflict resolution during reads.</li></ul></li></ul><h3 id="97ba44e3-c530-4bbf-b26a-a69abef6bb7c" class=""><strong>Brewer’s CAP Theorem</strong></h3><ul id="fe08dfe3-f63b-4223-bf3a-b36a300cc07d" class="bulleted-list"><li style="list-style-type:disc"><strong>Three Requirements</strong>:<ul id="a8b056f3-02c5-49d9-b425-ccfcd4cbc1d3" class="bulleted-list"><li style="list-style-type:circle"><strong>Consistency</strong>: All clients read the same value.</li></ul><ul id="4a0bea81-7c9b-47d5-a250-c4729e2c389c" class="bulleted-list"><li style="list-style-type:circle"><strong>Availability</strong>: All clients can read/write data.</li></ul><ul id="c90faff2-9e81-4425-8a56-6dcaa156f4bb" class="bulleted-list"><li style="list-style-type:circle"><strong>Partition Tolerance</strong>: System continues functioning despite network segmentation.</li></ul></li></ul><figure id="53d2c54b-13b9-4908-a1e8-1d066acd6ab6" class="image" style="text-align:left"><a href="Chapter%202%20Introducing%20Cassandra%20b398813521b9401bb782599e6c197fa6/Untitled.png"><img style="width:288px" src="Chapter%202%20Introducing%20Cassandra%20b398813521b9401bb782599e6c197fa6/Untitled.png"/></a></figure><p id="9c2792e2-8472-42c9-92b4-9b7dfaa93913" class=""><strong><strong>CAP theorem indicates that you can realize only two of these properties at once</strong></strong></p><ul id="11ca2e21-2d55-4d44-b184-ea0342735a5f" class="bulleted-list"><li style="list-style-type:disc"><strong>Trade-offs</strong>:<ul id="fcfb9b89-1b11-404a-8bca-a2344f980a63" class="bulleted-list"><li style="list-style-type:circle">Only two of the three can be strongly supported.</li></ul><ul id="2844c5c8-092c-4e4a-accc-ba8ca8d79a7e" class="bulleted-list"><li style="list-style-type:circle"><strong>CA</strong>: Consistency and Availability.</li></ul><ul id="be4796f0-138c-4883-b035-c82e91cfb24d" class="bulleted-list"><li style="list-style-type:circle"><strong>CP</strong>: Consistency and Partition Tolerance.</li></ul><ul id="340c1ced-4bf8-4fa1-a096-df6783031e1d" class="bulleted-list"><li style="list-style-type:circle"><code><strong>AP</strong></code><code>: Availability and Partition Tolerance.</code></li></ul></li></ul><ul id="fde7bbd2-27b7-4a8e-8d2b-0a5a3c022b37" class="bulleted-list"><li style="list-style-type:disc"><strong>Cassandra’s Position</strong>: Focus on availability and partition tolerance.</li></ul><h3 id="c8fc7a9b-1590-4276-a0e0-e39017d46b0c" class=""><strong>Row-Oriented</strong></h3><ul id="979e5dac-a9f4-4c09-b194-8c1a0fa50149" class="bulleted-list"><li style="list-style-type:disc"><strong>Data Model</strong>:<ul id="50876573-8ed9-4588-b1c6-db7c0ddc724b" class="bulleted-list"><li style="list-style-type:circle">Partitioned row store with sparse multidimensional hash tables.</li></ul><ul id="0355f61f-4db9-4b88-8159-bd30af3c2475" class="bulleted-list"><li style="list-style-type:circle">Efficient storage and query processing with flexible schema support.</li></ul></li></ul><ul id="17fda5d2-0fe4-4454-aca8-ae6505dee42a" class="bulleted-list"><li style="list-style-type:disc"><strong>Schema Evolution</strong>:<ul id="e0275915-b253-4da1-8e00-ea857918f2f6" class="bulleted-list"><li style="list-style-type:circle">Transition from schema-free to schema-optional to flexible schema with CQL.</li></ul></li></ul><h3 id="ab9cc51c-ac67-40c8-87d4-1e34b5c8a5f1" class=""><strong>High Performance</strong></h3><ul id="cc7bbdad-34d5-4e87-ad33-2058c7b10331" class="bulleted-list"><li style="list-style-type:disc"><strong>Design</strong>: Optimized for multiprocessor/multicore machines.</li></ul><ul id="be15b46e-2d7e-4b6e-b893-edf3ec39fc52" class="bulleted-list"><li style="list-style-type:disc"><strong>Scalability</strong>: Consistent performance across many machines and data centers.</li></ul><h3 id="95928bc2-a98a-4882-a8df-4b580199c98a" class=""><strong>History of Cassandra</strong></h3><ul id="4dd31ace-3271-4331-839a-79652d9a2438" class="bulleted-list"><li style="list-style-type:disc"><strong>Origins</strong>: Created at Facebook in 2007 for inbox search.</li></ul><ul id="78c67625-6017-434f-b5ff-e5e8d28b2593" class="bulleted-list"><li style="list-style-type:disc"><strong>Development</strong>:<ul id="62ecae3c-b71c-4501-b838-a742b7d33dab" class="bulleted-list"><li style="list-style-type:circle">Led by Jeff Hammerbacher, Avinash Lakshman, Karthik Ranganathan, and Prashant Malik.</li></ul><ul id="caac4410-992e-496d-82fb-c60592a60f56" class="bulleted-list"><li style="list-style-type:circle">Open-sourced in 2008, moved to Apache Incubator in 2009, top-level project in 2010.</li></ul></li></ul><ul id="459c4d66-156b-49ce-9ede-c934c15a2be3" class="bulleted-list"><li style="list-style-type:disc"><strong>Community</strong>: Contributions from companies like Twitter, LinkedIn, Apple, and independent developers.</li></ul><ul id="de525aa6-aa7e-4fad-afa8-a8b3a70fcf29" class="bulleted-list"><li style="list-style-type:disc"><strong>Evolution</strong>:<ul id="82944b3b-2d62-4c36-92d7-2fb99af14b0f" class="bulleted-list"><li style="list-style-type:circle">Introduction of CQL for improved usability.</li></ul><ul id="7522659e-03ea-43e2-b0f3-513312d5632d" class="bulleted-list"><li style="list-style-type:circle">Major contributions from enterprises and consultancies.</li></ul></li></ul><h3 id="5cc5631c-f46a-4d98-8da4-04b26d6cf029" class=""><strong>Is Cassandra a Good Fit for My Project?</strong></h3><ul id="2b8c36ab-b626-43d8-9823-9b1a3f273a57" class="bulleted-list"><li style="list-style-type:disc"><strong>Large Deployments</strong>: Effective for projects needing several nodes or more.</li></ul><ul id="1753f3d2-8198-43e1-b2f9-15721f670a52" class="bulleted-list"><li style="list-style-type:disc"><strong>High Write Throughput</strong>: Optimized for write-heavy applications.</li></ul><ul id="a75973f0-71fe-44ba-be02-5ecb42d6f4fb" class="bulleted-list"><li style="list-style-type:disc"><strong>Geographical Distribution</strong>: Supports data replication across multiple data centers.</li></ul><ul id="8baf462a-4698-4347-b645-44673bdbebdf" class="bulleted-list"><li style="list-style-type:disc"><strong>Hybrid Cloud and Multicloud</strong>: Flexible deployment across different providers.</li></ul><h3 id="f321afd5-eac9-42e1-bac1-7fcd33d496e9" class=""><strong>Getting Involved</strong></h3><ul id="f6e46f2a-e246-4e06-9337-ad5d9ca3a88b" class="bulleted-list"><li style="list-style-type:disc"><strong>Community Resources</strong>:<ul id="9ed67aa1-40f6-487e-b7ba-29f001d06476" class="bulleted-list"><li style="list-style-type:circle">Forums (Stack Overflow, Quora).</li></ul><ul id="2ec121b0-8c6b-48ba-bb22-c373e30f32cb" class="bulleted-list"><li style="list-style-type:circle">Mailing lists (user, dev, client-dev, commits).</li></ul><ul id="8ab86353-95fd-4f17-be10-f2d8d1aecb10" class="bulleted-list"><li style="list-style-type:circle">Chat (Apache Software Foundation’s Slack).</li></ul><ul id="3f5a1bd0-8100-4e38-8aa5-0ef8bea34b2a" class="bulleted-list"><li style="list-style-type:circle">Blogs (Apache Cassandra blog, DataStax blog).</li></ul></li></ul><ul id="b19e224e-2d3f-4210-b4ff-e02eb2b1354b" class="bulleted-list"><li style="list-style-type:disc"><strong>Contributions</strong>:<ul id="c68effcd-c30f-4d18-8e4c-91c04fc18b5b" class="bulleted-list"><li style="list-style-type:circle">Report issues on Cassandra JIRA.</li></ul><ul id="df2a3e51-94ac-484e-92ff-691aca85d183" class="bulleted-list"><li style="list-style-type:circle">Participate in the Cassandra Enhancement Proposal (CEP) process.</li></ul></li></ul><ul id="c4d0abac-ca7e-4a09-9bff-02ba90c23c2d" class="bulleted-list"><li style="list-style-type:disc"><strong>Meetups and Conferences</strong>:<ul id="481e2a31-9671-42e4-aa1d-f9fefb91893b" class="bulleted-list"><li style="list-style-type:circle">Local Cassandra meetups.</li></ul><ul id="bbb892af-dd71-4264-97d1-8a97fe067203" class="bulleted-list"><li style="list-style-type:circle">Conferences like ApacheCon, Strata Data, Next Generation Cassandra Conferences (NGCC), and DataStax Accelerate.</li></ul></li></ul><ul id="1cf0a518-7c59-42ed-9405-5c861184126c" class="bulleted-list"><li style="list-style-type:disc"><strong>Training</strong>: DataStax Academy offers training and certification.</li></ul><h3 id="db5eef8d-6c7e-44bf-a21b-d93d4b505532" class=""><strong>Summary</strong></h3><ul id="f83fbe5b-49f6-4085-8ee5-15440d3da1e6" class="bulleted-list"><li style="list-style-type:disc"><strong>Overview</strong>: Introduction to Cassandra’s defining characteristics, history, and major features.</li></ul><ul id="6ff4106b-42e2-4267-afdd-74c2f128886a" class="bulleted-list"><li style="list-style-type:disc"><strong>Community</strong>: Active participation in the Cassandra community.</li></ul><ul id="cf0390b0-d0c2-4b48-81e5-6a074ffbf2ce" class="bulleted-list"><li style="list-style-type:disc"><strong>Hands-On Experience</strong>: Ready to start using Cassandra.</li></ul><p id="96da3b20-ecc8-4517-abb9-13b46a8888aa" class="">
+</p><p id="92aaec5b-8eac-42e6-b40a-ff29c701c64d" class="">
+</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

@@ -1,0 +1,696 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Chapter 1. Beyond Relational Databases</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="1cc670bc-c6f3-44ba-876e-d001159f01db" class="page sans"><header><h1 class="page-title">Chapter 1. Beyond Relational Databases</h1><p class="page-description"></p></header><div class="page-body"><hr id="84949820-013c-4832-bd33-505d10b0bd24"/><p id="64b69c12-83a6-40f3-bf8d-ff07d14e8cc5" class="">
+</p><h3 id="53bbafbd-e3fe-4d5c-939b-a1117efc6c97" class=""><strong>Introduction to Cassandra</strong></h3><ul id="59c5c53b-fad1-4c92-b878-a60d71034e61" class="bulleted-list"><li style="list-style-type:disc"><strong>Objective</strong>: Help developers and database administrators understand Cassandra.</li></ul><ul id="401dbf5c-acca-42c4-861d-8a8bfbbf585c" class="bulleted-list"><li style="list-style-type:disc"><strong>Comparison</strong>: Contrast Cassandra with traditional relational database management systems (RDBMS).</li></ul><p id="9e5dd66f-7233-4b44-8874-96b73516e33e" class="">
+</p><hr id="3775370f-a0dd-46b8-8b70-2f34a2091c3a"/><p id="af79a5dc-b607-411c-94c9-a86d6efc76f6" class="">
+</p><h3 id="1a846ef3-25ba-4303-829f-ad8415d1cd6f" class=""><strong>What&#x27;s Wrong with Relational Databases?</strong></h3><p id="9fa6d76e-c72f-4fba-b0d9-cbebf8dadfc8" class="">
+</p><ul id="32bacbf0-7367-417f-b787-084aa7dc7d08" class="bulleted-list"><li style="list-style-type:disc"><strong>Advantages of Relational Databases</strong>:<ul id="3153e1fe-3109-42fd-a437-8116971fc77c" class="bulleted-list"><li style="list-style-type:circle">Ability to express complex relationships.</li></ul><ul id="86609945-2f1f-4b21-9005-b05d724d91c6" class="bulleted-list"><li style="list-style-type:circle">Popularity and widespread use.</li></ul></li></ul><ul id="2569db2f-71e2-4d54-aea1-9b0aa8bd28ab" class="bulleted-list"><li style="list-style-type:disc"><strong>Challenges</strong>:<ul id="734027fc-ec87-4388-bc7a-b4a680c55bbf" class="bulleted-list"><li style="list-style-type:circle">Scalability issues when usage increases.</li></ul><ul id="6862dbcd-5e67-4a29-937c-5feb0504b990" class="bulleted-list"><li style="list-style-type:circle">Slow joins in normalized databases.</li></ul><ul id="691711bd-a56e-446e-87cd-4fce70ec3c00" class="bulleted-list"><li style="list-style-type:circle">Transaction locking leading to queuing under heavy loads.</li></ul><ul id="609f3a66-0396-4fe5-9f9b-3684cdbcfdc2" class="bulleted-list"><li style="list-style-type:circle">Solutions often involve vertical and horizontal scaling, configuration updates, query optimization, caching, and denormalization.</li></ul><ul id="58c6c999-97cc-42fc-92f8-4d256832daab" class="bulleted-list"><li style="list-style-type:circle">ACID properties: Atomicity, Consistency, Isolation, Durability.</li></ul><ul id="47e8ab08-78b5-42f9-b098-ee7076644efe" class="bulleted-list"><li style="list-style-type:circle">Two-phase commit (2PC) for distributed transactions can cause higher latency and availability issues.</li></ul></li></ul><p id="e04559e9-d316-4f15-ad08-7a428d677ee9" class="">
+</p><hr id="54d22cdf-4b6f-46f5-88fa-45f7e055f34e"/><p id="359a4bb9-2857-4e94-8f63-564f0e203206" class="">
+</p><h3 id="924644f9-21c9-4383-8d4b-874c43569242" class=""><strong>Scalability Problems</strong></h3><ul id="8d461124-78ed-4866-8dc7-8e187d9c52b4" class="bulleted-list"><li style="list-style-type:disc"><strong>Vertical Scaling</strong>: Adding more hardware (memory, processors, disks) to a single machine.</li></ul><ul id="d94caa8c-6dc7-4c67-b8bc-955e0a2f463c" class="bulleted-list"><li style="list-style-type:disc"><strong>Horizontal Scaling</strong>: Adding more machines to form a database cluster.</li></ul><ul id="af4a5397-2883-43fd-83c5-73ac418ad92d" class="bulleted-list"><li style="list-style-type:disc"><strong>Challenges with Scaling</strong>:<ul id="01bf2f22-0450-4227-bc76-c2df1f1d1997" class="bulleted-list"><li style="list-style-type:circle">Data replication and consistency issues.</li></ul><ul id="c0b503a6-f21e-4a2d-a662-d5b883686f70" class="bulleted-list"><li style="list-style-type:circle">Complexity in configuration and optimization.</li></ul><ul id="89adcefc-827c-47e2-88e7-6e5a38b9144b" class="bulleted-list"><li style="list-style-type:circle">Need for distributed caches (e.g., Redis, memcached).</li></ul><ul id="4abdfda0-252c-461b-8e60-411dba905a8a" class="bulleted-list"><li style="list-style-type:circle">Denormalization to improve performance, violating Codd&#x27;s 12 Rules for relational data.</li></ul></li></ul><p id="c1562676-6fcf-4537-9639-9f63574ecd7e" class="">
+</p><hr id="2f23ca52-134a-491c-aeb8-9c33e8f7a2fc"/><p id="09a77a31-af53-4d83-9682-be003b6a8661" class="">
+</p><h3 id="889f3ce6-ba40-4b06-9041-f9e6b42b1db2" class=""><strong>Sharding and Shared-Nothing Architecture</strong></h3><ul id="0757bca3-42fb-4bf1-a893-87babfaa684f" class="bulleted-list"><li style="list-style-type:disc"><strong>Sharding</strong>: Dividing data across multiple machines to handle large data sets.<ul id="b33e09b9-f87b-49b8-b12a-bb50797d1a79" class="bulleted-list"><li style="list-style-type:circle"><strong>Strategies</strong>:<ul id="7ca08658-ad0a-4a4c-ae97-4c60f2a3ebe3" class="bulleted-list"><li style="list-style-type:square">Feature-based shard (functional segmentation).</li></ul><ul id="c8c474a6-60a2-48ad-bf10-a9eea363abf0" class="bulleted-list"><li style="list-style-type:square">Key-based sharding.</li></ul><ul id="ee03a053-285f-4061-967c-1780605f9bff" class="bulleted-list"><li style="list-style-type:square">Lookup table (directory-based sharding).</li></ul></li></ul></li></ul><ul id="e6fa1de3-c53d-4489-9fcc-650df98f4a25" class="bulleted-list"><li style="list-style-type:disc"><strong>Shared-Nothing Architecture</strong>:<ul id="461dd315-3c6e-434c-87dc-ca413dcf3e29" class="bulleted-list"><li style="list-style-type:circle">No centralized state; each node operates independently.</li></ul><ul id="f9fe0771-e376-469f-b0bf-b2b759a49bc5" class="bulleted-list"><li style="list-style-type:circle">Popularized by Google’s Bigtable and MapReduce.</li></ul><ul id="05060f61-1015-434f-8f7c-cc06939e5676" class="bulleted-list"><li style="list-style-type:circle">Cassandra employs shared-nothing architecture with no central controller.</li></ul></li></ul><p id="dfd29929-70c7-476c-8fbc-56a04d3ff618" class="">
+</p><hr id="9d70255b-a27c-48ff-bcf6-78a3ea5f1993"/><p id="ea13edd6-c64e-4b82-a5f2-4cad41a589e1" class="">
+</p><h3 id="d5fdd9fc-d058-4b19-bc7e-627c15ebde5f" class=""><strong>Web Scale and Relational Databases</strong></h3><ul id="96978d9b-9df3-4e46-8985-ba7ef9a6a06d" class="bulleted-list"><li style="list-style-type:disc"><strong>Relational Databases</strong>:<ul id="31949695-b2c9-49c3-bb33-651aa915ada0" class="bulleted-list"><li style="list-style-type:circle">Good at solving certain data storage problems.</li></ul><ul id="31e45487-6971-47cc-9d90-9892304b9560" class="bulleted-list"><li style="list-style-type:circle">Challenges when scaling for web applications.</li></ul><ul id="48d425ae-c3e9-480c-81ff-63d283ce908c" class="bulleted-list"><li style="list-style-type:circle">Need for denormalization and avoidance of distributed transactions.</li></ul><ul id="5b48f8e7-5a71-4920-9b4a-2fad67623480" class="bulleted-list"><li style="list-style-type:circle">Limitations of traditional RDBMSs in handling web-scale data.</li></ul></li></ul><ul id="e1174086-575f-4e79-84bf-ab1839d10c35" class="bulleted-list"><li style="list-style-type:disc"><strong>NoSQL Solutions</strong>:<ul id="ec2ede2e-423d-43b2-a101-89e2f3ea3d82" class="bulleted-list"><li style="list-style-type:circle">Emerging as natural solutions to manage very large databases.</li></ul><ul id="3aec6856-cfb6-4c54-8f14-e6469fa84360" class="bulleted-list"><li style="list-style-type:circle">Designed to support horizontal scalability and high availability.</li></ul><p id="bef1de91-34e1-4033-a848-fd081bd8f6a7" class="">
+</p></li></ul><hr id="62122b59-b10e-49f7-ae96-2084f6db4bf8"/><p id="e83d6569-8ddf-42b0-81e1-8a07f77cf02f" class="">
+</p><h3 id="a9cb812d-5a33-4ae3-8e8e-553cb128b4b1" class=""><strong>The Rise of NoSQL</strong></h3><ul id="8a28458c-d69a-4e1e-926b-fc5d0dfc1b92" class="bulleted-list"><li style="list-style-type:disc"><strong>NoSQL</strong>: Nonrelational databases supporting &quot;not only SQL&quot; semantics.<ul id="fe61f7aa-6f5c-44a5-a1dd-5e1ba0386bc4" class="bulleted-list"><li style="list-style-type:circle"><strong>Categories</strong>:<ul id="11029a99-c85a-4523-946f-969f39ef5bb5" class="bulleted-list"><li style="list-style-type:square">Key-value stores (e.g., DynamoDB, Redis).</li></ul><ul id="5572e120-7a14-439c-b054-a872c3c87fe7" class="bulleted-list"><li style="list-style-type:square">Column stores (e.g., HBase, Kudu).</li></ul><ul id="254f6557-c3b7-42f6-ae3b-6ed0bec779e4" class="bulleted-list"><li style="list-style-type:square">Document stores (e.g., MongoDB, CouchDB).</li></ul><ul id="0423966d-6b0d-4da3-b6f4-8ed94a354ae4" class="bulleted-list"><li style="list-style-type:square">Graph databases (e.g., Neo4j, DataStax Graph).</li></ul><ul id="bd928ce3-12b0-4a23-b2bd-dee54eb976f9" class="bulleted-list"><li style="list-style-type:square">Object databases (e.g., db4o, InterSystems Caché).</li></ul><ul id="0d7df7ef-1ad2-4901-82c5-1f2f473ed17c" class="bulleted-list"><li style="list-style-type:square">XML databases (e.g., BaseX, eXist).</li></ul><ul id="cb806a4a-ed49-4555-bb34-fbe20d0e6e9c" class="bulleted-list"><li style="list-style-type:square">Multimodel databases (e.g., Azure Cosmos DB, DataStax Enterprise).</li></ul></li></ul></li></ul><p id="0593d0e8-e3fb-4f5a-bf29-0da3537cd966" class="">
+</p><hr id="116900be-3925-44d3-800d-2b595ceaf872"/><p id="c95efc88-43f5-415f-9664-43de6aeae291" class="">
+</p><h3 id="3bf0c467-8ef0-4302-a2b4-cacf1bac44d4" class=""><strong>New Relational Architectures (NewSQL)</strong></h3><ul id="ffb3f872-25fb-4271-a958-8ec77a4e767d" class="bulleted-list"><li style="list-style-type:disc"><strong>NewSQL</strong>: Relational databases designed for scalability and transactional guarantees.<ul id="f4818372-6ab8-4b41-ab2d-4f83ba50d14b" class="bulleted-list"><li style="list-style-type:circle"><strong>Examples</strong>:<ul id="6c95f558-6d56-453d-8fa8-de17f11e51b9" class="bulleted-list"><li style="list-style-type:square">Calvin transaction protocol (e.g., FaunaDB).</li></ul><ul id="d1c77ad3-49a3-4a07-8ee8-58c4740f90de" class="bulleted-list"><li style="list-style-type:square">Google’s Spanner (e.g., Cloud Spanner, CockroachDB).</li></ul></li></ul></li></ul><p id="dc0699d7-e276-49b7-8738-abd4eb3e61ad" class="">
+</p><p id="ac0f4c6c-f2b7-421f-a3f3-1e795863df28" class="">
+</p><hr id="65fddecc-0f1b-4c6d-9d71-d4624c9766c0"/><p id="957d9cdf-f025-46b5-b402-80968762fb61" class="">
+</p><h3 id="f7829d9f-a0c7-4e0e-af0b-732123751ce6" class=""><strong>Summary</strong></h3><ul id="3f461cd6-4095-49cf-a0d5-1769b55445f6" class="bulleted-list"><li style="list-style-type:disc"><strong>Relational Databases</strong>: Effective but challenged by modern scalability and availability requirements.</li></ul><ul id="22b9f83a-4550-42a6-afe1-b53d328b6882" class="bulleted-list"><li style="list-style-type:disc"><strong>Cassandra</strong>: A viable non-relational database solution for web-scale applications.</li></ul><ul id="4ab48e85-2f10-4d73-8980-7cbc427c7a81" class="bulleted-list"><li style="list-style-type:disc"><strong>Decision Making</strong>: Evaluate based on specific data needs and application requirements.</li></ul><p id="d2054304-9011-4d77-9399-28970ca009b1" class="">
+</p><hr id="8375f723-9433-4fbf-a530-738a1b6226bf"/><p id="3ee8be7f-9e22-44fb-8904-5e43f57a0c44" class="">
+</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

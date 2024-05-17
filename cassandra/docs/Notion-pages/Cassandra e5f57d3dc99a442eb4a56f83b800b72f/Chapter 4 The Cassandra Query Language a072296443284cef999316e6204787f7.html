@@ -1,0 +1,712 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Chapter 4. The Cassandra Query Language</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="a0722964-4328-4cef-9993-16e6204787f7" class="page sans"><header><h1 class="page-title"><strong>Chapter 4. The Cassandra Query Language</strong></h1><p class="page-description"></p></header><div class="page-body"><hr id="10d7f1c7-98eb-4b46-8cee-0107619d8b5c"/><p id="66f0ea24-0bdb-473c-a248-aae611eda25c" class="">
+</p><h3 id="1f356a00-4c9c-416e-a503-8364659b9e55" class=""><strong>The Relational Data Model</strong></h3><ul id="3cc1caef-f363-46bb-8e7d-85b627a4a164" class="bulleted-list"><li style="list-style-type:disc"><strong>Database</strong>: Outer container for applications.</li></ul><ul id="5588a4f4-cf5f-4406-90cb-1908b7f9b978" class="bulleted-list"><li style="list-style-type:disc"><strong>Tables</strong>: Named collections of columns.</li></ul><ul id="998ecb77-865a-4352-9520-516b769e8460" class="bulleted-list"><li style="list-style-type:disc"><strong>Columns</strong>: Named fields within tables.</li></ul><ul id="98af1fdc-df57-4b86-98e8-5fcff24c3360" class="bulleted-list"><li style="list-style-type:disc"><strong>Rows</strong>: Entries with values for each column.</li></ul><ul id="352297fd-3733-4564-a021-4799427f0125" class="bulleted-list"><li style="list-style-type:disc"><strong>Primary Key</strong>: Unique identifier for rows.</li></ul><ul id="9095bb09-b81b-410e-8fee-36230ee495c8" class="bulleted-list"><li style="list-style-type:disc"><strong>SQL</strong>: Language used for querying and updating data.</li></ul><h3 id="9b84eb0e-4216-4384-b881-dfe8135f9490" class=""><strong>Cassandra’s Data Model</strong></h3><ul id="58bbade9-7a3e-41d4-9add-85a0da64245a" class="bulleted-list"><li style="list-style-type:disc"><strong>Cluster</strong>: Distributed over several machines, appearing as a single instance.</li></ul><ul id="cc832244-b342-4eb1-9065-bb5a89f5051c" class="bulleted-list"><li style="list-style-type:disc"><strong>Keyspace</strong>: Corresponds to a relational database, a container for tables.</li></ul><ul id="efc673e9-d1ba-4c4a-9754-0f4488b8682f" class="bulleted-list"><li style="list-style-type:disc"><strong>Table</strong>: Container for ordered rows, organized in partitions.</li></ul><ul id="04487e51-75c8-461e-8cf5-e1337e6269a4" class="bulleted-list"><li style="list-style-type:disc"><strong>Row</strong>: Contains columns, uniquely identified by a primary key.</li></ul><ul id="e0a267d9-9d24-4195-9ed8-038d8805be5e" class="bulleted-list"><li style="list-style-type:disc"><strong>Column</strong>: Name/value pair within a row.</li></ul><ul id="1da5e11e-2a2c-41b1-819c-4354c1593240" class="bulleted-list"><li style="list-style-type:disc"><strong>Primary Key</strong>: Composite key consisting of a partition key and optional clustering columns.</li></ul><ul id="c1f25bbc-3c12-4ea5-8dcf-864a3b81db08" class="bulleted-list"><li style="list-style-type:disc"><strong>Partition</strong>: Group of related rows stored together on the same nodes.</li></ul><h3 id="7dea820a-949a-44bd-9ff2-cf6a88a3aeb2" class=""><strong>Key Components of Cassandra’s Data Model</strong></h3><ol type="1" id="6807c08e-ee30-4c8d-96b0-ebe30dfecadf" class="numbered-list" start="1"><li><strong>Clusters</strong><ul id="ae2a2a97-617d-4ef1-a578-0e8151930e4a" class="bulleted-list"><li style="list-style-type:disc">Outer container for keyspaces.</li></ul><ul id="c7bc9c60-a1a0-459d-95ce-e16a84bce2cb" class="bulleted-list"><li style="list-style-type:disc">Nodes are arranged in a ring for data distribution.</li></ul></li></ol><ol type="1" id="383fbd3f-7e79-4d5f-b670-7b790196e78c" class="numbered-list" start="2"><li><strong>Keyspaces</strong><ul id="3dd07a55-b1c6-46c0-b75b-975abfd4bcfb" class="bulleted-list"><li style="list-style-type:disc">Correspond to relational databases.</li></ul><ul id="a395e73f-6733-4963-8b4b-f9b1b5773e51" class="bulleted-list"><li style="list-style-type:disc">Contain tables and define replication strategies.</li></ul></li></ol><ol type="1" id="52f734b6-69cc-4562-93e8-d66acbc336f8" class="numbered-list" start="3"><li><strong>Tables</strong><ul id="03414472-4e4f-44ec-8873-00543f77720b" class="bulleted-list"><li style="list-style-type:disc">Containers for rows and columns.</li></ul><ul id="8828420a-216d-4fdd-a5e9-34cdf421c7ec" class="bulleted-list"><li style="list-style-type:disc">Organized in partitions based on the partition key.</li></ul></li></ol><ol type="1" id="623ce61d-e3f7-4fac-b881-92a6140a1cb9" class="numbered-list" start="4"><li><strong>Rows</strong><ul id="cfba4fe3-f2ce-4f4b-b0dd-53dd04830125" class="bulleted-list"><li style="list-style-type:disc">Entries within tables, containing columns.</li></ul><ul id="6c6b3200-fd4c-4cf0-bcce-fbc4a24a9ec0" class="bulleted-list"><li style="list-style-type:disc">Identified by a unique primary key.</li></ul></li></ol><ol type="1" id="ae0b3b78-e909-4472-a22c-a10f6befded3" class="numbered-list" start="5"><li><strong>Columns</strong><ul id="f7e94c4a-6bc2-4c24-beba-2d789288ec49" class="bulleted-list"><li style="list-style-type:disc">Name/value pairs within rows.</li></ul><ul id="7915090d-9549-46b4-a01c-412338625243" class="bulleted-list"><li style="list-style-type:disc">May include timestamps and time to live (TTL) for managing data.</li></ul></li></ol><h3 id="1b3d264f-6280-4630-b73d-8e4615d3ee25" class=""><strong>Practical Example: User Table</strong></h3><ol type="1" id="bf875bb0-a667-4cad-ba3f-ebff70e8bd86" class="numbered-list" start="1"><li><strong>Creating Keyspace and Table</strong><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1520e7b0-8172-4e3e-8544-f8889c2d3cda" class="code"><code class="language-SQL" style="white-space:pre-wrap;word-break:break-all">
+CREATE KEYSPACE my_keyspace WITH replication = {&#x27;class&#x27;: &#x27;SimpleStrategy&#x27;, &#x27;replication_factor&#x27;: 1};
+
+
+CREATE TABLE user (first_name text, last_name text, title text, PRIMARY KEY (last_name, first_name));
+
+CREATE TABLE user (first_name text, last_name text, title text, PRIMARY KEY ((pk1,pk2), (ck1,ck2));
+
+
+</code></pre></li></ol><ol type="1" id="db8f06d0-427e-4416-bc7a-64be4f53c133" class="numbered-list" start="2"><li><strong>Inserting and Querying Data</strong><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="37ac514f-77bd-435c-9e5e-5f5a8f44e0c0" class="code"><code class="language-SQL" style="white-space:pre-wrap;word-break:break-all">
+INSERT INTO user (first_name, last_name, title) VALUES (&#x27;Bill&#x27;, &#x27;Nguyen&#x27;, &#x27;Mr.&#x27;);
+SELECT * FROM user WHERE last_name=&#x27;Nguyen&#x27;;
+
+</code></pre></li></ol><ol type="1" id="121766d0-ffd4-4429-acdd-6a9a40c55e82" class="numbered-list" start="3"><li><strong>Updating Data</strong><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="867077ff-2108-4b4f-99f4-4489147dd414" class="code"><code class="language-SQL" style="white-space:pre-wrap;word-break:break-all">
+UPDATE user SET title = &#x27;Dr.&#x27; WHERE first_name=&#x27;Bill&#x27; AND last_name=&#x27;Nguyen&#x27;;
+</code></pre></li></ol><ol type="1" id="009d84c4-ecab-443a-8f42-605ce7892405" class="numbered-list" start="4"><li><strong>Using Timestamps and TTL</strong><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="8ce1beaf-be52-49d6-9b7b-fb3786425d22" class="code"><code class="language-SQL" style="white-space:pre-wrap;word-break:break-all">
+SELECT first_name, last_name, title, writetime(title) FROM user;
+UPDATE user USING TIMESTAMP 1567886623298243 SET middle_initial = &#x27;Q&#x27; WHERE first_name = &#x27;Mary&#x27; AND last_name = &#x27;Rodriguez&#x27;;
+UPDATE user USING TTL 3600 SET middle_initial = &#x27;Z&#x27; WHERE first_name = &#x27;Mary&#x27; AND last_name = &#x27;Rodriguez&#x27;;
+
+</code></pre></li></ol><ol type="1" id="eceeb62e-44de-43da-b603-4f223bd0785b" class="numbered-list" start="5"><li><strong>Using UUIDs</strong><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="dcd742c7-d698-465f-bdeb-456adb6c48e5" class="code"><code class="language-SQL" style="white-space:pre-wrap;word-break:break-all">
+ALTER TABLE user ADD id uuid;
+UPDATE user SET id = uuid() WHERE first_name = &#x27;Mary&#x27; AND last_name = &#x27;Rodriguez&#x27;;
+SELECT first_name, id FROM user WHERE first_name = &#x27;Mary&#x27; AND last_name = &#x27;Rodriguez&#x27;;
+
+</code></pre></li></ol><ol type="1" id="ce95e4ba-3a00-49d6-89f3-0b59958a4c5e" class="numbered-list" start="6"><li><strong>Defining Collections</strong><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="f069020c-2982-4cf5-9de3-ab337959769e" class="code"><code class="language-SQL" style="white-space:pre-wrap;word-break:break-all">
+ALTER TABLE user ADD emails set&lt;text&gt;;
+UPDATE user SET emails = { &#x27;mary@example.com&#x27; } WHERE first_name = &#x27;Mary&#x27; AND last_name = &#x27;Rodriguez&#x27;;
+
+</code></pre></li></ol><ol type="1" id="3db7b260-0f69-47a4-94dd-cbaa74a5185f" class="numbered-list" start="7"><li><strong>Using User-Defined Types (UDTs)</strong><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="6b55fd10-c970-4620-9a8d-38836d531b90" class="code"><code class="language-SQL" style="white-space:pre-wrap;word-break:break-all">
+CREATE TYPE address (street text, city text, state text, zip_code int);
+ALTER TABLE user ADD addresses map&lt;text, frozen&lt;address&gt;&gt;;
+UPDATE user SET addresses = addresses + {&#x27;home&#x27;: { street: &#x27;7712 E. Broadway&#x27;, city: &#x27;Tucson&#x27;, state: &#x27;AZ&#x27;, zip_code: 85715 } } WHERE first_name = &#x27;Mary&#x27; AND last_name = &#x27;Rodriguez&#x27;;
+
+</code></pre></li></ol><h3 id="1108938d-1aa0-41aa-9267-b061dd71bc60" class=""><strong>Summary</strong></h3><p id="109e7d7a-6e92-4ef3-a6ad-030796f235ae" class="">In this chapter, we explored Cassandra’s data model and how it differs from relational databases. We covered the basic components, including clusters, keyspaces, tables, rows, and columns. Additionally, we looked into CQL syntax for creating, updating, and querying data, as well as using collections and user-defined types for more complex data structures.</p><p id="eb4ca4e6-9a98-4a78-aa31-a414a9ba7786" class="">By understanding these concepts and practicing with cqlsh, you’ll be better equipped to leverage Cassandra’s capabilities in your applications.</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

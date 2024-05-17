@@ -30,3 +30,5 @@ confluent-7.6.1/
 security/
 
 node_modules/
+
+apache-cassandra-4.1.4/
