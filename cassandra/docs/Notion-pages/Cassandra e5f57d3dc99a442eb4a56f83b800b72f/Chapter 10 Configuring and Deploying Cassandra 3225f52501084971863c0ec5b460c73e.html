@@ -1,0 +1,740 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Chapter 10. Configuring and Deploying Cassandra</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="3225f525-0108-4971-863c-0ec5b460c73e" class="page sans"><header><h1 class="page-title"><strong>Chapter 10. Configuring and Deploying Cassandra</strong></h1><p class="page-description"></p></header><div class="page-body"><hr id="d7f5484c-adde-4620-94db-2f75cbd45430"/><p id="37a06080-3e7a-4c20-bd75-d7057dfb6921" class="">
+</p><h3 id="333d9b44-27cc-459d-a721-39c3a880f5ba" class=""><strong>Cassandra Cluster Manager</strong></h3><ul id="861f23a2-6ea6-41c2-869e-01fe8b787e87" class="bulleted-list"><li style="list-style-type:disc"><strong>Overview</strong><ul id="0bdb5159-5708-4c88-8d2c-dbc182f61c8f" class="bulleted-list"><li style="list-style-type:circle">Cassandra works out of the box with default settings but offers extensive configurability.</li></ul><ul id="35cbbc8a-896f-4bbe-88fe-f8ac35126fb1" class="bulleted-list"><li style="list-style-type:circle">Cassandra Cluster Manager (ccm) is a toolset of Python scripts to manage multinode clusters on a single machine.</li></ul><ul id="f0fe7cca-d960-40f1-bbc2-b320e1d01e42" class="bulleted-list"><li style="list-style-type:circle">Ideal for testing and learning configuration options without additional hardware.</li></ul></li></ul><ul id="cc2997b1-cca8-4b51-acac-1bc3f42503dc" class="bulleted-list"><li style="list-style-type:disc"><strong>Installing ccm</strong><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="7c758735-1fb9-4f3c-8be1-e26ca81e26fc" class="code"><code class="language-Shell" style="white-space:pre-wrap;word-break:break-all">bashCopy code
+$ pip install ccm
+$ brew install ccm  # for macOS users
+
+</code></pre></li></ul><ul id="b919b9f3-e5e9-4e86-8e9b-29c07308ca6c" class="bulleted-list"><li style="list-style-type:disc"><strong>Creating a Cluster with ccm</strong><ul id="bd604393-6b22-4b54-babb-83902a1691e0" class="bulleted-list"><li style="list-style-type:circle">Primary configuration file: <code><strong>cassandra.yaml</strong></code>.</li></ul><ul id="360665ab-9e37-4b2c-883d-fb98ed4e978d" class="bulleted-list"><li style="list-style-type:circle">Key values: cluster name, partitioner, snitch, seed nodes.</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="928e5e5e-1654-4c8c-933c-61b6acca079d" class="code"><code class="language-Shell" style="white-space:pre-wrap;word-break:break-all">bashCopy code
+$ ccm create -v 4.0.0 -n 3 reservation_cluster --vnodes
+$ ccm list
+*reservation_cluster
+$ ccm status
+$ ccm start
+
+</code></pre></li></ul><ul id="b2482afc-dba6-4b31-9157-aa15105b0e7a" class="bulleted-list"><li style="list-style-type:disc"><strong>Inspecting Cluster Configuration</strong><ul id="2fa501e1-5893-4bf9-b47c-533aae8768de" class="bulleted-list"><li style="list-style-type:circle">Nodes and their configuration can be checked using <code><strong>ccm status</strong></code> and <code><strong>ccm showlog</strong></code>.</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="8b8e0af6-e8ff-428b-9cd3-20a8c28ae112" class="code"><code class="language-Shell" style="white-space:pre-wrap;word-break:break-all">bashCopy code
+$ ccm node1 status
+$ ccm node1 ring
+$ cd ~/.ccm/reservation_cluster
+$ diff node1/conf/ node2/conf/
+
+</code></pre></li></ul><ul id="91f321c2-cee4-4856-9c39-8435a161e9ab" class="bulleted-list"><li style="list-style-type:disc"><strong>Adding Nodes to a Cluster</strong><ul id="93c98431-35f5-474c-89c1-cc548b3704ba" class="bulleted-list"><li style="list-style-type:circle">Simple with ccm.</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c48021db-a60d-4908-80f3-341776f6b906" class="code"><code class="language-Shell" style="white-space:pre-wrap;word-break:break-all">bashCopy code
+$ ccm add node4 -i 127.0.0.4 -j 7400
+$ ccm start
+
+</code></pre></li></ul><h3 id="9829409a-3518-4bd0-b0e6-930d3dabde7f" class=""><strong>Dynamic Ring Participation</strong></h3><ul id="9e1bbdd4-d29e-4e09-be32-8eb5b9071001" class="bulleted-list"><li style="list-style-type:disc"><strong>Node Operations</strong><ul id="b6c66247-1df6-4111-88d8-83ffe34948be" class="bulleted-list"><li style="list-style-type:circle">Nodes can be stopped and started without disrupting the cluster.</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b43abc2c-1530-4a0f-acc0-0b58470eb4fa" class="code"><code class="language-Shell" style="white-space:pre-wrap;word-break:break-all">bashCopy code
+$ ccm stop
+$ ccm start
+
+</code></pre></li></ul><h3 id="37aa9be2-beee-4ef0-b4ab-c05c634352ce" class=""><strong>Node Configuration</strong></h3><ul id="b1676aee-a15f-426b-9a66-c203e6455428" class="bulleted-list"><li style="list-style-type:disc"><strong>Seed Nodes</strong><ul id="cb049a83-9058-428a-8cd5-0f191c77f843" class="bulleted-list"><li style="list-style-type:circle">Used as contact points for bootstrapping.</li></ul><ul id="314c836d-76fb-4742-9dbe-c3a3c21af799" class="bulleted-list"><li style="list-style-type:circle">Example seed configuration in <code><strong>cassandra.yaml</strong></code>:</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="92c04a7e-5ff5-4567-a5c0-296b69e87f45" class="code"><code class="language-YAML" style="white-space:pre-wrap;word-break:break-all">yamlCopy code
+- seeds: &quot;127.0.0.1, 127.0.0.2, 127.0.0.3&quot;
+
+</code></pre></li></ul><ul id="5ac9510a-6f19-49f6-a17f-b9088b26d3b0" class="bulleted-list"><li style="list-style-type:disc"><strong>Snitches</strong><ul id="0ab0c778-b15a-4575-a477-e1a61eb794ce" class="bulleted-list"><li style="list-style-type:circle">Determine network topology.</li></ul><ul id="aec4592a-d12b-4b9c-9b85-d54638e96216" class="bulleted-list"><li style="list-style-type:circle">Common snitches: <code><strong>SimpleSnitch</strong></code>, <code><strong>PropertyFileSnitch</strong></code>, <code><strong>GossipingPropertyFileSnitch</strong></code>, <code><strong>RackInferringSnitch</strong></code>.</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="f14f1232-0429-4e76-bbfc-34b15d921b1d" class="code"><code class="language-YAML" style="white-space:pre-wrap;word-break:break-all">yamlCopy code
+endpoint_snitch: GossipingPropertyFileSnitch
+
+</code></pre></li></ul><h3 id="57e51a09-5378-42b7-afa6-079befbb4a8e" class=""><strong>Partitioners</strong></h3><ul id="83225fe8-40ff-4c34-b82d-4570aa528f27" class="bulleted-list"><li style="list-style-type:disc"><strong>Default Partitioner</strong><ul id="40febef2-c405-47ba-8cfb-6df0dcd3c560" class="bulleted-list"><li style="list-style-type:circle"><code><strong>Murmur3Partitioner</strong></code> for even distribution of data.</li></ul><ul id="5fd7d2f8-6b98-4acb-924d-4415fda72eb3" class="bulleted-list"><li style="list-style-type:circle">Other options include <code><strong>RandomPartitioner</strong></code> and <code><strong>OrderPreservingPartitioner</strong></code>.</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="78c62280-ebc4-4672-9f48-6f32666f4920" class="code"><code class="language-YAML" style="white-space:pre-wrap;word-break:break-all">yamlCopy code
+partitioner: org.apache.cassandra.dht.Murmur3Partitioner
+
+</code></pre></li></ul><h3 id="f7034a1c-ff34-40d3-bdfd-c8f48c2fd032" class=""><strong>Tokens and Virtual Nodes</strong></h3><ul id="bae6fc89-18ab-4576-bcbc-9332bce1d78b" class="bulleted-list"><li style="list-style-type:disc"><strong>Configuration</strong><ul id="f24b70bc-9580-4216-a0f6-8ee220622a79" class="bulleted-list"><li style="list-style-type:circle">Use vnodes for ease of management.</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="93a8232a-f526-4f47-aaa9-824888ae9c52" class="code"><code class="language-YAML" style="white-space:pre-wrap;word-break:break-all">yamlCopy code
+num_tokens: 256
+
+</code></pre></li></ul><ul id="8a808f9e-a3cf-4175-b895-88297ccb5fbd" class="bulleted-list"><li style="list-style-type:disc"><strong>Disabling vnodes</strong><ul id="f208190a-14a5-44d8-803d-71369a3e1c26" class="bulleted-list"><li style="list-style-type:circle">Manually configure token ranges if not using vnodes.</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="45b6aa41-7c58-49df-84d3-093892d26a3d" class="code"><code class="language-YAML" style="white-space:pre-wrap;word-break:break-all">yamlCopy code
+num_tokens: 1
+
+</code></pre></li></ul><h3 id="46c9edbe-cd32-4e71-8b3d-df43bcffa418" class=""><strong>Network Interfaces</strong></h3><ul id="5c509694-d070-4efb-b733-14946d4974d3" class="bulleted-list"><li style="list-style-type:disc"><strong>Configuration Options</strong><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="0230e3ee-90fc-4666-b384-1c54ed45dddc" class="code"><code class="language-YAML" style="white-space:pre-wrap;word-break:break-all">yamlCopy code
+listen_address: 127.0.0.1
+broadcast_address: 127.0.0.1
+rpc_address: 127.0.0.1
+broadcast_rpc_address: 127.0.0.1
+native_transport_port: 9042
+
+</code></pre></li></ul><h3 id="8437c2ec-ad8b-4e88-b770-dc1c88eeb074" class=""><strong>Data Storage</strong></h3><ul id="1d0ac126-06aa-42d5-989f-c45646b2e0a8" class="bulleted-list"><li style="list-style-type:disc"><strong>Directory Configuration</strong><ul id="107cb624-96d2-440d-8fcd-f09dc794aa89" class="bulleted-list"><li style="list-style-type:circle">Separate directories for datafiles, commit logs, hints, and caches.</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="3f75ef3a-26c1-413d-9f32-540de9c4c884" class="code"><code class="language-YAML" style="white-space:pre-wrap;word-break:break-all">yamlCopy code
+commitlog_directory: /var/lib/cassandra/commitlog
+data_file_directories:
+  - /var/lib/cassandra/data
+
+</code></pre></li></ul><h3 id="cfe1de78-2fbd-48f8-bc1f-9c3006ba673c" class=""><strong>Startup and JVM Settings</strong></h3><ul id="0aca1565-61de-44e8-ab3a-7d71e17e17d4" class="bulleted-list"><li style="list-style-type:disc"><strong>Configuration Files</strong><ul id="120c8dbd-b0f4-46ea-b0f7-202a480fe62e" class="bulleted-list"><li style="list-style-type:circle"><code><strong>jvm.options</strong></code> for JVM settings.</li></ul><ul id="adf5724e-e32a-44a7-af82-fb9c5f952901" class="bulleted-list"><li style="list-style-type:circle"><code><strong>logback.xml</strong></code> for logging configuration.</li></ul></li></ul><h3 id="29018912-01fe-40ee-808a-e09212018516" class=""><strong>Creating a Cluster in Docker</strong></h3><ul id="60cc6552-bb58-41fb-812c-ae712de09551" class="bulleted-list"><li style="list-style-type:disc"><strong>Docker Commands</strong><ul id="83d8a1fe-5bf6-42af-bd9d-089649e2e57e" class="bulleted-list"><li style="list-style-type:circle">Example of creating a cluster with Docker.</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a2a39b64-c7c0-4ba8-87ce-931ad86a19c2" class="code"><code class="language-Shell" style="white-space:pre-wrap;word-break:break-all">bashCopy code
+$ docker network create my-network
+$ docker run --name node1 --network my-network -p 9042:9042 -d cassandra
+$ docker run --name node2 --network my-network -e CASSANDRA_SEEDS=node1 -d cassandra
+$ docker run --name node3 --network my-network -e CASSANDRA_SEEDS=node1,node2 -d cassandra
+
+</code></pre></li></ul><h3 id="78884da3-f77c-4202-92fc-d8490efc4907" class=""><strong>Planning a Cluster Deployment</strong></h3><ul id="5df3682a-09f1-4167-b132-58693674a35d" class="bulleted-list"><li style="list-style-type:disc"><strong>Cluster Topology and Replication Strategies</strong><ul id="7c8af1b7-8d9a-4592-b2d4-00245846225b" class="bulleted-list"><li style="list-style-type:circle">Consider data center layout, replication needs, and workload isolation.</li></ul><ul id="4435a044-911c-41ce-8687-715c1762bca1" class="bulleted-list"><li style="list-style-type:circle">Example replication strategy for multiple data centers:</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1c40303c-3fec-40e9-9c0e-6146621df44c" class="code"><code class="language-SQL" style="white-space:pre-wrap;word-break:break-all">sqlCopy code
+ALTER KEYSPACE reservation
+WITH REPLICATION = {&#x27;class&#x27; : &#x27;NetworkTopologyStrategy&#x27;, &#x27;DC1&#x27; : &#x27;3&#x27;, &#x27;DC2&#x27; : &#x27;3&#x27;};
+
+</code></pre></li></ul><ul id="014bc93b-1529-467f-80d4-25b6e36b3280" class="bulleted-list"><li style="list-style-type:disc"><strong>Sizing Your Cluster</strong><ul id="4aa263a2-93d1-4795-8412-39a6cf0ad141" class="bulleted-list"><li style="list-style-type:circle">Calculate storage size based on table schema, replication factor, and compaction strategy.</li></ul><ul id="5387b57a-75ef-4fa4-82ca-a0d752833045" class="bulleted-list"><li style="list-style-type:circle">Recommended to balance storage and performance.</li></ul></li></ul><ul id="7799dd19-68bc-41b2-9d54-17107d903e16" class="bulleted-list"><li style="list-style-type:disc"><strong>Selecting Instances</strong><ul id="0757becd-722e-447e-a2e0-143d6fb31cd4" class="bulleted-list"><li style="list-style-type:circle">Development: 2 cores, 8 GB memory.</li></ul><ul id="96fc818b-0bcf-46a0-85dc-bae0d99adfcc" class="bulleted-list"><li style="list-style-type:circle">Production: 8+ cores, 32+ GB memory.</li></ul><ul id="0b0a21e9-a0e7-4512-8482-a0aa995b679d" class="bulleted-list"><li style="list-style-type:circle">SSDs preferred for performance.</li></ul></li></ul><h3 id="b1cce914-8525-4add-bcc1-92001e520163" class=""><strong>Cloud Deployment</strong></h3><ul id="9348d2a4-1875-452b-b76c-da600849d63f" class="bulleted-list"><li style="list-style-type:disc"><strong>Amazon Web Services (AWS)</strong><ul id="a7149b5b-30a0-4eb3-a555-02f082b890d9" class="bulleted-list"><li style="list-style-type:circle">Use EC2 instances with ephemeral or EBS storage.</li></ul><ul id="131e7a32-b2dd-4077-90e2-1de274da0644" class="bulleted-list"><li style="list-style-type:circle">VPC for networking.</li></ul><ul id="11614858-f6db-4f5f-b28b-49a3b5d71678" class="bulleted-list"><li style="list-style-type:circle">Use <code><strong>Ec2Snitch</strong></code> or <code><strong>Ec2MultiRegionSnitch</strong></code>.</li></ul></li></ul><ul id="8ca8302a-e5ff-4b53-a635-d75a51f1a0db" class="bulleted-list"><li style="list-style-type:disc"><strong>Google Cloud Platform (GCP)</strong><ul id="2d9224bc-38d1-46e0-acaf-16c8295efe69" class="bulleted-list"><li style="list-style-type:circle">Use GCE instances with local SSDs or network-attached storage.</li></ul><ul id="a65bc5f1-ada2-48eb-9595-9ada30d3c11e" class="bulleted-list"><li style="list-style-type:circle">Global VPC network recommended.</li></ul><ul id="57cb8de5-f24c-4e80-b95d-6a87ff361bb5" class="bulleted-list"><li style="list-style-type:circle">Use <code><strong>GoogleCloudSnitch</strong></code>.</li></ul></li></ul><ul id="4e573001-31f1-4935-9b0f-8f9db272c3a5" class="bulleted-list"><li style="list-style-type:disc"><strong>Microsoft Azure</strong><ul id="a7e1ec82-dd2b-4bc8-a60b-548407bfd752" class="bulleted-list"><li style="list-style-type:circle">Use D series or H series VMs with Premium SSDs.</li></ul><ul id="6d169999-9ef0-49cc-96c2-2faac967b646" class="bulleted-list"><li style="list-style-type:circle">VNet peering for networking.</li></ul><ul id="37edc270-2bcc-40a1-903f-300b141b1363" class="bulleted-list"><li style="list-style-type:circle">Use <code><strong>GossipingPropertyFileSnitch</strong></code>.</li></ul></li></ul><hr id="4881c35e-bd01-4715-87fc-7770c7f17f2c"/><p id="1f637e5d-bc78-49a7-8f87-b7d8e1b1ae2f" class="">This detailed outline, complete with code examples and figure references, should help you create a comprehensive presentation on configuring and deploying Cassandra.</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

@@ -1,0 +1,813 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Chapter 9. Writing and Reading Data</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="cc8f11a9-474f-4e82-b11d-3c3997414c5c" class="page sans"><header><h1 class="page-title">Chapter 9. Writing and Reading Data</h1><p class="page-description"></p></header><div class="page-body"><hr id="f9820049-ffac-4e0f-b048-8335219c58e7"/><p id="503870c7-65cd-4d4a-907e-311fe6c0ba49" class="">
+</p><h3 id="e3a58ba3-7d52-41a9-b26c-6e5200e44682" class=""><strong>Writing Data to Cassandra</strong></h3><ul id="e97c1a97-242e-4ced-8d68-ff1644e13e8c" class="bulleted-list"><li style="list-style-type:disc"><strong>Write Operations</strong><ul id="c7c7bd10-d633-47fe-b6cc-c033dbb1fe78" class="bulleted-list"><li style="list-style-type:circle">Writes are fast because of Cassandra&#x27;s append-only design.</li></ul><ul id="2b7a4edd-0455-4b26-9264-b975f198279f" class="bulleted-list"><li style="list-style-type:circle">Uses commit logs and memtables, avoiding disk reads and seeks.</li></ul><ul id="4a303e9f-e861-40d5-9bec-c17643547589" class="bulleted-list"><li style="list-style-type:circle">Writes are always atomic within a row.</li></ul></li></ul><ul id="70c5575c-49db-494b-beb7-d4b8a7cebc28" class="bulleted-list"><li style="list-style-type:disc"><strong>Write Consistency Levels</strong><ul id="517bed7e-474f-442c-80da-fcceda0b8ef3" class="bulleted-list"><li style="list-style-type:circle"><strong>ANY</strong>: Write to at least one replica or store a hint.</li></ul><ul id="041fff27-0b96-4579-96a6-537ecc0782b3" class="bulleted-list"><li style="list-style-type:circle"><strong>ONE, TWO, THREE</strong>: Write to the commit log and memtable of 1, 2, or 3 nodes.</li></ul><ul id="5ad420b1-e82a-4152-8897-34b8e5aabeaa" class="bulleted-list"><li style="list-style-type:circle"><strong>LOCAL_ONE</strong>: Same as ONE but within the local data center.</li></ul><ul id="ac1eeab2-502e-4bec-8fed-977b411aa442" class="bulleted-list"><li style="list-style-type:circle"><strong>QUORUM</strong>: Write to a majority of replicas.</li></ul><ul id="a7283b2c-ff0d-4e5d-87f5-2f60c2d45d51" class="bulleted-list"><li style="list-style-type:circle"><strong>LOCAL_QUORUM</strong>: QUORUM within the local data center.</li></ul><ul id="e93f0a92-a200-42c5-8ada-0dfc6b0ebbdb" class="bulleted-list"><li style="list-style-type:circle"><strong>EACH_QUORUM</strong>: QUORUM in each data center.</li></ul><ul id="40df6fb0-50c8-4512-9817-e560036dccba" class="bulleted-list"><li style="list-style-type:circle"><strong>ALL</strong>: Write to all replicas. Fails if any replica is unresponsive.<br/><br/></li></ul><table id="09c65d25-f006-4805-af1f-a5720383d5f3" class="simple-table"><tbody><tr id="db388e6f-2f51-4bf6-91b6-345d627f4dc7"><td id="wJr{" class=""><strong>Consistency level</strong></td><td id=";W;m" class="" style="width:524px"><strong>Implication</strong></td></tr><tr id="dbb943d9-0ba8-4632-b252-f5b2ed480828"><td id="wJr{" class=""><code><strong>ANY</strong></code></td><td id=";W;m" class="" style="width:524px"><strong>Ensure that the value is written to a minimum of one replica node before returning to the client, allowing hints to count as a write.</strong></td></tr><tr id="ca3efe7a-f326-48a2-aa53-596367af4182"><td id="wJr{" class=""><code><strong>ONE, TWO, THREE</strong></code></td><td id=";W;m" class="" style="width:524px"><strong>Ensure that the value is written to the commit log and memtable of at least one, two, or three nodes before returning to the client.</strong></td></tr><tr id="623bc3ac-9985-4069-876c-8dbee28f528c"><td id="wJr{" class=""><code><strong>LOCAL_ONE</strong></code></td><td id=";W;m" class="" style="width:524px"><strong>Similar to </strong><code><strong>ONE</strong></code><strong>, with the additional requirement that the responding node is in the local data center.</strong></td></tr><tr id="51365b6e-cdf0-4fb1-8f1e-d981466375d2"><td id="wJr{" class=""><code><strong>QUORUM</strong></code></td><td id=";W;m" class="" style="width:524px"><strong>Ensure that the write was received by at least a majority of replicas ((</strong><code><strong>replication factor</strong></code><strong> / 2) + 1).</strong></td></tr><tr id="d60ac4b6-e537-4a1b-a230-95be71d0baa2"><td id="wJr{" class=""><code><strong>LOCAL_QUORUM</strong></code></td><td id=";W;m" class="" style="width:524px"><strong>Similar to </strong><code><strong>QUORUM</strong></code><strong>, where the responding nodes are in the local data center.</strong></td></tr><tr id="61245c07-868b-452f-a864-06d89a6865fa"><td id="wJr{" class=""><code><strong>EACH_QUORUM</strong></code></td><td id=";W;m" class="" style="width:524px"><strong>Ensure that a </strong><code><strong>QUORUM</strong></code><strong> of nodes respond in each data center.</strong></td></tr><tr id="80fa6e31-3040-4ea9-8c9d-d10f2961f626"><td id="wJr{" class=""><code><strong>ALL</strong></code></td><td id=";W;m" class="" style="width:524px"><strong>Ensure that the number of nodes specified by </strong><code><strong>replication factor</strong></code><strong> received the write before returning to the client. If even one replica is unresponsive to the write operation, fail the operation.</strong></td></tr></tbody></table><p id="f014d561-ec51-4738-a697-976e026d7938" class="">
+</p></li></ul><ul id="8e993bab-3cbe-4844-9f6a-a4ffe559ec0e" class="bulleted-list"><li style="list-style-type:disc"><strong>Setting Consistency Levels in cqlsh</strong><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e2e6d3ff-e082-438d-949c-fede837095f9" class="code"><code class="language-SQL" style="white-space:pre-wrap;word-break:break-all">
+cqlsh&gt; CONSISTENCY;
+Current consistency level is ONE.
+cqlsh&gt; CONSISTENCY LOCAL_ONE;
+Consistency level set to LOCAL_ONE.
+
+</code></pre></li></ul><ul id="8b208a34-f276-4e83-8a68-bc04d1a9bfac" class="bulleted-list"><li style="list-style-type:disc"><strong>Setting Consistency Levels in DataStax Java Driver</strong><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="74a5cfb1-b727-49c5-bd1d-f249ca637070" class="code"><code class="language-Java" style="white-space:pre-wrap;word-break:break-all">
+Statement statement = ...
+statement.setConsistencyLevel(ConsistencyLevel.LOCAL_QUORUM);
+
+</code></pre></li></ul><h3 id="12fbb84a-63be-42d5-8783-3161cb5105b7" class=""><strong>The Cassandra Write Path</strong></h3><ul id="8ace8bca-1dd1-4496-adbe-cf19db3f32a3" class="bulleted-list"><li style="list-style-type:disc"><strong>Coordinator Node Responsibilities</strong><ul id="64638d2c-2e61-4219-b8bf-eab1a867b08f" class="bulleted-list"><li style="list-style-type:circle">Uses partitioner to identify replicas.</li></ul><ul id="2d1f7811-8070-45aa-8d1c-db1cabf15ef7" class="bulleted-list"><li style="list-style-type:circle">Sends write requests to local replicas.</li></ul><ul id="8fa3a14f-4261-46fd-bc4e-8c31d41d3889" class="bulleted-list"><li style="list-style-type:circle">Forwards writes to remote coordinators in other data centers.</li></ul><ul id="942756ca-43ae-480e-bc14-306fa5c89557" class="bulleted-list"><li style="list-style-type:circle">Waits for responses to meet the requested consistency level.<br/><br/></li></ul><figure id="c44344f9-9f1a-4126-b8a9-4a71c5d9d935" class="image"><a href="Chapter%209%20Writing%20and%20Reading%20Data%20cc8f11a9474f4e82b11d3c3997414c5c/Untitled.png"><img style="width:1440px" src="Chapter%209%20Writing%20and%20Reading%20Data%20cc8f11a9474f4e82b11d3c3997414c5c/Untitled.png"/></a></figure></li></ul><ul id="56fb3f24-0f0b-48ff-823a-32348f272cfd" class="bulleted-list"><li style="list-style-type:disc"><strong>Internal Node Write Process</strong> (Figure 9-2)<ul id="ae0a2060-7d79-4296-8b63-3d4ff4430084" class="bulleted-list"><li style="list-style-type:circle">Writes data to the commit log.</li></ul><ul id="d0be1da8-77dc-45d5-bfe1-3208483daf20" class="bulleted-list"><li style="list-style-type:circle">Writes data to a memtable.</li></ul><ul id="060533c2-3edd-461e-bf33-6899e8c81b4d" class="bulleted-list"><li style="list-style-type:circle">Invalidates row cache if used.</li></ul><ul id="652d651a-01a4-4ae9-b815-bcf88bf1b4b1" class="bulleted-list"><li style="list-style-type:circle">Schedules a flush if thresholds are exceeded.</li></ul><ul id="04a1a501-17cc-4f56-a896-ad45ee65097d" class="bulleted-list"><li style="list-style-type:circle">Flushes memtable to SSTables and clears commit log.</li></ul><ul id="a0b5a52a-ca10-4704-b6c6-8a91e73342e2" class="bulleted-list"><li style="list-style-type:circle">Compaction may be performed if needed.<br/><br/></li></ul><figure id="f69357c1-395c-451c-bf70-983260ac632b" class="image"><a href="Chapter%209%20Writing%20and%20Reading%20Data%20cc8f11a9474f4e82b11d3c3997414c5c/Untitled%201.png"><img style="width:1440px" src="Chapter%209%20Writing%20and%20Reading%20Data%20cc8f11a9474f4e82b11d3c3997414c5c/Untitled%201.png"/></a></figure></li></ul><h3 id="94d35ee1-cfe7-40a7-a865-dbceccabca38" class=""><strong>Commit Log and SSTable Files</strong></h3><ul id="0267895e-6710-47f7-a3bd-27f0f723a942" class="bulleted-list"><li style="list-style-type:disc"><strong>Commit Log Files</strong><ul id="8044d6cc-c299-487f-bd30-cf1143d5e935" class="bulleted-list"><li style="list-style-type:circle">Found under <code><strong>$CASSANDRA_HOME/data/commitlog</strong></code>.</li></ul><ul id="3087936d-313e-4d1d-bba4-3b6c17e7660c" class="bulleted-list"><li style="list-style-type:circle">Named <code><strong>CommitLog-&lt;version&gt;&lt;timestamp&gt;.log</strong></code>.</li></ul></li></ul><ul id="7a957299-e593-4131-a27f-b9e57aed110b" class="bulleted-list"><li style="list-style-type:disc"><strong>SSTable Files</strong><ul id="b969a653-f2ee-4715-a305-521197bf3593" class="bulleted-list"><li style="list-style-type:circle">Found under <code><strong>$CASSANDRA_HOME/data/data/&lt;keyspace&gt;/&lt;table-UUID&gt;</strong></code>.</li></ul><ul id="bbacc56b-a4b5-47d0-87f9-aabf37476be0" class="bulleted-list"><li style="list-style-type:circle">Multiple files per SSTable: Data.db, CompressionInfo.db, Digest.crc32, Filter.db, Index.db, Summary.db, Statistics.db, TOC.txt.</li></ul></li></ul><h3 id="e53ad863-d797-4215-b26d-e50b53f1a74b" class=""><strong>Lightweight Transactions</strong></h3><ul id="f7ed5821-5549-4341-b63c-d8da04a9b73e" class="bulleted-list"><li style="list-style-type:disc"><strong>Usage and Syntax</strong><ul id="9bf86593-48a9-4df4-914e-b16c1bc1e39f" class="bulleted-list"><li style="list-style-type:circle">Ensures conditions are met before performing an operation.</li></ul><ul id="f95ebb34-b07e-4da1-81e7-623d31ceca35" class="bulleted-list"><li style="list-style-type:circle">Uses <code><strong>IF NOT EXISTS</strong></code> or <code><strong>IF &lt;condition&gt;</strong></code> clauses.</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="4d09f07f-b522-4464-9789-fb785fcdd12d" class="code"><code class="language-SQL" style="white-space:pre-wrap;word-break:break-all">
+INSERT INTO reservations (confirm_number, hotel_id, start_date, end_date, room_number, guest_id)
+VALUES (&#x27;RS2G0Z&#x27;, &#x27;NY456&#x27;, &#x27;2020-06-08&#x27;, &#x27;2020-06-10&#x27;, 111, 1b4d86f4-ccff-4256-a63d-45c905df2677) IF NOT EXISTS;
+
+</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="f74d0c7e-42b5-4053-a0a8-f784470620cf" class="code"><code class="language-SQL" style="white-space:pre-wrap;word-break:break-all">
+UPDATE reservations SET end_date=&#x27;2020-06-12&#x27; WHERE confirm_number=&#x27;RS2G0Z&#x27; IF end_date=&#x27;2020-06-10&#x27;;
+</code></pre></li></ul><ul id="8f43cece-4bc0-4291-a31d-ee63264aefcd" class="bulleted-list"><li style="list-style-type:disc"><strong>DataStax Java Driver Example</strong><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ed7f967e-6a61-4411-87f4-cef331f19e6c" class="code"><code class="language-Java" style="white-space:pre-wrap;word-break:break-all">javaCopy code
+SimpleStatement reservationInsert = SimpleStatement.builder(
+  &quot;INSERT INTO reservations (confirm_number, hotel_id, start_date, end_date, room_number, guest_id) VALUES (?, ?, ?, ?, ?, ?)&quot;)
+  .addPositionalValue(&quot;RS2G0Z&quot;)
+  .addPositionalValue(&quot;NY456&quot;)
+  .addPositionalValue(&quot;2020-06-08&quot;)
+  .addPositionalValue(&quot;2020-06-10&quot;)
+  .addPositionalValue(111)
+  .addPositionalValue(&quot;1b4d86f4-ccff-4256-a63d-45c905df2677&quot;)
+  .ifNotExists()
+  .build();
+
+ResultSet reservationInsertResult = session.execute(reservationInsert);
+boolean wasApplied = reservationInsertResult.wasApplied();
+
+</code></pre></li></ul><ul id="9905f5f2-82ee-4726-8189-900d0e1e1f7a" class="bulleted-list"><li style="list-style-type:disc"><strong>Serial Consistency Levels</strong><ul id="db3bcce1-ed26-4b5e-a9a0-6718447ecffb" class="bulleted-list"><li style="list-style-type:circle"><strong>SERIAL</strong>: Default, requires a quorum of nodes.</li></ul><ul id="1345637e-7efc-43e4-bb4e-cc6c7571a5f9" class="bulleted-list"><li style="list-style-type:circle"><strong>LOCAL_SERIAL</strong>: Quorum within the local data center.</li></ul></li></ul><h3 id="0c9b004f-15ba-4528-9c97-0bccb4864b96" class=""><strong>Batches</strong></h3><ul id="caf8dca8-3d0c-4eee-81ad-672fa9f7bd40" class="bulleted-list"><li style="list-style-type:disc"><strong>Batch Semantics</strong><ul id="619983fb-8b65-4bd5-95cd-82d751d7f15a" class="bulleted-list"><li style="list-style-type:circle">Group multiple modification statements into a single statement.</li></ul><ul id="d8005f9f-1539-40f0-a3b2-033e38ffc910" class="bulleted-list"><li style="list-style-type:circle">Types: logged and unlogged batches.</li></ul><ul id="8e4a188c-66e8-4187-8bf7-ff8c3c6bc67b" class="bulleted-list"><li style="list-style-type:circle">Not a true transaction mechanism.</li></ul></li></ul><ul id="f6e60b8f-33ee-4b5d-a909-effe9b359312" class="bulleted-list"><li style="list-style-type:disc"><strong>Logged Batch Example</strong><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="7a33acab-0764-44b6-ab1f-a84d9a2c6d66" class="code"><code class="language-SQL" style="white-space:pre-wrap;word-break:break-all">sqlCopy code
+BEGIN BATCH
+  INSERT INTO reservations (confirm_number, hotel_id, start_date, end_date, room_number, guest_id)
+  VALUES (&#x27;RS2G0Z&#x27;, &#x27;NY456&#x27;, &#x27;2020-06-08&#x27;, &#x27;2020-06-10&#x27;, 111, 1b4d86f4-ccff-4256-a63d-45c905df2677);
+  INSERT INTO reservations_by_hotel_date (confirm_number, hotel_id, start_date, end_date, room_number, guest_id)
+  VALUES (&#x27;RS2G0Z&#x27;, &#x27;NY456&#x27;, &#x27;2020-06-08&#x27;, &#x27;2020-06-10&#x27;, 111, 1b4d86f4-ccff-4256-a63d-45c905df2677);
+APPLY BATCH;
+
+</code></pre></li></ul><ul id="3e4e43b4-7505-4771-9498-e7009ee95228" class="bulleted-list"><li style="list-style-type:disc"><strong>DataStax Java Driver Example</strong><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="18c8550a-58f7-4106-832f-7fafe2a532af" class="code"><code class="language-Java" style="white-space:pre-wrap;word-break:break-all">javaCopy code
+SimpleStatement reservationByConfirmationInsert = SimpleStatement.builder(
+  &quot;INSERT INTO reservations (confirm_number, hotel_id, start_date, end_date, room_number, guest_id) VALUES (?, ?, ?, ?, ?, ?)&quot;)
+  .addPositionalValue(&quot;RS2G0Z&quot;)
+  .addPositionalValue(&quot;NY456&quot;)
+  .addPositionalValue(&quot;2020-06-08&quot;)
+  .addPositionalValue(&quot;2020-06-10&quot;)
+  .addPositionalValue(111)
+  .addPositionalValue(&quot;1b4d86f4-ccff-4256-a63d-45c905df2677&quot;)
+  .build();
+
+SimpleStatement reservationByHotelDateInsert = SimpleStatement.builder(
+  &quot;INSERT INTO reservations_by_hotel_date (confirm_number, hotel_id, start_date, end_date, room_number, guest_id) VALUES (?, ?, ?, ?, ?, ?)&quot;)
+  .addPositionalValue(&quot;RS2G0Z&quot;)
+  .addPositionalValue(&quot;NY456&quot;)
+  .addPositionalValue(&quot;2020-06-08&quot;)
+  .addPositionalValue(&quot;2020-06-10&quot;)
+  .addPositionalValue(111)
+  .addPositionalValue(&quot;1b4d86f4-ccff-4256-a63d-45c905df2677&quot;)
+  .build();
+
+BatchStatement reservationBatch = BatchStatement.builder(DefaultBatchType.LOGGED)
+  .addStatement(reservationByConfirmationInsert)
+  .addStatement(reservationByHotelDateInsert)
+  .build();
+
+cqlSession.execute(reservationBatch);
+
+</code></pre></li></ul><p id="8829a846-96a7-4709-9022-83191faa79ae" class="">
+</p><hr id="000e114a-efac-402b-8237-e2f3b4991d04"/><p id="a8ca1b48-36fa-4980-b65f-aae028de82d3" class="">
+</p><h3 id="9f815733-10ed-4ad7-8e00-993fd0a0a355" class=""><strong>Reading Data from Cassandra</strong></h3><ul id="ded1fc4b-699b-4694-87d0-427c22a13b9c" class="bulleted-list"><li style="list-style-type:disc"><strong>Read Consistency Levels</strong><ul id="e582b4fd-8d7b-49bd-82d3-9ada495e7c81" class="bulleted-list"><li style="list-style-type:circle"><strong>ONE, TWO, THREE</strong>: Return the record from the first node(s) to respond.</li></ul><ul id="67cfa305-6381-4a33-bf95-de78f1365ced" class="bulleted-list"><li style="list-style-type:circle"><strong>LOCAL_ONE</strong>: Similar to ONE but within the local data center.</li></ul><ul id="f77b24f6-ab5c-4378-bf1b-442f43aeb06f" class="bulleted-list"><li style="list-style-type:circle"><strong>QUORUM</strong>: Return the value with the most recent timestamp from a majority of replicas.</li></ul><ul id="0ba4345f-f830-4ee9-bfad-4586a12581c3" class="bulleted-list"><li style="list-style-type:circle"><strong>LOCAL_QUORUM</strong>: QUORUM within the local data center.</li></ul><ul id="4c3a0e9c-f6fe-4c4f-b87b-15f69e17538a" class="bulleted-list"><li style="list-style-type:circle"><strong>EACH_QUORUM</strong>: QUORUM in each data center.</li></ul><ul id="f8050233-a3e6-4af7-92e9-7d813762ce03" class="bulleted-list"><li style="list-style-type:circle"><strong>ALL</strong>: Return the value from all replicas. Fails if any node is unresponsive.<br/><br/><br/></li></ul><table id="a368170b-e346-414a-9152-a9a11f6849c6" class="simple-table"><tbody><tr id="3f3324ec-d29d-4cb9-aeff-59a2010ef135"><td id=";w_q" class=""><strong>Consistency level</strong></td><td id="\\Hr" class="" style="width:735px"><strong>Implication</strong></td></tr><tr id="a9b8567a-df5f-4d8b-b8b7-8a3e2b1781bc"><td id=";w_q" class=""><code><strong>ONE, TWO, THREE</strong></code></td><td id="\\Hr" class="" style="width:735px"><strong>Immediately return the record held by the first node(s) that respond to the query. The record is checked against the same record on other replicas. If any are out of date, a </strong><em><strong>read repair</strong></em><strong> is then performed to sync them all to the most recent value.</strong></td></tr><tr id="03900be1-247d-44ee-bce9-8e743316aeb9"><td id=";w_q" class=""><code><strong>LOCAL_ONE</strong></code></td><td id="\\Hr" class="" style="width:735px"><strong>Similar to </strong><code><strong>ONE</strong></code><strong>, with the additional requirement that the responding node is in the local data center.</strong></td></tr><tr id="29363ab3-bf1a-4473-be01-65e3ae412ef1"><td id=";w_q" class=""><code><strong>QUORUM</strong></code></td><td id="\\Hr" class="" style="width:735px"><strong>Query all nodes. Once a majority of replicas ((</strong><code><strong>replication factor</strong></code><strong> / 2) + 1) respond, return to the client the value with the most recent timestamp. Then, if necessary, perform a read repair on all remaining replicas.</strong></td></tr><tr id="e6769f36-246b-4050-a460-dbf11d78fcaf"><td id=";w_q" class=""><code><strong>LOCAL_QUORUM</strong></code></td><td id="\\Hr" class="" style="width:735px"><strong>Similar to </strong><code><strong>QUORUM</strong></code><strong>, where the responding nodes are in the local data center.</strong></td></tr><tr id="654f6b93-c9b8-4f83-a4fd-a09172fe6a39"><td id=";w_q" class=""><code><strong>EACH_QUORUM</strong></code></td><td id="\\Hr" class="" style="width:735px"><strong>Ensure that a </strong><code><strong>QUORUM</strong></code><strong> of nodes respond in each data center.</strong></td></tr><tr id="606f9b6e-4561-45c1-a6a2-5b94d912f009"><td id=";w_q" class=""><code><strong>ALL</strong></code></td><td id="\\Hr" class="" style="width:735px"><strong>Query all nodes. Wait for all nodes to respond, and return to the client the record with the most recent timestamp. Then, if necessary, perform a read repair. If any nodes fail to respond, fail the read operation.</strong></td></tr></tbody></table></li></ul><ul id="afbc1269-75e0-4623-ba54-14641aa345f2" class="bulleted-list"><li style="list-style-type:disc"><strong>The Cassandra Read Path</strong> (Figure 9-3)<ul id="161ad7b5-50bf-4da4-8cbe-7024075a2dd9" class="bulleted-list"><li style="list-style-type:circle">Coordinator node identifies replicas using partitioner.</li></ul><ul id="0d328d40-51bf-42d0-986e-36e47556d76b" class="bulleted-list"><li style="list-style-type:circle">Sends read request to the fastest replica.</li></ul><ul id="d722d3fc-2109-4703-ae47-9d31b98ed6db" class="bulleted-list"><li style="list-style-type:circle">Sends digest requests to other replicas.</li></ul><ul id="4ad7030f-5359-45aa-bc8f-3f2b69ead8e0" class="bulleted-list"><li style="list-style-type:circle">Compares digests to detect inconsistencies.</li></ul><ul id="1fc280b0-d0d0-4f18-a4c2-86ff6cfd43c0" class="bulleted-list"><li style="list-style-type:circle">Performs read repair if necessary.<br/><br/></li></ul><figure id="63929d2e-8847-4f94-a93f-59bd8359dc2a" class="image"><a href="Chapter%209%20Writing%20and%20Reading%20Data%20cc8f11a9474f4e82b11d3c3997414c5c/Untitled%202.png"><img style="width:1440px" src="Chapter%209%20Writing%20and%20Reading%20Data%20cc8f11a9474f4e82b11d3c3997414c5c/Untitled%202.png"/></a></figure></li></ul><p id="32247780-c3bf-45d0-b484-25c68ef87009" class=""><div class="indented"><figure id="34c70806-4577-405b-b59f-5d41e511cf1d" class="image"><a href="Chapter%209%20Writing%20and%20Reading%20Data%20cc8f11a9474f4e82b11d3c3997414c5c/Untitled%203.png"><img style="width:1440px" src="Chapter%209%20Writing%20and%20Reading%20Data%20cc8f11a9474f4e82b11d3c3997414c5c/Untitled%203.png"/></a></figure></div></p><ul id="d0f5bc0f-ba32-4f91-87dd-eae37874c0bd" class="bulleted-list"><li style="list-style-type:disc"><strong>Read Repair</strong><ul id="64c1ea84-13ce-45a3-8b44-86af6295ae6a" class="bulleted-list"><li style="list-style-type:circle">Performed asynchronously to update outdated replicas.</li></ul><ul id="28a37015-baab-40e2-a3f8-dad4516dfac0" class="bulleted-list"><li style="list-style-type:circle">Happens before returning data for QUORUM or ALL consistency levels.</li></ul><ul id="3e1a3319-d06f-4ca6-97b7-363294d8747a" class="bulleted-list"><li style="list-style-type:circle">Happens in the background for lower consistency levels.<br/><br/></li></ul><figure id="78949f49-c6e1-42bd-8a9a-a16b9f047da4" class="image"><a href="Chapter%209%20Writing%20and%20Reading%20Data%20cc8f11a9474f4e82b11d3c3997414c5c/Untitled%204.png"><img style="width:932px" src="Chapter%209%20Writing%20and%20Reading%20Data%20cc8f11a9474f4e82b11d3c3997414c5c/Untitled%204.png"/></a></figure></li></ul><p id="f93d71ef-1386-4235-b1fb-870658725090" class="">
+</p><p id="f9a95ae8-4630-48f2-ae41-4e83406d0dfc" class="">
+</p><h3 id="5a01e137-ecbd-4833-9b10-4721da2dd8ac" class=""><strong>Range Queries, Ordering, and Filtering</strong></h3><ul id="23952249-f6e2-4fe5-982b-6f5bf00fb54e" class="bulleted-list"><li style="list-style-type:disc"><strong>Range Queries with WHERE Clause</strong><ul id="2a733015-fabc-43f4-96f9-6940fbfa499c" class="bulleted-list"><li style="list-style-type:circle">All elements of the partition key must be identified.</li></ul><ul id="8f099d99-31b6-4d32-99c4-a885b1e41602" class="bulleted-list"><li style="list-style-type:circle">Clustering keys must be restricted in order.</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="7020216c-c922-4535-b02e-c403dc6963b5" class="code"><code class="language-SQL" style="white-space:pre-wrap;word-break:break-all">sqlCopy code
+SELECT * FROM available_rooms_by_hotel_date
+  WHERE hotel_id=&#x27;AZ123&#x27; and date&gt;&#x27;2020-01-05&#x27; and date&lt;&#x27;2020-01-12&#x27;;
+
+</code></pre></li></ul><ul id="9eb74c63-d14b-42cb-ae0d-02d36072ac23" class="bulleted-list"><li style="list-style-type:disc"><strong>ALLOW FILTERING</strong><ul id="dd83e952-9963-4dd6-b6a3-2c80ff6dbc4b" class="bulleted-list"><li style="list-style-type:circle">Allows omission of partition key elements but can be expensive.</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="af0c7947-76fe-4a26-8d27-f1d0b3e34803" class="code"><code class="language-SQL" style="white-space:pre-wrap;word-break:break-all">sqlCopy code
+SELECT * FROM available_rooms_by_hotel_date
+  WHERE date=&#x27;2020-01-25&#x27; ALLOW FILTERING;
+
+</code></pre></li></ul><ul id="edfb52b5-3b9b-4f86-9c3c-55044f66bf22" class="bulleted-list"><li style="list-style-type:disc"><strong>IN Clause</strong><ul id="f4f07610-1058-402f-ab70-aca9f938f749" class="bulleted-list"><li style="list-style-type:circle">Tests equality with multiple possible values.</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d6a6a741-e6cc-4f93-930d-7a4cd5d81bb4" class="code"><code class="language-SQL" style="white-space:pre-wrap;word-break:break-all">sqlCopy code
+SELECT * FROM available_rooms_by_hotel_date
+  WHERE hotel_id=&#x27;AZ123&#x27; AND date IN (&#x27;2020-01-05&#x27;, &#x27;2020-01-12&#x27;);
+
+</code></pre></li></ul><ul id="bdb8b319-dec9-44ff-99b8-f6bc666fa9e1" class="bulleted-list"><li style="list-style-type:disc"><strong>ORDER BY Clause</strong><ul id="8a3e66ff-1a10-4005-a844-98ef8cc6323f" class="bulleted-list"><li style="list-style-type:circle">Overrides the default sort order.</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="3ebc3b1d-77fc-4d09-9436-0827663d08f5" class="code"><code class="language-SQL" style="white-space:pre-wrap;word-break:break-all">sqlCopy code
+SELECT * FROM available_rooms_by_hotel_date
+  WHERE hotel_id=&#x27;AZ123&#x27; and date&gt;&#x27;2020-01-05&#x27; and date&lt;&#x27;2020-01-12&#x27;
+  ORDER BY date DESC;
+
+</code></pre></li></ul><h3 id="e29f7dae-8133-4765-b27f-84cbde67603c" class=""><strong>Paging</strong></h3><ul id="490dcba0-21c5-4539-b831-90f7c54ffb6c" class="bulleted-list"><li style="list-style-type:disc"><strong>Automatic Paging</strong><ul id="d1a34965-cccf-40b1-b73a-878560af1cd9" class="bulleted-list"><li style="list-style-type:circle">Retrieves result sets incrementally.</li></ul><ul id="4db84317-d7ca-42dc-877e-ab30a00c3312" class="bulleted-list"><li style="list-style-type:circle">Default fetch size can be set globally or per statement.</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d58fcffb-960d-4630-93a3-c6306294053b" class="code"><code class="language-Java" style="white-space:pre-wrap;word-break:break-all">javaCopy code
+Statement statement = SimpleStatement.builder(&quot;...&quot;).build();
+statement.setPageSize(2000);
+
+</code></pre></li></ul><ul id="a88cfbdf-1693-452d-a193-6827e4b68ce1" class="bulleted-list"><li style="list-style-type:disc"><strong>Iterating Over Result Sets</strong><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="36b68308-07d4-4874-a1c2-0c7bcd50334f" class="code"><code class="language-Java" style="white-space:pre-wrap;word-break:break-all">javaCopy code
+SimpleStatement reservationsByHotelDateSelect = SimpleStatement.builder(
+  &quot;SELECT * FROM reservations_by_hotel_date&quot;).build();
+ResultSet resultSet = cqlSession.execute(reservationsByHotelDateSelect);
+
+for (Row row : resultSet) {
+  // process the row
+}
+
+</code></pre></li></ul><ul id="3a1eafd9-5f8e-4fb4-a24a-59f9d702cb11" class="bulleted-list"><li style="list-style-type:disc"><strong>Prefetching Rows</strong><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="483cc2c6-2a40-4c77-bc62-2be3ba8b244e" class="code"><code class="language-Java" style="white-space:pre-wrap;word-break:break-all">javaCopy code
+for (Row row : resultSet) {
+  if (resultSet.getAvailableWithoutFetching() &lt; 100 &amp;&amp; !resultSet.isFullyFetched())
+    resultSet.fetchMoreResults();
+  // process the row
+}
+
+</code></pre></li></ul><ul id="b1bca10c-31a6-4014-91ff-9bc39e6c76e1" class="bulleted-list"><li style="list-style-type:disc"><strong>Paging State</strong><ul id="42619fce-3996-433d-83ed-3276bdc8e81d" class="bulleted-list"><li style="list-style-type:circle">Access and resume paging state.</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="5679a2bb-c563-4294-ac93-8566fe75d2eb" class="code"><code class="language-Java" style="white-space:pre-wrap;word-break:break-all">javaCopy code
+ByteBuffer nextPage = resultSet.getExecutionInfo().getPagingState();
+SimpleStatement reservationsByHotelDateSelect = SimpleStatement.builder(
+  &quot;SELECT * FROM reservation.reservations_by_hotel_date&quot;).build();
+reservationsByHotelDateSelect.setPagingState(pagingState);
+
+</code></pre></li></ul><p id="cbef14b0-a331-487e-ac06-3adac2910889" class="">
+</p><h3 id="5945699c-7d09-44a8-8ea8-b47fec02bbf0" class=""><strong>Deleting Data</strong></h3><ul id="2914a05b-314a-446b-ada7-dac15c09e933" class="bulleted-list"><li style="list-style-type:disc"><strong>Tombstones</strong><ul id="886b6ebf-8d43-490a-8086-440fa81bafca" class="bulleted-list"><li style="list-style-type:circle">Deletes are marked by tombstones, which are propagated to replicas.</li></ul><ul id="3a2046cf-5c24-4025-b55a-6af61ced9d77" class="bulleted-list"><li style="list-style-type:circle">Tombstones are removed after <code><strong>gc_grace_seconds</strong></code> (default 10 days).</li></ul></li></ul><ul id="a04faf54-ad45-40aa-8783-e9489142a992" class="bulleted-list"><li style="list-style-type:disc"><strong>Delete Operations</strong><ul id="778235db-0cad-4821-896a-48c2028b14cf" class="bulleted-list"><li style="list-style-type:circle">Delete items from collections.</li></ul><ul id="ed55eaac-f883-4af1-b659-8ad17f8e7180" class="bulleted-list"><li style="list-style-type:circle">Delete non-primary key columns.</li></ul><ul id="10d4b779-083d-421e-a15b-7ddf3b94c383" class="bulleted-list"><li style="list-style-type:circle">Delete entire rows.</li></ul><ul id="086b22cc-25fc-4b9c-ad60-dcaf63687223" class="bulleted-list"><li style="list-style-type:circle">Delete ranges of rows.</li></ul><ul id="cfd689d9-dc37-45f8-add9-9011dae81ef4" class="bulleted-list"><li style="list-style-type:circle">Delete entire partitions.</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="8250b004-ad2d-4542-b5d9-21951bb654cf" class="code"><code class="language-Java" style="white-space:pre-wrap;word-break:break-all">javaCopy code
+SimpleStatement reservationByConfirmationDelete = SimpleStatement.builder(
+  &quot;DELETE * FROM reservation.reservations_by_confirm WHERE confirm_number=?&quot;)
+  .addPositionalValue(&quot;RS2G0Z&quot;)
+  .build();
+
+cqlSession.execute(reservationByConfirmationDelete);
+
+</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="736c1094-0603-44f8-9ab6-87d5a6c7eaac" class="code"><code class="language-Java" style="white-space:pre-wrap;word-break:break-all">javaCopy code
+import static com.datastax.oss.driver.api.querybuilder.QueryBuilder.*;
+
+SimpleStatement reservationByConfirmationDelete = deleteFrom(&quot;reservations&quot;, &quot;reservations_by_confirmation&quot;)
+  .whereColumn(&quot;confirm_number&quot;).isEqualTo(&quot;RS2G0Z&quot;)
+  .build();
+
+cqlSession.execute(reservationByConfirmationDelete);
+
+</code></pre></li></ul><ul id="dcaf4678-a5f8-4df0-aa90-805e700a6ae0" class="bulleted-list"><li style="list-style-type:disc"><strong>Best Practices</strong><ul id="100bc4b8-3c6b-4e04-bc05-8a6157b26283" class="bulleted-list"><li style="list-style-type:circle">Avoid writing NULL values.</li></ul><ul id="7bcd902a-f9ef-4cb9-9c9b-0535686c7643" class="bulleted-list"><li style="list-style-type:circle">Delete data at the largest granularity possible.</li></ul><ul id="fefe3589-6814-4bc7-9c74-2f3f5a849d6d" class="bulleted-list"><li style="list-style-type:circle">Be cautious when updating collections.</li></ul><ul id="1a8f4120-ebbe-45af-b22a-5d097c18e2b8" class="bulleted-list"><li style="list-style-type:circle">Use TTL feature for automatic expiration.</li></ul><ul id="ef7e491a-80a4-4ddc-ad98-e0d592f309c6" class="bulleted-list"><li style="list-style-type:circle">Consider TimeWindowCompactionStrategy for time-series data.</li></ul><p id="f77e35e5-0761-4dd1-bbd0-b8aeee0199b2" class="">
+</p><hr id="d77a658a-bf7d-47e8-a8b7-2a46e4e9ee4d"/><p id="0df61065-5ac8-4ca6-b4b3-4799712cd282" class="">
+</p></li></ul></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

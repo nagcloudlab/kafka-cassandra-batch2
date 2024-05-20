@@ -1,0 +1,814 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Chapter 8. Application Development with Drivers</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="7484bad6-c1c8-4c18-ba8d-5301c762e5ec" class="page sans"><header><h1 class="page-title"><strong>Chapter 8. Application Development with Drivers</strong></h1><p class="page-description"></p></header><div class="page-body"><hr id="e2f5e254-d58f-438b-9002-7cfbd3204afa"/><p id="cbaebba3-9d83-43f5-9dc4-be5e10848ebf" class="">
+</p><h3 id="14a62a76-9eb3-41ec-8d56-5923d4967955" class=""><strong>Overview</strong></h3><ul id="ac8ccc39-c587-42d8-8106-013a470cbc2b" class="bulleted-list"><li style="list-style-type:disc">Importance of client drivers for connecting to Cassandra.</li></ul><ul id="7815ed8f-5581-4ceb-8def-1451a6ad4c8f" class="bulleted-list"><li style="list-style-type:disc">Availability of drivers for multiple programming languages.</li></ul><h3 id="7bb42d45-c247-4927-bed0-9b2d230f7d11" class=""><strong>Legacy Clients</strong></h3><ul id="e46b3037-8e1e-4461-9784-1daf9ec72f6a" class="bulleted-list"><li style="list-style-type:disc"><strong>Hector</strong><ul id="6bbd1d9b-f0a4-4d8a-9e55-8e2a8bdeee54" class="bulleted-list"><li style="list-style-type:circle">Early Java client for Cassandra.</li></ul><ul id="8679d07a-0ece-48b1-bc15-25a84451eac6" class="bulleted-list"><li style="list-style-type:circle">Helped avoid writing directly to Thrift API.</li></ul></li></ul><ul id="6435f0d6-d0b2-4524-91b8-f0eedba4bbef" class="bulleted-list"><li style="list-style-type:disc"><strong>Astyanax</strong><ul id="c633e8de-c729-485c-bedb-8a5ec26ed9c6" class="bulleted-list"><li style="list-style-type:circle">Java client by Netflix.</li></ul><ul id="e6f568a4-8bf5-41c2-b592-748d402fb9f3" class="bulleted-list"><li style="list-style-type:circle">Successor to Hector, transitioned users from Thrift to CQL.</li></ul></li></ul><ul id="2e1693c4-c5f7-4a00-88bd-b0b03cde7218" class="bulleted-list"><li style="list-style-type:disc"><strong>Other Legacy Clients</strong><ul id="ae706b60-be6e-40c6-8e65-9ab948eff764" class="bulleted-list"><li style="list-style-type:circle"><strong>Pycassa</strong> (Python)</li></ul><ul id="fb4a8475-f300-42da-ac93-7ee73e796bc7" class="bulleted-list"><li style="list-style-type:circle"><strong>Perlcassa</strong> (Perl)</li></ul><ul id="a86236cc-3ffc-46a0-bb55-e9945f46536b" class="bulleted-list"><li style="list-style-type:circle"><strong>Helenus</strong> (Node.js)</li></ul><ul id="fde4e59b-4732-4801-a401-628c06b23a8b" class="bulleted-list"><li style="list-style-type:circle"><strong>Cassandra-Sharp</strong> (.NET)</li></ul></li></ul><ul id="1fbff22d-8495-46a5-a540-d1949dd40216" class="bulleted-list"><li style="list-style-type:disc">Most legacy clients are no longer maintained.</li></ul><h3 id="5a483a62-e073-40b1-9a83-4e70dc28ffd5" class=""><span style="border-bottom:0.05em solid"><strong>DataStax Java Driver</strong></span></h3><ul id="802751a6-9fc2-4ca2-964d-97ebb455db3c" class="bulleted-list"><li style="list-style-type:disc">Most popular and feature-rich driver.</li></ul><ul id="11193d04-8c06-454a-870d-0e50e6c3adfe" class="bulleted-list"><li style="list-style-type:disc">New features often appear first in the Java driver.</li></ul><ul id="15cb0a98-5f1e-4b3b-b7ae-9d0b6b7d6fc4" class="bulleted-list"><li style="list-style-type:disc">Supports connection pooling, JMX integration, and more.</li></ul><h3 id="a657b4f4-c8c8-4f99-aa57-c42154a11642" class=""><strong>Development Environment Configuration</strong></h3><ul id="e8e4a2c5-53e2-4e3c-858f-a7684408cfc1" class="bulleted-list"><li style="list-style-type:disc">Use Maven or Gradle to manage dependencies.</li></ul><ul id="cfc993e5-10e9-4155-bb88-fd120ffca417" class="bulleted-list"><li style="list-style-type:disc">Example Maven dependency configuration:</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="79f6ba59-06a2-4025-86de-72d0da32a615" class="code"><code class="language-XML" style="white-space:pre-wrap;word-break:break-all">
+&lt;dependency&gt;
+  &lt;groupId&gt;com.datastax.oss&lt;/groupId&gt;
+  &lt;artifactId&gt;java-driver-core&lt;/artifactId&gt;
+  &lt;version&gt;${driver.version}&lt;/version&gt;
+&lt;/dependency&gt;
+
+</code></pre><h3 id="bf493554-1329-4d95-85be-e30e37dda238" class=""><strong>Connecting to a Cluster</strong></h3><ul id="0004c4d7-9258-4bb3-a09c-c5b594f372d7" class="bulleted-list"><li style="list-style-type:disc">Use <code><strong>CqlSession</strong></code> class to connect.</li></ul><ul id="f9ee7b3b-996f-4d54-b038-8dfab06b9adc" class="bulleted-list"><li style="list-style-type:disc">Specify contact points and data center.</li></ul><ul id="ae8ecfad-487a-4b41-92df-47da8e342c02" class="bulleted-list"><li style="list-style-type:disc">Example code snippets for connecting to a cluster:</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="ee06827f-922e-4824-9c56-2a9585b8ee9b" class="code"><code class="language-Java" style="white-space:pre-wrap;word-break:break-all">
+CqlSession cqlSession = CqlSession.builder()
+    .addContactPoint(new InetSocketAddress(&quot;127.0.0.1&quot;, 9042))
+    .withLocalDatacenter(&quot;datacenter1&quot;)
+    .build();
+
+</code></pre><h3 id="55b7ca7a-a6c7-43c7-8c32-28b76e753254" class=""><strong>Statements</strong></h3><ul id="28556dd7-4be2-4725-bb77-7e64f4555855" class="bulleted-list"><li style="list-style-type:disc">Types of statements: SimpleStatement, PreparedStatement, BoundStatement.</li></ul><ul id="37245bd1-f4fe-4267-9bef-ba37a6650913" class="bulleted-list"><li style="list-style-type:disc">Creating and executing simple and prepared statements.</li></ul><ul id="3f2dbdce-9e0a-4434-8245-175ee68e9795" class="bulleted-list"><li style="list-style-type:disc">Example code snippets for inserting and querying data:</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="6781092b-de49-4c48-b7e2-21f4ee33a499" class="code"><code class="language-Java" style="white-space:pre-wrap;word-break:break-all">
+// SimpleStatement
+SimpleStatement reservationInsert = SimpleStatement.builder(
+  &quot;INSERT INTO reservations_by_confirmation (confirm_number, hotel_id, start_date, end_date, room_number, guest_id) VALUES (?, ?, ?, ?, ?, ?)&quot;)
+  .addPositionalValue(&quot;RS2G0Z&quot;)
+  .addPositionalValue(&quot;NY456&quot;)
+  .addPositionalValue(&quot;2020-06-08&quot;)
+  .addPositionalValue(&quot;2020-06-10&quot;)
+  .addPositionalValue(111)
+  .addPositionalValue(&quot;1b4d86f4-ccff-4256-a63d-45c905df2677&quot;)
+  .build();
+cqlSession.execute(reservationInsert);
+
+// PreparedStatement
+PreparedStatement reservationInsertPrepared = cqlSession.prepare(
+  &quot;INSERT INTO reservations_by_confirmation (confirm_number, hotel_id, start_date, end_date, room_number, guest_id) VALUES (?, ?, ?, ?, ?, ?)&quot;);
+BoundStatement reservationInsertBound = reservationInsertPrepared.bind()
+  .setString(&quot;confirm_number&quot;, &quot;RS2G0Z&quot;)
+  .setString(&quot;hotel_id&quot;, &quot;NY456&quot;)
+  .setLocalDate(&quot;start_date&quot;, LocalDate.parse(&quot;2020-06-08&quot;))
+  .setLocalDate(&quot;end_date&quot;, LocalDate.parse(&quot;2020-06-10&quot;))
+  .setShort(&quot;room_number&quot;, 111)
+  .setUuid(&quot;guest_id&quot;, UUID.fromString(&quot;1b4d86f4-ccff-4256-a63d-45c905df2677&quot;));
+cqlSession.execute(reservationInsertBound);
+
+</code></pre><h3 id="18b43a9a-af63-4b40-a666-d1c92632668a" class=""><strong>Query Builder</strong></h3><ul id="468c2a2d-70fc-4002-b70b-7ad293471076" class="bulleted-list"><li style="list-style-type:disc">Fluent-style API for building queries programmatically.</li></ul><ul id="c77a7ed4-aee4-42b0-bd94-f0feb02a144b" class="bulleted-list"><li style="list-style-type:disc">Example code snippets using QueryBuilder:</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="0e1ca2e6-b232-4306-afb1-a0d9d6acdcf9" class="code"><code class="language-Java" style="white-space:pre-wrap;word-break:break-all">
+// Insert statement using QueryBuilder
+Insert reservationInsert = insertInto(&quot;reservation&quot;, &quot;reservations_by_confirmation&quot;)
+  .value(&quot;confirm_number&quot;, literal(&quot;RS2G0Z&quot;))
+  .value(&quot;hotel_id&quot;, literal(&quot;NY456&quot;))
+  .value(&quot;start_date&quot;, literal(LocalDate.parse(&quot;2020-06-08&quot;)))
+  .value(&quot;end_date&quot;, literal(LocalDate.parse(&quot;2020-06-10&quot;)))
+  .value(&quot;room_number&quot;, literal(111))
+  .value(&quot;guest_id&quot;, literal(UUID.fromString(&quot;1b4d86f4-ccff-4256-a63d-45c905df2677&quot;)));
+SimpleStatement reservationInsertStatement = reservationInsert.build();
+cqlSession.execute(reservationInsertStatement);
+
+// Select statement using QueryBuilder
+Select reservationSelect = selectFrom(&quot;reservation&quot;, &quot;reservations_by_confirmation&quot;)
+  .all()
+  .whereColumn(&quot;confirm_number&quot;).isEqualTo(literal(&quot;RS2G0Z&quot;));
+SimpleStatement reservationSelectStatement = reservationSelect.build();
+cqlSession.execute(reservationSelectStatement);
+
+</code></pre><h3 id="ee9c3f98-ea3a-46de-9777-f83d44ae0429" class=""><strong>Object Mapper</strong></h3><ul id="f919aa65-0daf-480f-9b13-8f696dd5b948" class="bulleted-list"><li style="list-style-type:disc">Map Java classes to Cassandra tables using annotations.</li></ul><ul id="5e9d1d06-acb2-4588-80c1-7eedc212941b" class="bulleted-list"><li style="list-style-type:disc">Simplifies interaction with Cassandra.</li></ul><ul id="6984b177-c447-46a2-8d92-16bc42febd3b" class="bulleted-list"><li style="list-style-type:disc">Example code snippets for entity classes and DAOs:</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="195b9c19-e3ee-4d8e-be9f-03dcc03baec6" class="code"><code class="language-Java" style="white-space:pre-wrap;word-break:break-all">javaCopy code
+// Entity class
+import com.datastax.oss.driver.api.mapper.annotations.Entity;
+import com.datastax.oss.driver.api.mapper.annotations.PartitionKey;
+
+@Entity
+public class ReservationsByConfirmation {
+  @PartitionKey
+  private String confirmNumber;
+  private String hotelId;
+  private LocalDate startDate;
+  private LocalDate endDate;
+  private short roomNumber;
+  private UUID guestId;
+  // getters and setters
+}
+
+// DAO interface
+import com.datastax.oss.driver.api.mapper.annotations.Dao;
+import com.datastax.oss.driver.api.mapper.annotations.Insert;
+import com.datastax.oss.driver.api.mapper.annotations.Select;
+
+@Dao
+public interface ReservationDao {
+  @Select
+  ReservationsByConfirmation findByConfirmationNumber(String confirmNumber);
+  @Insert
+  void save(ReservationsByConfirmation reservation);
+}
+
+</code></pre><h3 id="638523e4-774d-4747-a947-6b6ef7158a6b" class=""><strong>Asynchronous Execution</strong></h3><ul id="3a44728c-fc16-41b6-9435-a9feeb24e1c2" class="bulleted-list"><li style="list-style-type:disc">Use <code><strong>executeAsync()</strong></code> for non-blocking queries.</li></ul><ul id="1cee2e00-fc59-4da4-b4f7-bbfc60db38d0" class="bulleted-list"><li style="list-style-type:disc">CompletionStage API for handling async responses.</li></ul><ul id="6e71e5ee-97bd-4b63-9e4e-f03d16ee055b" class="bulleted-list"><li style="list-style-type:disc">Example code snippets for async operations:</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c7beca31-f599-41b0-9477-6b31996c2cdd" class="code"><code class="language-Java" style="white-space:pre-wrap;word-break:break-all">javaCopy code
+CompletionStage&lt;AsyncResultSet&gt; resultStage = cqlSession.executeAsync(
+  SimpleStatement.newInstance(&quot;SELECT * FROM reservations_by_confirmation WHERE confirm_number=?&quot;, &quot;RS2G0Z&quot;));
+resultStage.thenAccept(resultSet -&gt; {
+  Row row = resultSet.one();
+  if (row != null) {
+    System.out.println(&quot;Got reservation: &quot; + row.getString(&quot;confirm_number&quot;));
+  }
+});
+
+</code></pre><h3 id="d32bbed6-99ab-44ab-aff5-4e8829519b33" class=""><strong>Driver Configuration</strong></h3><ul id="37d783b1-7098-4bc6-89ee-c4ba013c904c" class="bulleted-list"><li style="list-style-type:disc">File-based configuration using Typesafe Config.</li></ul><ul id="cc9d7b9f-25a6-4ff7-8018-ad689d598cbd" class="bulleted-list"><li style="list-style-type:disc">Basic and advanced configuration options.</li></ul><ul id="9116b212-8453-4e8a-8365-7675ffdb6f90" class="bulleted-list"><li style="list-style-type:disc">Load balancing, retry policies, speculative execution.</li></ul><ul id="8d3f6048-7ba7-4700-9ce2-c6571238980e" class="bulleted-list"><li style="list-style-type:disc">Example configuration snippets:</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a972af37-3bc5-43b0-9f02-cec6501ba4ad" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">
+datastax-java-driver {
+  basic {
+    contact-points = [&quot;127.0.0.1:9042&quot;]
+    session-keyspace = reservation
+  }
+  advanced.speculative-execution-policy {
+    class = ConstantSpeculativeExecutionPolicy
+    max-executions = 3
+    delay = 100 milliseconds
+  }
+}
+
+</code></pre><h3 id="1da2f7d1-7f5f-4eba-b0e9-2ac4e1aa2b05" class=""><strong>Debugging and Monitoring</strong></h3><ul id="7d5ccbc0-09ec-4652-99b0-7019ef3d1a0d" class="bulleted-list"><li style="list-style-type:disc">Logging using SLF4J.</li></ul><ul id="21aa5695-91fa-42f5-bf5d-789fa8634596" class="bulleted-list"><li style="list-style-type:disc">Metrics collection with Dropwizard Metrics.</li></ul><ul id="cf9e9302-8c18-48cd-b875-b3c148ca2fce" class="bulleted-list"><li style="list-style-type:disc">Example configurations for logging and metrics:</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="5001c259-1816-4bcb-aeb9-34d776877b24" class="code"><code class="language-XML" style="white-space:pre-wrap;word-break:break-all">xmlCopy code
+&lt;configuration&gt;
+  &lt;logger name=&quot;com.datastax.oss.driver&quot; level=&quot;INFO&quot;/&gt;
+&lt;/configuration&gt;
+
+</code></pre><h3 id="995efb18-17d9-4b17-90bf-0d2df66398e9" class=""><strong>Other Drivers</strong></h3><ul id="d09b6704-23ea-4b85-8c29-8462a627b3c8" class="bulleted-list"><li style="list-style-type:disc"><strong>DataStax Python Driver</strong><ul id="3b8b149e-3827-4c48-947b-4c3a7894258b" class="bulleted-list"><li style="list-style-type:circle">Installation and basic usage:</li></ul></li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="08eb32ee-a5cf-4444-8bf1-835f6360b84d" class="code"><code class="language-Python" style="white-space:pre-wrap;word-break:break-all">pythonCopy code
+from cassandra.cluster import Cluster
+cluster = Cluster([&#x27;127.0.0.1&#x27;])
+session = cluster.connect(&#x27;hotel&#x27;)
+session.execute(&quot;INSERT INTO hotels (id, name, phone) VALUES (%s, %s, %s)&quot;, (&#x27;AZ123&#x27;, &#x27;Super Hotel at WestWorld&#x27;, &#x27;1-888-999-9999&#x27;))
+
+</code></pre><ul id="0bf0d0e4-ebd8-4121-8d78-1cef587ef2a8" class="bulleted-list"><li style="list-style-type:disc"><strong>DataStax Node.js Driver</strong><ul id="ef405e45-8bcb-477d-a122-7c0e449568ad" class="bulleted-list"><li style="list-style-type:circle">Installation and basic usage:</li></ul></li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e581026e-de0b-4ad4-8e00-bbb1f61bbb69" class="code"><code class="language-JavaScript" style="white-space:pre-wrap;word-break:break-all">javascriptCopy code
+const cassandra = require(&#x27;cassandra-driver&#x27;);
+const client = new cassandra.Client({ contactPoints: [&#x27;127.0.0.1&#x27;], localDataCenter: &#x27;datacenter1&#x27;, keyspace: &#x27;hotel&#x27; });
+client.execute(&#x27;SELECT * FROM hotels WHERE id=?&#x27;, [&#x27;AZ123&#x27;], function(err, result) {
+  assert.ifError(err);
+  console.log(&#x27;got hotel with name &#x27; + result.rows[0].name);
+});
+
+</code></pre><ul id="7b780b56-dcba-4812-a879-a33fb6f6b3c3" class="bulleted-list"><li style="list-style-type:disc"><strong>DataStax C# Driver</strong><ul id="e2ec9bfc-faf9-4ae2-992d-7946173479e9" class="bulleted-list"><li style="list-style-type:circle">Installation and basic usage:</li></ul></li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1a8ecfb7-2d3a-467b-be83-a7e4aa6fec52" class="code"><code class="language-C#" style="white-space:pre-wrap;word-break:break-all">csharpCopy code
+var cluster = Cluster.Builder()
+  .AddContactPoints(&quot;127.0.0.1&quot;)
+  .Build();
+var session = cluster.Connect(&quot;hotel&quot;);
+session.Execute(&quot;INSERT INTO hotels (id, name, phone) VALUES (&#x27;AZ123&#x27;, &#x27;Super Hotel at WestWorld&#x27;, &#x27;1-888-999-9999&#x27;);&quot;);
+
+</code></pre><ul id="9ab1c22f-d046-481e-8604-056d951595ad" class="bulleted-list"><li style="list-style-type:disc"><strong>GoCQL Driver</strong> for Go language.</li></ul><ul id="bc1c4045-3e43-4eb1-ba13-66337d7c798b" class="bulleted-list"><li style="list-style-type:disc"><strong>DataStax C/C++ Driver</strong> for asynchronous operations.</li></ul><h3 id="a9272f0e-8885-434f-8ee1-4f8defb37d2d" class=""><strong>Stargate: An Open Source Data Gateway</strong></h3><ul id="82bc86f9-57dd-42dc-9c1c-d2636dad6d24" class="bulleted-list"><li style="list-style-type:disc">Simplifies API frameworks on top of Cassandra.</li></ul><ul id="d02920d0-5fd5-4d59-887a-affc3aeb7aa7" class="bulleted-list"><li style="list-style-type:disc">Supports CQL, REST, GraphQL, gRPC, and document-style REST APIs.</li></ul><ul id="8b36ab40-89df-412a-a8d3-19341a1ce977" class="bulleted-list"><li style="list-style-type:disc">Can be installed in front of Cassandra and DataStax Enterprise clusters.</li></ul><hr id="82adb7e5-0d15-407a-9ab3-80eecf6242af"/></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

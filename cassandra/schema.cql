@@ -16,7 +16,7 @@ SELECT * FROM movies;
 
 ---
 
-CRETE TABLE movies_by_actor(
+CREATE TABLE movies_by_actor(
     actor TEXT,
     release_year INT,
     movie_id UUID,
@@ -68,5 +68,5 @@ CREATE MATERIALIZED VIEW movies_by_actor_and_rating AS
     PRIMARY KEY ((actor),rating,release_year,movie_id)
     WITH CLUSTERING ORDER BY (rating DESC,release_year DESC,movie_id ASC);
 
-SELECT * FROM movies_by_actor_and_rating;
+SELECT * FROM movies_by_actor_and_rating WHERE actor = 'Morgan Freeman' AND rating=9.3;
 

@@ -1,0 +1,691 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Chapter 7. Designing Applications with Cassandra</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="ccb2be90-7221-46da-a686-c7c15493aa1a" class="page sans"><header><h1 class="page-title"><strong>Chapter 7. Designing Applications with Cassandra</strong></h1><p class="page-description"></p></header><div class="page-body"><hr id="3b8df1c8-3074-4374-8459-209329d65639"/><p id="9cfa776d-9eb2-4da5-9fe9-213f89dcab9c" class="">
+</p><h3 id="36072f00-3d5f-4ee4-b0f1-0244c854bca4" class=""><strong>Designing Applications with Cassandra</strong></h3><ul id="2e2ad3ad-da2d-4ec3-9f4e-d7f614630e10" class="bulleted-list"><li style="list-style-type:disc"><strong>Introduction</strong><ul id="9a1d71ab-d9c0-481b-ad37-b51190ab4cab" class="bulleted-list"><li style="list-style-type:circle">Leverage Cassandra data models to develop applications.</li></ul><ul id="24107476-fa7d-43f8-9883-bedfe9a2c27d" class="bulleted-list"><li style="list-style-type:circle">Focus on microservice architectural style.</li></ul></li></ul><h3 id="178af2e9-ee58-4b7a-8d18-0553cbf5e268" class=""><strong>Hotel Application Design</strong></h3><ul id="e3d248b9-36fa-4eae-9276-9f426e45aec4" class="bulleted-list"><li style="list-style-type:disc"><strong>Application Development</strong><ul id="b527d83e-c16f-4086-9f12-303618432f5f" class="bulleted-list"><li style="list-style-type:circle">Transition from data model to application.</li></ul><ul id="3bace1b2-514a-4c4b-a9fe-94ff0266686c" class="bulleted-list"><li style="list-style-type:circle">Utilize microservice architecture.</li></ul></li></ul><h3 id="c0715849-1d3f-4315-9241-2a05633e6b73" class=""><strong>Cassandra and Microservice Architecture</strong></h3><ul id="d7fa16e8-9d7a-43ff-bb49-069a4437c115" class="bulleted-list"><li style="list-style-type:disc"><strong>Encapsulation</strong><ul id="14515614-1638-4c5f-91dc-d69009101681" class="bulleted-list"><li style="list-style-type:circle">Services focused on a single responsibility.</li></ul><ul id="876d50c6-dcf1-411a-85e1-6e5b4bc4afe4" class="bulleted-list"><li style="list-style-type:circle">Contrast with database as a central integration point.</li></ul><ul id="e07382ba-b001-4fd8-994e-fde7a9ff13b4" class="bulleted-list"><li style="list-style-type:circle"><strong>Figure 7-1</strong>: Integration by database contrasted with microservices.</li></ul><figure id="b95614e7-7bd4-4c6b-b70b-6d0086813ce9" class="image"><a href="Chapter%207%20Designing%20Applications%20with%20Cassandra%20ccb2be90722146daa686c7c15493aa1a/Untitled.png"><img style="width:1320px" src="Chapter%207%20Designing%20Applications%20with%20Cassandra%20ccb2be90722146daa686c7c15493aa1a/Untitled.png"/></a></figure></li></ul><ul id="dfaf07bf-c19e-4ee0-9bbf-91159f5ef157" class="bulleted-list"><li style="list-style-type:disc"><strong>Autonomy</strong><ul id="773775c2-603d-4a15-b743-17424fb2e8de" class="bulleted-list"><li style="list-style-type:circle">Independent deployment of microservices.</li></ul><ul id="445500dd-5216-4c82-8dad-256885b323c2" class="bulleted-list"><li style="list-style-type:circle">Microservices with their own data stores.</li></ul></li></ul><ul id="d999a36a-ebdc-4cb1-8413-550c9d514131" class="bulleted-list"><li style="list-style-type:disc"><strong>Scalability</strong><ul id="c8a0d6ee-3dd1-4210-ab2a-101f5c205445" class="bulleted-list"><li style="list-style-type:circle">Dynamic scaling of services based on demand.</li></ul><ul id="72b0df1b-10fb-45eb-822e-64e90aa85dd3" class="bulleted-list"><li style="list-style-type:circle">Example: Scaling hotel and inventory data services differently from reservation services.</li></ul></li></ul><h3 id="547aa142-4eef-42c5-964d-3e34c49a9130" class=""><strong>Microservice Architecture for a Hotel Application</strong></h3><ul id="d02b9d95-ab19-482f-a26d-d503e5e4bce7" class="bulleted-list"><li style="list-style-type:disc"><strong>Identifying Services</strong><ul id="fa17d75d-5232-492d-a78d-8c0a97848ea5" class="bulleted-list"><li style="list-style-type:circle">Identify services, interfaces, and interactions.</li></ul><ul id="4ef64962-0ce8-4341-ad6b-53123148a184" class="bulleted-list"><li style="list-style-type:circle">Use domain-driven design to identify bounded contexts.</li></ul><ul id="728da899-7aec-4846-ab50-bb8ce539bb39" class="bulleted-list"><li style="list-style-type:circle"><strong>Figure 7-2</strong>: Artifacts produced by architectural and design processes.</li></ul><figure id="a625d50b-f270-40af-9cc6-a58b8a924739" class="image"><a href="Chapter%207%20Designing%20Applications%20with%20Cassandra%20ccb2be90722146daa686c7c15493aa1a/Untitled%201.png"><img style="width:1118px" src="Chapter%207%20Designing%20Applications%20with%20Cassandra%20ccb2be90722146daa686c7c15493aa1a/Untitled%201.png"/></a></figure></li></ul><ul id="14a316e1-b40b-466a-add4-1b97c9a5edd6" class="bulleted-list"><li style="list-style-type:disc"><strong>Identifying Bounded Contexts</strong><ul id="7d5efeb7-7c0b-4ca4-971c-dab2c55fa6f2" class="bulleted-list"><li style="list-style-type:circle">Reuse conceptual data model from Chapter 5.</li></ul><ul id="8defa52d-9a0e-4254-bff0-46ab47ce77a3" class="bulleted-list"><li style="list-style-type:circle">Identify Hotel Domain and Reservation Domain.</li></ul><ul id="60693553-483e-437c-9db3-b71b1dae2ad7" class="bulleted-list"><li style="list-style-type:circle"><strong>Figure 7-3</strong>: Identifying bounded contexts for a hotel application.<figure id="ee8170fc-b030-4972-86d9-b0f4d6f67efa" class="image"><a href="Chapter%207%20Designing%20Applications%20with%20Cassandra%20ccb2be90722146daa686c7c15493aa1a/Untitled%202.png"><img style="width:1440px" src="Chapter%207%20Designing%20Applications%20with%20Cassandra%20ccb2be90722146daa686c7c15493aa1a/Untitled%202.png"/></a></figure></li></ul></li></ul><ul id="17febfbd-b1e0-452f-a0e0-a13d312ea298" class="bulleted-list"><li style="list-style-type:disc"><strong>Identifying Services</strong><ul id="9d7898dc-065d-4181-b541-1d6e168fb5dd" class="bulleted-list"><li style="list-style-type:circle">Formalize bounded contexts into specific services.</li></ul><ul id="df60ca04-3fb9-4442-86cb-e3d4abeac294" class="bulleted-list"><li style="list-style-type:circle">Example: Hotel Domain decomposed into services for hotels, points of interest, and inventory availability.</li></ul><ul id="dc6bb571-d5e7-4b60-8051-f92d4e302ffb" class="bulleted-list"><li style="list-style-type:circle"><strong>Figure 7-4</strong>: Identifying services for hotel data.<figure id="e2cc2ebc-d177-46fb-b230-6f4af9145d50" class="image"><a href="Chapter%207%20Designing%20Applications%20with%20Cassandra%20ccb2be90722146daa686c7c15493aa1a/Untitled%203.png"><img style="width:1440px" src="Chapter%207%20Designing%20Applications%20with%20Cassandra%20ccb2be90722146daa686c7c15493aa1a/Untitled%203.png"/></a></figure></li></ul><ul id="f4fd3ad7-1b24-4659-a5b7-72cf032c01ee" class="bulleted-list"><li style="list-style-type:circle">Example: Reservation Domain decomposed into Reservation Service and Guest Service.</li></ul><ul id="e0bb4f93-7a6c-49e4-b9f4-d2381e5d58e5" class="bulleted-list"><li style="list-style-type:circle"><strong>Figure 7-5</strong>: Identifying services for reservation data.<figure id="35e76db2-92ef-4a67-b2b9-4285b5076050" class="image"><a href="Chapter%207%20Designing%20Applications%20with%20Cassandra%20ccb2be90722146daa686c7c15493aa1a/Untitled%204.png"><img style="width:652px" src="Chapter%207%20Designing%20Applications%20with%20Cassandra%20ccb2be90722146daa686c7c15493aa1a/Untitled%204.png"/></a></figure></li></ul></li></ul><h3 id="f0c5f275-355e-4245-b98f-261c80b1d5ca" class=""><strong>Designing Microservice Persistence</strong></h3><ul id="6c5670ba-5360-489b-8ffd-d018ef3c596a" class="bulleted-list"><li style="list-style-type:disc"><strong>Polyglot Persistence</strong><ul id="bf906f8e-8e2f-4c8f-80cf-3023073d8803" class="bulleted-list"><li style="list-style-type:circle">Each service can use the most appropriate database technology.</li></ul><ul id="7b72d622-7c8b-498e-b461-5ca3e9014178" class="bulleted-list"><li style="list-style-type:circle"><strong>Table 7-1</strong>: Polyglot persistence example.</li></ul><table id="f9d7e102-a783-4716-9879-b029073ac096" class="simple-table"><tbody><tr id="39d328d8-09b8-421e-bfd6-e93d2a08bbe7"><td id="iyvF" class=""><strong>Service</strong></td><td id="YH{k" class=""><strong>Data characteristics</strong></td><td id="_^SS" class=""><strong>Database options</strong></td></tr><tr id="b3d4b8f4-d015-4e67-8946-9dcde2da1c99"><td id="iyvF" class=""><strong>Hotel Service</strong></td><td id="YH{k" class=""><strong>Descriptive text about hotels and their amenities, changes infrequently</strong></td><td id="_^SS" class=""><strong>Document database (i.e., MongoDB), Cassandra, or Elasticsearch/Solr for full text search</strong></td></tr><tr id="8032c5c6-7bdc-4001-b29d-e159a726df49"><td id="iyvF" class=""><strong>Point of Interest Service</strong></td><td id="YH{k" class=""><strong>Geographic locations and descriptions of points of interest</strong></td><td id="_^SS" class=""><strong>Cassandra or other tabular databases supporting geospatial indexes such as DataStax Enterprise</strong></td></tr><tr id="668eb971-fb6f-4db7-af21-88c961563497"><td id="iyvF" class=""><strong>Inventory Service</strong></td><td id="YH{k" class=""><strong>Counts of available rooms by date, large volume of reads and writes</strong></td><td id="_^SS" class=""><strong>Cassandra or other tabular databases</strong></td></tr><tr id="2eab2581-a28d-415f-91bf-e2992d1e3da0"><td id="iyvF" class=""><strong>Reservation Service</strong></td><td id="YH{k" class=""><strong>Rooms reserved on behalf of guests, lower volume of reads and writes than inventory</strong></td><td id="_^SS" class=""><strong>Cassandra or other tabular databases</strong></td></tr><tr id="e5c15eda-d3a2-44fd-a391-b1734921d9d5"><td id="iyvF" class=""><strong>Guest Service</strong></td><td id="YH{k" class=""><strong>Guest identity and contact information, possible extension point for customer and fraud analytics systems</strong></td><td id="_^SS" class=""><strong>Cassandra, graph databases</strong></td></tr></tbody></table></li></ul><ul id="298e7be4-0d4a-4bdf-b8dd-4602bde4c6cb" class="bulleted-list"><li style="list-style-type:disc"><strong>Representing Other Database Models in CQL</strong><ul id="58957e5c-28b7-47a4-ab1d-649a19d1c52b" class="bulleted-list"><li style="list-style-type:circle">Key-value models: Treat key as partition key, store value as text/blob.</li></ul><ul id="71cf260b-bff1-41cd-8dc1-d60da86372a5" class="bulleted-list"><li style="list-style-type:circle">Document models: Use JSON for flexible schema.</li></ul><ul id="2ff5bd7b-9f28-460f-9e2a-1f9bd98a06ab" class="bulleted-list"><li style="list-style-type:circle">Example: Creating a table with a JSON document.<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a3f1e570-51a7-4b5e-aa82-6d6d5a6e39a1" class="code"><code class="language-SQL" style="white-space:pre-wrap;word-break:break-all">
+CREATE TABLE hotel.hotels_document (
+    id text PRIMARY KEY,
+    document text);
+
+</code></pre></li></ul><ul id="38254fed-111d-468e-b77c-1f7b022aac59" class="bulleted-list"><li style="list-style-type:circle">Insert and select JSON data.<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="9ad9c73e-2c6b-4603-8613-70fa20b14686" class="code"><code class="language-SQL" style="white-space:pre-wrap;word-break:break-all">
+INSERT INTO hotels JSON &#x27;{ &quot;id&quot;: &quot;AZ123&quot;, &quot;name&quot;: &quot;Super Hotel Suites at WestWorld&quot;, &quot;phone&quot;: &quot;1-888-999-9999&quot;, &quot;address&quot;: { &quot;street&quot;: &quot;10332 E. Bucking Bronco&quot;, &quot;city&quot;: &quot;Scottsdale&quot;, &quot;state_or_province&quot;: &quot;AZ&quot;, &quot;postal_code&quot;: &quot;85255&quot; }}&#x27;;
+SELECT JSON * FROM hotels WHERE id = &#x27;AZ123&#x27;;
+
+</code></pre></li></ul><ul id="b68b019e-b06f-438a-a60c-6ebb00bbf4fe" class="bulleted-list"><li style="list-style-type:circle">Graph models: Use a dedicated table for each vertex and edge type.</li></ul></li></ul><h3 id="3852c686-6613-4e67-b804-c6acb56026db" class=""><strong>Extending Designs</strong></h3><ul id="f48e62a1-8280-4951-a627-d9eb76e75ac5" class="bulleted-list"><li style="list-style-type:disc"><strong>Handling New Requirements</strong><ul id="6b8805e9-bd44-4eec-92c5-3e4cc8808781" class="bulleted-list"><li style="list-style-type:circle">Example: Adding new search capabilities for hotels.</li></ul><ul id="7bd64309-33a7-45ac-85a9-9e15654818ca" class="bulleted-list"><li style="list-style-type:circle"><strong>Figure 7-6</strong>: Additional hotel access patterns.</li></ul><figure id="37126d94-801c-4b68-9ce3-5e97475971d5" class="image"><a href="Chapter%207%20Designing%20Applications%20with%20Cassandra%20ccb2be90722146daa686c7c15493aa1a/Untitled%205.png"><img style="width:1127px" src="Chapter%207%20Designing%20Applications%20with%20Cassandra%20ccb2be90722146daa686c7c15493aa1a/Untitled%205.png"/></a></figure><ul id="556f8ca2-fa66-45a8-a52d-e833cf6f0358" class="bulleted-list"><li style="list-style-type:circle">Creating new tables to support access patterns.</li></ul><ul id="62a70e5a-1aa2-4e6e-8696-8d1a7ca20d13" class="bulleted-list"><li style="list-style-type:circle"><strong>Figure 7-7</strong>: Additional hotel tables.</li></ul><figure id="a317ee45-8b9e-4227-af55-ff1118176617" class="image"><a href="Chapter%207%20Designing%20Applications%20with%20Cassandra%20ccb2be90722146daa686c7c15493aa1a/Untitled%206.png"><img style="width:1440px" src="Chapter%207%20Designing%20Applications%20with%20Cassandra%20ccb2be90722146daa686c7c15493aa1a/Untitled%206.png"/></a></figure></li></ul><h3 id="7c760f8e-4f30-49b4-bd89-1fede70be8e0" class=""><strong>Alternatives to Denormalized Tables</strong></h3><ul id="688e9043-64a9-48ef-9bb2-9c25bef1a5ae" class="bulleted-list"><li style="list-style-type:disc"><strong>Secondary Indexes</strong><ul id="002b67b3-50b6-42f7-8457-995ec46779ec" class="bulleted-list"><li style="list-style-type:circle">Create indexes for non-primary key columns.</li></ul><ul id="11094e0b-ea8c-4921-8e66-96b8f1f01d36" class="bulleted-list"><li style="list-style-type:circle">Example: Creating an index on the hotel name column.<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d8f0f1f2-9757-4b18-938f-d2803bb2562c" class="code"><code class="language-SQL" style="white-space:pre-wrap;word-break:break-all">
+CREATE INDEX ON hotels (name);</code></pre></li></ul><ul id="1794b226-492b-45a0-b870-207e3a82a535" class="bulleted-list"><li style="list-style-type:circle"><strong>Figure 7-8</strong>: Revised hotel physical model.</li></ul><figure id="1d344770-b071-44e0-b0e7-933ca55f0a49" class="image"><a href="Chapter%207%20Designing%20Applications%20with%20Cassandra%20ccb2be90722146daa686c7c15493aa1a/Untitled%207.png"><img style="width:1440px" src="Chapter%207%20Designing%20Applications%20with%20Cassandra%20ccb2be90722146daa686c7c15493aa1a/Untitled%207.png"/></a></figure></li></ul><ul id="304f61cc-9a5e-4978-8cc7-ea90e154eed9" class="bulleted-list"><li style="list-style-type:disc"><strong>Materialized Views</strong><ul id="968c6e23-8a2b-4654-ae79-37d128337ab6" class="bulleted-list"><li style="list-style-type:circle">Preconfigured views to support queries.</li></ul><ul id="43d1ad77-3a86-413f-b432-fcee24f5dafb" class="bulleted-list"><li style="list-style-type:circle">Example: Creating a materialized view for reservations by confirmation number.<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="647415e4-c4e0-4a6c-ba6a-aaaf6e9d9bd2" class="code"><code class="language-SQL" style="white-space:pre-wrap;word-break:break-all">sqlCopy code
+CREATE MATERIALIZED VIEW reservation.reservations_by_confirmation AS SELECT * FROM reservation.reservations_by_hotel_date WHERE confirm_number IS NOT NULL and hotel_id IS NOT NULL and start_date IS NOT NULL and room_number IS NOT NULL PRIMARY KEY (confirm_number, hotel_id, start_date, room_number);
+
+</code></pre></li></ul><ul id="7d8e83a1-58e6-40d1-afe0-6db8576eb82e" class="bulleted-list"><li style="list-style-type:circle"><strong>Figure 7-9</strong>: Revised Reservation physical model.</li></ul><figure id="fa79eb99-f105-47cd-817a-a7b9fd16b742" class="image"><a href="Chapter%207%20Designing%20Applications%20with%20Cassandra%20ccb2be90722146daa686c7c15493aa1a/Untitled%208.png"><img style="width:2014px" src="Chapter%207%20Designing%20Applications%20with%20Cassandra%20ccb2be90722146daa686c7c15493aa1a/Untitled%208.png"/></a></figure></li></ul><h3 id="a6287513-cc5a-4047-af18-ca2039f82823" class=""><strong>Reservation Service: A Sample Microservice</strong></h3><ul id="8876e9f3-c5f6-4815-97a6-e0c02ada1faa" class="bulleted-list"><li style="list-style-type:disc"><strong>Design Choices for a Java Microservice</strong><ul id="c18c7d19-8c41-4595-b4fa-121306c58cff" class="bulleted-list"><li style="list-style-type:circle">Example: Java implementation of the Reservation Service.</li></ul><ul id="b0f514cb-609f-4c55-b213-38dda1f5a848" class="bulleted-list"><li style="list-style-type:circle"><strong>Figure 7-10</strong>: Reservation Service Java design.</li></ul><figure id="6a355328-dba5-452d-ab76-b0fd094c8db8" class="image"><a href="Chapter%207%20Designing%20Applications%20with%20Cassandra%20ccb2be90722146daa686c7c15493aa1a/Untitled%209.png"><img style="width:1362px" src="Chapter%207%20Designing%20Applications%20with%20Cassandra%20ccb2be90722146daa686c7c15493aa1a/Untitled%209.png"/></a></figure></li></ul><h3 id="0d4b9396-aef6-4d19-8351-09c04f7e337c" class=""><strong>Deployment and Integration Considerations</strong></h3><ul id="cfaeb052-8956-40fd-a91f-5656982fe2cf" class="bulleted-list"><li style="list-style-type:disc"><strong>Services, Keyspaces, and Clusters</strong><ul id="a8cba2e2-d829-4548-a1a9-9061183d072e" class="bulleted-list"><li style="list-style-type:circle">Use a keyspace per service for encapsulation.</li></ul><ul id="78486667-d1ac-40bd-99e6-d9da85e38db0" class="bulleted-list"><li style="list-style-type:circle">Consider dedicated or shared clusters based on service workload.</li></ul><ul id="e53102f5-7e46-4510-8196-f62caa773dfa" class="bulleted-list"><li style="list-style-type:circle"><strong>Figure 7-11</strong>: Service mapping to clusters.</li></ul><figure id="29e93d22-bc37-4c5f-b9ce-c3d0a10de5b4" class="image"><a href="Chapter%207%20Designing%20Applications%20with%20Cassandra%20ccb2be90722146daa686c7c15493aa1a/Untitled%2010.png"><img style="width:507px" src="Chapter%207%20Designing%20Applications%20with%20Cassandra%20ccb2be90722146daa686c7c15493aa1a/Untitled%2010.png"/></a></figure></li></ul><ul id="c5fd937f-7d1f-450a-8b81-c34944d242ba" class="bulleted-list"><li style="list-style-type:disc"><strong>Data Centers and Load Balancing</strong><ul id="4d57099e-597a-4ad3-8b0d-c48ad0c19a79" class="bulleted-list"><li style="list-style-type:circle">Deploy services and corresponding clusters in multiple data centers.</li></ul><ul id="d73c9113-7e8c-4dab-ae27-2b62206ac61e" class="bulleted-list"><li style="list-style-type:circle"><strong>Figure 7-12</strong>: Multiple data center deployment.</li></ul><figure id="e9263ec0-43c1-4b76-ad45-1860ac562397" class="image"><a href="Chapter%207%20Designing%20Applications%20with%20Cassandra%20ccb2be90722146daa686c7c15493aa1a/Untitled%2011.png"><img style="width:1440px" src="Chapter%207%20Designing%20Applications%20with%20Cassandra%20ccb2be90722146daa686c7c15493aa1a/Untitled%2011.png"/></a></figure></li></ul><ul id="b5b66c9f-1615-43a4-a070-fa0a2a54702a" class="bulleted-list"><li style="list-style-type:disc"><strong>Interactions Between Microservices</strong><ul id="76c8f79d-55d3-4245-808e-56ccdf738431" class="bulleted-list"><li style="list-style-type:circle">Maintain data consistency between services.</li></ul><ul id="31eee16e-ceb2-49ea-9a13-f6b9d5ce4a9e" class="bulleted-list"><li style="list-style-type:circle">Approaches: Orchestration vs. Choreography.</li></ul><ul id="79721823-a387-416a-85ea-9a7763285fcd" class="bulleted-list"><li style="list-style-type:circle"><strong>Figure 7-13</strong>: Service integration patterns.</li></ul><figure id="3b20360d-71e9-4bb9-bd85-4cfaacd9ab00" class="image"><a href="Chapter%207%20Designing%20Applications%20with%20Cassandra%20ccb2be90722146daa686c7c15493aa1a/Untitled%2012.png"><img style="width:1440px" src="Chapter%207%20Designing%20Applications%20with%20Cassandra%20ccb2be90722146daa686c7c15493aa1a/Untitled%2012.png"/></a></figure></li></ul><h3 id="e219a577-6805-4606-a07c-b2244ffee673" class=""><strong>Summary</strong></h3><ul id="64ef38c6-a110-4b4c-86c4-01e190b38311" class="bulleted-list"><li style="list-style-type:disc">Cassandra fits well within microservice architectures.</li></ul><ul id="14bf5184-84f3-484a-86be-adcfbde4ffd3" class="bulleted-list"><li style="list-style-type:disc">Techniques for designing services and integrating them with Cassandra.</li></ul><ul id="0ab852f0-df89-4513-a7d9-af15e4fac121" class="bulleted-list"><li style="list-style-type:disc">Preparing for implementing applications using Cassandra.</li></ul></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
