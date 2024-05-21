@@ -1,0 +1,719 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Chapter 12. Maintenance</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="9fd6e00f-8698-495a-be18-7b43be096f09" class="page sans"><header><h1 class="page-title"><strong>Chapter 12. Maintenance</strong></h1><p class="page-description"></p></header><div class="page-body"><hr id="6303c4c4-9e5d-4ca2-b687-d5eadb0bc2e2"/><p id="b2266e69-d54f-47ef-955b-32c8458c49a4" class="">
+</p><h3 id="6fc08f0d-5436-46fc-9fc4-44d2ee8ac15e" class=""><strong>Health Check</strong></h3><p id="7e39a5fa-4476-495a-bf0e-d1e64d1227e6" class="">
+</p><p id="fb7f114c-ac8c-47be-a5fb-0e83b2af9314" class=""><strong>Key Health Check Procedures</strong></p><ol type="1" id="3be2fc91-8e4b-4f76-a3eb-607ab75a6fa9" class="numbered-list" start="1"><li><strong>Node Status</strong>:<ul id="d2600197-958b-45df-9675-61b2731b48c5" class="bulleted-list"><li style="list-style-type:disc">Use <code><strong>nodetool status</strong></code> to ensure all nodes are up and reporting normal status.</li></ul><ul id="6724413b-f2ea-489f-9261-b33d880ef833" class="bulleted-list"><li style="list-style-type:disc">Verify the load column to ensure the cluster is well-balanced.</li></ul></li></ol><ol type="1" id="6f59cba0-625b-4949-a9fd-c36343d0b4de" class="numbered-list" start="2"><li><strong>Dropped Messages and Blocked Writers</strong>:<ul id="8b655de3-b19c-4d9f-b40d-44456cfc492e" class="bulleted-list"><li style="list-style-type:disc">Use <code><strong>nodetool tpstats</strong></code> to check for dropped messages and blocked flush writers.</li></ul><ul id="05bb5c87-13df-4b5f-a915-cf6ce1d4f48a" class="bulleted-list"><li style="list-style-type:disc">Address issues by reducing load, scaling up hardware, or adding nodes.</li></ul></li></ol><ol type="1" id="4f331b7f-8fc5-4815-b5be-90a8a8d10453" class="numbered-list" start="3"><li><strong>Logs</strong>:<ul id="b8d216df-1342-499e-a952-c9cd0363800a" class="bulleted-list"><li style="list-style-type:disc">Check logs for ERROR or WARN level messages.</li></ul><ul id="c9447923-ff82-4211-b4c3-af3c97300965" class="bulleted-list"><li style="list-style-type:disc">Address issues such as OutOfMemoryError or configuration errors.</li></ul></li></ol><ol type="1" id="139977f3-83eb-40c7-84c4-6a9d93a8730f" class="numbered-list" start="4"><li><strong>Configuration Review</strong>:<ul id="1fe9d268-3ef3-45b0-a371-7403e84bd401" class="bulleted-list"><li style="list-style-type:disc">Verify settings in <code><strong>cassandra.yaml</strong></code> and <code><strong>cassandra-env.sh</strong></code> files.</li></ul><ul id="846e9a5f-d56e-4a22-a22a-1fe731f1b6f2" class="bulleted-list"><li style="list-style-type:disc">Ensure keyspace and table configurations match the cluster topology.</li></ul></li></ol><ol type="1" id="08057e9b-7d23-4d22-9514-110de0c57d66" class="numbered-list" start="5"><li><strong>Network and NTP</strong>:<ul id="334dadc2-a106-486f-a85f-bac3d29bfcd8" class="bulleted-list"><li style="list-style-type:disc">Ensure network connectivity and functioning NTP servers.</li></ul></li></ol><p id="e02a69c9-bb99-46fa-9c25-835f65b34cf4" class=""><strong>Additional Health Checks</strong>:</p><ul id="a4ab0bf4-f635-457c-b901-8652eb8dde7a" class="bulleted-list"><li style="list-style-type:disc">Experienced Cassandra operators often customize health checks to suit their environment.</li></ul><hr id="babc4a1c-9f94-4adf-b2c8-76cdc7119331"/><h3 id="5ae99122-94ba-49ae-8a7a-dba6f7f0597b" class=""><strong>Common Maintenance Tasks</strong></h3><p id="02f3dcc7-6a12-47a2-adb8-06a38bb25b08" class=""><strong>Flush</strong></p><ul id="c5a28cb9-d5a3-4c09-b270-17751a8e8b63" class="bulleted-list"><li style="list-style-type:disc">Use <code><strong>nodetool flush</strong></code> to force Cassandra to write data from memtables to SSTables:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="9998371b-29fe-4039-95c9-e03da0aa7bbe" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">shCopy code
+$ nodetool flush</code></pre></li></ul><ul id="b2b379dc-2a06-4545-9447-f187a8758c93" class="bulleted-list"><li style="list-style-type:disc">Optionally, specify keyspaces or tables:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="6bd8371a-3f40-45b2-b57f-7d94d113c851" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">shCopy code
+$ nodetool flush &lt;keyspace&gt;
+$ nodetool flush &lt;keyspace&gt; &lt;table&gt;</code></pre></li></ul><p id="9b046609-ee8a-4ccb-9cda-df554c100750" class=""><strong>Drain</strong></p><ul id="8c0e9658-cd65-4b81-83b7-abf601d8c7c4" class="bulleted-list"><li style="list-style-type:disc">Similar to flush but stops Cassandra from accepting commands:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="e2773bf4-2d7d-4ef8-b58d-1534b6e4ec56" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">shCopy code
+$ nodetool drain</code></pre></li></ul><p id="0550d3c0-077a-4840-bea3-c86329535b4d" class=""><strong>Cleanup</strong></p><ul id="3d1f1049-46c5-43f1-bf44-573684498438" class="bulleted-list"><li style="list-style-type:disc">Reclaims disk space by removing data no longer owned by a node:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="5b528efd-1bbd-449f-ae05-fb2dfc6985c7" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">shCopy code
+$ nodetool cleanup</code></pre></li></ul><p id="05e1440d-d770-44dc-abc0-3cdb44603c2d" class=""><strong>Repair</strong></p><ul id="fe602988-e903-45fb-8431-942cfaf91113" class="bulleted-list"><li style="list-style-type:disc">Ensures data consistency across nodes:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="8481c030-8884-434a-b5f1-f975a54e68d4" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">shCopy code
+$ nodetool repair</code></pre></li></ul><ul id="6d74b856-ac2a-4cc6-8c8d-50dd1c7af0b9" class="bulleted-list"><li style="list-style-type:disc">Options include limiting to local data center (<code><strong>local</strong></code>), running sequentially (<code><strong>seq</strong></code>), or in parallel (<code><strong>par</strong></code>).</li></ul><p id="aa25295b-bae1-4528-9314-d06b22c74370" class=""><strong>Rebuilding Indexes</strong></p><ul id="b37acddb-950c-4c77-879f-e33e222665ce" class="bulleted-list"><li style="list-style-type:disc">Rebuild secondary indexes using:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="5c80eead-a1bf-40a3-943c-37a92a6598f7" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">shCopy code
+$ nodetool rebuild_index &lt;keyspace&gt; &lt;index&gt;</code></pre></li></ul><hr id="07e853f2-dc59-441c-8f50-b79f139b7078"/><p id="2a8cbecf-1a22-4a01-86b1-e57c34f280ca" class=""><strong>Adding Nodes</strong></p><p id="903ff7a0-071e-4f1f-a1c2-68cfe7bfdb9c" class=""><strong>To an Existing Data Center</strong></p><ul id="218992ac-2a82-4aab-a924-b6a269182156" class="bulleted-list"><li style="list-style-type:disc">Install and configure Cassandra on new machines.</li></ul><ul id="2e22fa4c-d7dd-4055-a60b-05a4cb4027bc" class="bulleted-list"><li style="list-style-type:disc">Ensure the same version and configuration values as existing nodes.</li></ul><ul id="166f3101-f456-47db-b7c7-a8e29ecadd8b" class="bulleted-list"><li style="list-style-type:disc">Add nodes to each rack evenly.</li></ul><ul id="4b18cfb8-2081-4dc8-9a29-be581418ff58" class="bulleted-list"><li style="list-style-type:disc">Enable bootstrapping in <code><strong>cassandra.yaml</strong></code>:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c79fae4c-1ebc-4ce7-b512-7436890f55e2" class="code"><code class="language-YAML" style="white-space:pre-wrap;word-break:break-all">yamlCopy code
+auto_bootstrap: true
+
+</code></pre></li></ul><p id="e9509666-0afe-4c94-998a-292be83a4a73" class=""><strong>To a New Data Center</strong></p><ul id="0631f30a-dc79-4c06-bcf0-2617cf0b3ccc" class="bulleted-list"><li style="list-style-type:disc">Configure appropriate snitch.</li></ul><ul id="e6dd6222-64c1-4d6a-a0e0-ead4ac422751" class="bulleted-list"><li style="list-style-type:disc">Select seed nodes and configure accordingly.</li></ul><ul id="e0b05d44-66a2-411b-b396-4e731113191e" class="bulleted-list"><li style="list-style-type:disc">Update replication options for keyspaces:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="295a7f69-09cc-4388-9e0c-e4ad03736606" class="code"><code class="language-SQL" style="white-space:pre-wrap;word-break:break-all">sqlCopy code
+ALTER KEYSPACE &lt;keyspace&gt; WITH REPLICATION = {&#x27;class&#x27;: &#x27;NetworkTopologyStrategy&#x27;, &#x27;DC1&#x27;: 3, &#x27;DC2&#x27;: 3};
+
+</code></pre></li></ul><ul id="33ebb3d3-8061-4f90-b90d-a6ea12d2e80d" class="bulleted-list"><li style="list-style-type:disc">Rebuild data using:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="9d683011-6628-40e3-9d9f-0be7a5edc920" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">shCopy code
+$ nodetool rebuild -- &lt;source_dc&gt;
+
+</code></pre></li></ul><hr id="58dd7697-bff2-4c0e-842d-b6ead80bf46c"/><h3 id="6d085068-2624-462a-9f4f-574b39281d7d" class=""><strong>Handling Node Failure</strong></h3><p id="b679aea1-961f-42d9-88cb-fd79254ca59a" class=""><strong>Repairing Failed Nodes</strong></p><ul id="f547ea77-5a25-4ba4-88c5-09f4a3e12f52" class="bulleted-list"><li style="list-style-type:disc">Determine downtime duration.</li></ul><ul id="6ffab7d6-7791-4ef8-8844-e4032064be70" class="bulleted-list"><li style="list-style-type:disc">Use hinted handoff or repair as appropriate.</li></ul><p id="98a8c832-d862-4927-b17a-f527946aba2f" class=""><strong>Replacing Nodes</strong></p><ul id="e403f24f-6eba-44e0-9caa-0a597ff9f07e" class="bulleted-list"><li style="list-style-type:disc">Replace a node using <code><strong>Dcassandra.replace_address_first_boot=&lt;address&gt;</strong></code> JVM option.</li></ul><ul id="79fa3d58-74a4-4115-a0a0-ffa00eab1193" class="bulleted-list"><li style="list-style-type:disc">Monitor with <code><strong>nodetool netstats</strong></code>.</li></ul><p id="3ffe6d97-6930-43f0-a64c-ab6f88ff8493" class=""><strong>Removing Nodes</strong></p><ul id="e1b79640-3ad0-4e28-8b64-d12a9bd5a6ab" class="bulleted-list"><li style="list-style-type:disc"><strong>Decommission</strong> an up node:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c5136fc9-aaf9-443a-b14e-f28d312f2975" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">shCopy code
+$ nodetool decommission
+
+</code></pre></li></ul><ul id="56eba112-fa4a-45a7-978d-de94b7ef42db" class="bulleted-list"><li style="list-style-type:disc"><strong>Remove</strong> a down node:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="84c992f1-5ed9-4a9d-aa9d-80e946f76f5c" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">shCopy code
+$ nodetool removenode &lt;host_id&gt;
+
+</code></pre></li></ul><ul id="4292ae76-3a0d-43ca-be75-f8e3850a6b3a" class="bulleted-list"><li style="list-style-type:disc"><strong>Assassinate</strong> as a last resort:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="50d1fa81-ab38-4bca-bf7d-7cdd4580756d" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">shCopy code
+$ nodetool assassinate &lt;ip_address&gt;
+
+</code></pre></li></ul><hr id="702f29c3-2d55-45fd-b6b6-ca94851951fe"/><h3 id="d60df5cd-fdc2-41e0-bfa2-bb7c8e6b112b" class=""><strong>Upgrading Cassandra</strong></h3><p id="004bebb2-8731-4fce-82c7-881a96d9d038" class=""><strong>Rolling Upgrade Procedure</strong></p><ol type="1" id="830e56b7-978f-4442-a4a8-b3fc34e2d9b7" class="numbered-list" start="1"><li>Drain the node:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="910ff71c-da26-40c8-b732-5afbb2b647df" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">shCopy code
+$ nodetool drain
+
+</code></pre></li></ol><ol type="1" id="41718673-befd-4aa9-9adb-d0b8a1e88d9e" class="numbered-list" start="2"><li>Stop the node.</li></ol><ol type="1" id="d72db2b2-5693-4c79-9118-d5d6223e4b46" class="numbered-list" start="3"><li>Backup configuration files.</li></ol><ol type="1" id="4ba6d2d1-b700-4ff4-9b56-a826d0ee9870" class="numbered-list" start="4"><li>Install the new version.</li></ol><ol type="1" id="2c3b7598-a397-4d73-9fe3-3a015942c4f4" class="numbered-list" start="5"><li>Update configuration files.</li></ol><ol type="1" id="13cc6034-1a40-445d-a5a8-9539b32ddf1c" class="numbered-list" start="6"><li>Repeat for each node.</li></ol><hr id="367bb10b-a116-430b-b502-79ae0a294833"/><h3 id="8fc74fb3-9d0e-447c-93d0-f84c82160cc3" class=""><strong>Backup and Recovery</strong></h3><p id="f73adb11-bfed-4649-8b0a-c47e823133b7" class=""><strong>Taking a Snapshot</strong></p><ul id="6cbc27e6-312d-432e-985e-1662a84d8f41" class="bulleted-list"><li style="list-style-type:disc">Perform a snapshot:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="7a440997-97ed-4ade-8fa2-4f39fa2c3d53" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">shCopy code
+$ nodetool snapshot
+
+</code></pre></li></ul><ul id="6f35f78f-8ee9-4b03-b837-34bf648d0f20" class="bulleted-list"><li style="list-style-type:disc">List snapshots:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="6a0c1dc6-c678-4399-b671-5e015f62b066" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">shCopy code
+$ nodetool listsnapshots
+
+</code></pre></li></ul><p id="c5fbfd52-e354-458b-90d5-3b5f081f9dfd" class=""><strong>Clearing a Snapshot</strong></p><ul id="5d70c2d6-1fb6-4385-b8a7-8a679667d313" class="bulleted-list"><li style="list-style-type:disc">Clear snapshots:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="767b9526-7100-49c8-9dbf-08679581c1c6" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">shCopy code
+$ nodetool clearsnapshot
+
+</code></pre></li></ul><p id="507602ac-323f-41cc-9c1b-8c9fe99aeb02" class=""><strong>Incremental Backup</strong></p><ul id="b724aff1-b3db-4579-b251-bb6dfafb56d2" class="bulleted-list"><li style="list-style-type:disc">Enable incremental backup:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d574950b-d6cc-4862-8b39-025a98b144ce" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">shCopy code
+$ nodetool enablebackup
+
+</code></pre></li></ul><p id="79bdfc96-adb8-41df-88e8-3ea05d7f19d9" class=""><strong>Restoring from Snapshot</strong></p><ul id="1ec94ae2-34c5-42e1-8370-56c648128307" class="bulleted-list"><li style="list-style-type:disc">Collect the latest snapshot and incremental backups.</li></ul><ul id="7f449e9d-8a4e-42c3-85e5-092c220d2454" class="bulleted-list"><li style="list-style-type:disc">Truncate tables before restoring.</li></ul><ul id="5785d4c5-331c-46c7-9922-86c9a7ab68f9" class="bulleted-list"><li style="list-style-type:disc">Use <code><strong>sstableloader</strong></code> for topology changes or use <code><strong>nodetool import</strong></code> for same topology.</li></ul><hr id="3c7d25c8-b1da-435b-87e0-3d91086d71cc"/><h3 id="c3abbbce-e52b-41e5-b2cc-4e2908fe36f1" class=""><strong>Maintenance Tools</strong></h3><p id="e8ce7223-c9bf-4606-bdc6-fcd7745cf319" class=""><strong>Medusa</strong></p><ul id="a6aa2272-f6ea-423c-b752-9c0d27a9ab03" class="bulleted-list"><li style="list-style-type:disc">Open-source tool for backup and restore.</li></ul><p id="cd1fcdd3-a260-4e14-90bc-1efc4f41eff8" class=""><strong>Reaper</strong></p><ul id="f145f059-d7a9-4139-a307-176c263f7dd9" class="bulleted-list"><li style="list-style-type:disc">Automated repair tool.</li></ul><p id="01795553-c668-4947-817a-4db3ce8b70b8" class=""><strong>Netflix Priam</strong></p><ul id="fadc9b79-08de-4b24-9c8d-e0c7b7282ceb" class="bulleted-list"><li style="list-style-type:disc">Automates node management and backup in AWS.</li></ul><p id="1a49a99f-e137-4630-b007-812ae3624e12" class=""><strong>DataStax OpsCenter</strong></p><ul id="03bcfcd4-9217-4191-bf1e-33f24fdffeae" class="bulleted-list"><li style="list-style-type:disc">Web-based management and monitoring tool.</li></ul><p id="7b71a993-704c-4f97-8841-7ecd783167b7" class=""><strong>Cassandra Sidecars</strong></p><ul id="0908bb54-d214-4d50-af07-caf5e42b9dbd" class="bulleted-list"><li style="list-style-type:disc">Automate various cluster maintenance activities.</li></ul><p id="5030d4f4-7caf-43cd-aebd-d0ebcb71ed13" class=""><strong>Cassandra Kubernetes Operators</strong></p><ul id="f2b0d32f-52e1-4d0c-8c3e-ad0810866623" class="bulleted-list"><li style="list-style-type:disc">Automate maintenance of containerized Cassandra clusters.</li></ul><hr id="4ae190c3-d4c6-43c7-9bdd-f48d2fc25e66"/><h3 id="ae0dc7ad-695b-4f8f-84ba-118a1f2eb848" class=""><strong>Summary</strong></h3><p id="ec1bb9bc-e14c-466e-8f41-9a4df82ece8f" class="">This chapter covered essential maintenance tasks, node management, backup and recovery, and tools to help automate these processes. By applying these practices, you can ensure your Cassandra clusters are well-maintained and perform optimally.</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

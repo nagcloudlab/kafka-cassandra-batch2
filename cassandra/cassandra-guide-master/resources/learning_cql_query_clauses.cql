@@ -11,11 +11,13 @@
 # Load the hotels schema used in these examples
 # This command assumes you've cloned this repository in your home directory
 # Or replace with the path to the actual file
-SOURCE '~/cassandra-guide/resources/hotel.cql';
+
+SOURCE '/home/nag/kafka-cassandra-batch2/cassandra/cassandra-guide-master/resources/available_rooms.csv';
+
 USE hotel;
 
 # Load test data for the table containing available room data
-COPY available_rooms_by_hotel_date FROM '~/cassandra-guide/resources/available_rooms.csv' WITH HEADER=true;
+COPY available_rooms_by_hotel_date FROM '/home/nag/kafka-cassandra-batch2/cassandra/cassandra-guide-master/resources/available_rooms.csv' WITH HEADER=true;
 
 #
 # WHERE clause examples

@@ -1,0 +1,733 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Chapter 15. Migrating and Integrating</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="2429e887-3658-4be1-a987-ea8e8e17af56" class="page sans"><header><h1 class="page-title"><strong>Chapter 15. Migrating and Integrating</strong></h1><p class="page-description"></p></header><div class="page-body"><hr id="7056fff9-1fdb-4774-92d7-71d86a72f9fb"/><p id="672cbc25-2073-49e0-b886-b0351c6fe460" class="">
+</p><h3 id="364a3096-4a65-4a6e-adfe-e2851001aabf" class=""><strong>Knowing When to Migrate</strong></h3><p id="c68e49f9-9c7b-47e2-8b8d-a590384a4bd4" class="">Migration to Cassandra is advisable when encountering challenges such as:</p><ul id="6e1d114a-82cc-4b35-b030-90289079cd70" class="bulleted-list"><li style="list-style-type:disc">Poor performance due to volume and complexity of queries.</li></ul><ul id="fd7c0845-6ee8-479d-98ae-d0ebd0da19f7" class="bulleted-list"><li style="list-style-type:disc">Challenges in scaling beyond a single database node.</li></ul><ul id="e7aa2f17-7316-4878-a34c-d99f14a56fe2" class="bulleted-list"><li style="list-style-type:disc">Availability risks due to single-node or single-region deployments.</li></ul><ul id="8998fe00-1e2e-4a8c-a46f-2d17d3b1c9b0" class="bulleted-list"><li style="list-style-type:disc">High licensing and software maintenance costs.</li></ul><ul id="df6a1137-1b06-4d32-9558-f892c2918ef4" class="bulleted-list"><li style="list-style-type:disc">Limited deployment capabilities in hybrid or multicloud architectures.</li></ul><h3 id="3af5a3b6-a66e-4611-9a94-26f857a7caa8" class=""><strong>Adapting the Data Model</strong></h3><p id="53883601-393a-4c71-9b7e-d40d47cafaba" class=""><strong>Example: Hotel Reservation System</strong></p><h3 id="961d4553-3f11-4394-85a4-eea6e45a3f1f" class=""><strong>Translating Entities</strong></h3><ol type="1" id="bccb74bd-0646-41f5-ab4b-ed2a3c96e2a2" class="numbered-list" start="1"><li><strong>Entity Tables</strong><ul id="8c73ba55-999e-4767-b191-f6f00a1c53f5" class="bulleted-list"><li style="list-style-type:disc">Create tables similar to relational tables but with Cassandra&#x27;s partition and clustering keys.</li></ul><ul id="5e08c038-9aee-4a34-b8d4-046c03ed530e" class="bulleted-list"><li style="list-style-type:disc"><strong>Example</strong>: Translating a relational <code><strong>Hotels</strong></code> table to Cassandra:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="af0f7f54-df5c-4446-815d-aa8dbab1050f" class="code"><code class="language-SQL" style="white-space:pre-wrap;word-break:break-all">sqlCopy code
+CREATE TABLE hotels (
+  hotel_id UUID PRIMARY KEY,
+  name TEXT,
+  address TEXT
+);
+
+</code></pre></li></ul></li></ol><ol type="1" id="173acf90-d613-4d90-8512-3ee270ea1cb9" class="numbered-list" start="2"><li><strong>Denormalized Tables for Different Queries</strong><ul id="b12e8dbf-0042-49e5-8f19-221eb1b942a4" class="bulleted-list"><li style="list-style-type:disc">Create additional tables for different search combinations.</li></ul><ul id="9f24098a-9d94-49e4-aacd-42245fd62a81" class="bulleted-list"><li style="list-style-type:disc"><strong>Example</strong>: <code><strong>hotels_by_name</strong></code> table for searching by name.<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="a11c3074-6c99-49c6-a7c2-20434e0cb43f" class="code"><code class="language-SQL" style="white-space:pre-wrap;word-break:break-all">sqlCopy code
+CREATE TABLE hotels_by_name (
+  name TEXT PRIMARY KEY,
+  hotel_id UUID
+);
+
+</code></pre></li></ul></li></ol><ol type="1" id="884bddd2-198d-4e8d-883e-8b31a9ce32a1" class="numbered-list" start="3"><li><strong>Complex Types with UDTs</strong><ul id="5608d4a3-0b34-4e54-96e2-cd4383e6807a" class="bulleted-list"><li style="list-style-type:disc">Use user-defined types (UDTs) for complex attributes.</li></ul><ul id="03b6c810-903a-4685-b8b5-9b947be19018" class="bulleted-list"><li style="list-style-type:disc"><strong>Example</strong>: Define an <code><strong>Address</strong></code> UDT.<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="7396d1f6-96af-483d-949b-1ba2278caa60" class="code"><code class="language-SQL" style="white-space:pre-wrap;word-break:break-all">sqlCopy code
+CREATE TYPE address (
+  street TEXT,
+  city TEXT,
+  state TEXT,
+  zip TEXT
+);
+
+CREATE TABLE hotels (
+  hotel_id UUID PRIMARY KEY,
+  name TEXT,
+  address FROZEN&lt;address&gt;
+);
+
+</code></pre></li></ul></li></ol><h3 id="598d7b03-8eda-4a2d-9ece-d5605a368346" class=""><strong>Translating Relationships</strong></h3><ol type="1" id="09861e37-f7d8-4f44-8668-247b7e3d6e65" class="numbered-list" start="1"><li><strong>Join Tables</strong><ul id="64b1a494-1359-437b-8921-25e2be87185a" class="bulleted-list"><li style="list-style-type:disc">Map relationships to tables, like <code><strong>amenities_by_room</strong></code>.<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1926a612-0e1d-428b-bfa5-103f1c6bc90c" class="code"><code class="language-SQL" style="white-space:pre-wrap;word-break:break-all">sqlCopy code
+CREATE TABLE amenities_by_room (
+  room_id UUID,
+  amenity_id UUID,
+  PRIMARY KEY (room_id, amenity_id)
+);
+
+</code></pre></li></ul></li></ol><ol type="1" id="d5d78d35-ecf2-42ef-bc94-4ec69e416674" class="numbered-list" start="2"><li><strong>Embedded UDTs</strong><ul id="d5954ba4-d861-466c-8949-b123a43cc16e" class="bulleted-list"><li style="list-style-type:disc">Collapse related entities into a single table using UDTs.</li></ul><ul id="f625a5d4-feb6-42a3-b373-70ce2b15a9ce" class="bulleted-list"><li style="list-style-type:disc"><strong>Example</strong>: <code><strong>rooms_by_hotel</strong></code> table with embedded <code><strong>Amenity</strong></code> UDT.<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="542b9485-8f48-4820-aef2-2d6fd079b7dd" class="code"><code class="language-SQL" style="white-space:pre-wrap;word-break:break-all">sqlCopy code
+CREATE TABLE rooms_by_hotel (
+  hotel_id UUID,
+  room_id UUID,
+  amenities SET&lt;FROZEN&lt;amenity&gt;&gt;,
+  PRIMARY KEY (hotel_id, room_id)
+);
+
+</code></pre></li></ul></li></ol><h3 id="e61c169c-0131-46a2-957d-20e99289b574" class=""><strong>Adapting the Application</strong></h3><ol type="1" id="9ab2d2e9-787c-48b9-851e-d6918df49ae0" class="numbered-list" start="1"><li><strong>Microservice Architecture</strong><ul id="0223bfd8-e0c8-4e1c-9335-754fc66302e1" class="bulleted-list"><li style="list-style-type:disc">Use microservices for better scalability and maintainability.</li></ul><ul id="ea9a1540-be4f-447e-a115-abffa8f29ecc" class="bulleted-list"><li style="list-style-type:disc"><strong>Example</strong>: Implement a <code><strong>Reservation Service</strong></code> for handling reservations.</li></ul></li></ol><ol type="1" id="bcba6fcb-534d-4bd2-b1b6-0c64a872520d" class="numbered-list" start="2"><li><strong>Strangler Pattern</strong><ul id="49735de2-d246-4891-9b7e-5107a733db3d" class="bulleted-list"><li style="list-style-type:disc">Gradually replace legacy system components with new microservices.</li></ul><ul id="748b7ffc-b950-4888-a464-f316eb37d323" class="bulleted-list"><li style="list-style-type:disc">Use an API layer to manage interactions between the legacy system and new services.</li></ul></li></ol><ol type="1" id="29e9a3e3-393e-4a1b-a261-f9ad7b4d63a5" class="numbered-list" start="3"><li><strong>Refactoring Data Access</strong><ul id="8228776c-60b4-4b1e-83bd-e48013d18153" class="bulleted-list"><li style="list-style-type:disc">Use the Data Access Object (DAO) pattern to abstract database interactions.</li></ul><ul id="6570eb77-c4c0-4334-b82f-accc395da1ed" class="bulleted-list"><li style="list-style-type:disc"><strong>Example</strong>: Implement DAOs using the DataStax Java Driver.</li></ul></li></ol><ol type="1" id="664ebe68-87c6-4427-abf7-6fa581b8b159" class="numbered-list" start="4"><li><strong>Consistency Management</strong><ul id="839df7be-0233-4b69-a5b8-65aafe3e17a2" class="bulleted-list"><li style="list-style-type:disc">Use consistency levels, batches, and lightweight transactions to manage data consistency.</li></ul><ul id="782bbe1d-c0bb-4639-8fd2-a15bc6000010" class="bulleted-list"><li style="list-style-type:disc"><strong>Example</strong>:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c4d0397f-7821-4a59-a375-7dfec4b6945c" class="code"><code class="language-Java" style="white-space:pre-wrap;word-break:break-all">javaCopy code
+CqlSession session = CqlSession.builder().build();
+PreparedStatement ps = session.prepare(&quot;INSERT INTO reservations (id, guest_id, room_id) VALUES (?, ?, ?) IF NOT EXISTS&quot;);
+session.execute(ps.bind(id, guestId, roomId));
+
+</code></pre></li></ul></li></ol><ol type="1" id="c5e26850-5476-466d-bcf3-308f2acb91c4" class="numbered-list" start="5"><li><strong>Avoiding Joins</strong><ul id="993c3178-a34b-4cf1-9bf7-ba72799d7cf5" class="bulleted-list"><li style="list-style-type:disc">Denormalize data to avoid joins.</li></ul><ul id="56d92753-7853-453d-bd0d-3cb4aaef0ab6" class="bulleted-list"><li style="list-style-type:disc"><strong>Example</strong>: Use <code><strong>reservations_by_guest</strong></code> table for guest-based queries.</li></ul></li></ol><ol type="1" id="db4aff00-da96-4518-bd65-06ae69caa26b" class="numbered-list" start="6"><li><strong>Migrating Stored Procedures</strong><ul id="6168b676-c268-4bd7-a6b8-594db78af206" class="bulleted-list"><li style="list-style-type:disc">Use user-defined functions (UDFs) and aggregates (UDAs) for specific tasks.</li></ul><ul id="4cf847e6-6d75-47c3-98e6-f15ac4437dd3" class="bulleted-list"><li style="list-style-type:disc"><strong>Example</strong>:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b06e0a82-05f9-447f-b7e4-debf8d51c769" class="code"><code class="language-SQL" style="white-space:pre-wrap;word-break:break-all">sqlCopy code
+CREATE FUNCTION count_if_true (input BOOLEAN) RETURNS NULL ON NULL INPUT RETURNS INT LANGUAGE java AS &#x27;return input ? 1 : 0;&#x27;;
+CREATE AGGREGATE total_available (BOOLEAN) SFUNC count_if_true STYPE INT INITCOND 0;
+
+</code></pre></li></ul></li></ol><h3 id="428500ec-60f7-48e5-bad5-02c56fc56f27" class=""><strong>Planning the Deployment</strong></h3><ol type="1" id="fdfb8411-7ef7-4c87-85b4-78c3802106ce" class="numbered-list" start="1"><li><strong>Cluster Topology</strong><ul id="9d1456da-ac74-480b-92ee-596fc5053f7c" class="bulleted-list"><li style="list-style-type:disc">Plan data centers and replication strategies.</li></ul></li></ol><ol type="1" id="f63e5eb0-1afa-4a12-9cef-3948288fb099" class="numbered-list" start="2"><li><strong>Cluster Sizing</strong><ul id="229cc6d5-e0a9-48bd-a05c-9c2fd1736858" class="bulleted-list"><li style="list-style-type:disc">Size the cluster based on data size and performance goals.</li></ul></li></ol><ol type="1" id="9241e431-1437-42b1-8058-c2aec8c50767" class="numbered-list" start="3"><li><strong>Operational Integration</strong><ul id="9b6191ad-88bd-411b-be72-c764bf025734" class="bulleted-list"><li style="list-style-type:disc">Integrate with monitoring and orchestration tools.</li></ul></li></ol><ol type="1" id="99424fec-c9c7-4d08-88e3-b1c1f1fd696b" class="numbered-list" start="4"><li><strong>Security</strong><ul id="efbe3356-6f91-4954-af76-dfc8ac56ced7" class="bulleted-list"><li style="list-style-type:disc">Configure encryption, authentication, and authorization.</li></ul></li></ol><h3 id="a532dee6-cbd0-4411-a50e-a61072f76651" class=""><strong>Migrating Data</strong></h3><ol type="1" id="962434e1-87bc-4fe9-909e-0c10a51d9b26" class="numbered-list" start="1"><li><strong>Zero-Downtime Migration</strong><ul id="0bf80cc2-0f75-44ad-92f0-8465787ca8dd" class="bulleted-list"><li style="list-style-type:disc">Use dual writes to transition data without downtime.</li></ul><ul id="f3e02789-f2e0-4914-9ef2-a240b726ca8e" class="bulleted-list"><li style="list-style-type:disc"><strong>Example</strong>: Perform dual writes to both the legacy and new Cassandra databases.</li></ul></li></ol><ol type="1" id="9740f332-06de-4cff-95be-4d896708dd9f" class="numbered-list" start="2"><li><strong>Bulk Loading</strong><ul id="8c5c1e97-3557-467c-bf04-f2f22818da38" class="bulleted-list"><li style="list-style-type:disc">Use tools like <code><strong>cqlsh COPY</strong></code> and DataStax Bulk Loader (DSBulk).</li></ul><ul id="7f373334-4db2-40c2-ab7c-3264708c7a44" class="bulleted-list"><li style="list-style-type:disc"><strong>Example</strong>:<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="32060993-b6ba-4138-b7e8-a23a52dce666" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">shCopy code
+cqlsh&gt; COPY reservations_by_confirmation TO &#x27;reservations.csv&#x27; WITH HEADER=TRUE;
+cqlsh&gt; COPY reservations_by_confirmation FROM &#x27;reservations.csv&#x27; WITH HEADER=TRUE;
+
+</code></pre></li></ul></li></ol><ol type="1" id="80072149-893c-4158-8117-b6a1615d7e26" class="numbered-list" start="3"><li><strong>Validating Data Migration</strong><ul id="70557d5f-041f-4b7e-aef2-b375f079d552" class="bulleted-list"><li style="list-style-type:disc">Use tools and scripts to validate data integrity post-migration.</li></ul></li></ol><h3 id="7e9a074c-7e60-42ac-8c4a-b2eed58e7951" class=""><strong>Common Integrations</strong></h3><ol type="1" id="a2074f1a-a43c-46b9-b1c8-7dd933e7a61e" class="numbered-list" start="1"><li><strong>Apache Kafka</strong><ul id="5a6a6ba8-eefa-4d04-a572-a3e4005439c7" class="bulleted-list"><li style="list-style-type:disc">Use Kafka for real-time data pipelines.</li></ul><ul id="17cddcc7-df65-4e4c-ae9c-649379d48dd3" class="bulleted-list"><li style="list-style-type:disc"><strong>Example</strong>: Use the DataStax Apache Kafka Connector to stream data into Cassandra.</li></ul></li></ol><ol type="1" id="f5e8bffc-3f6b-4f3d-b038-194a073b2ae2" class="numbered-list" start="2"><li><strong>Search with Lucene, SOLR, and Elasticsearch</strong><ul id="89ca7603-a238-4a9e-a7ce-3e0fd39819d8" class="bulleted-list"><li style="list-style-type:disc">Use distributed search engines for advanced search capabilities.</li></ul><ul id="12ebcd4c-35a8-42cc-bdf0-2251139631cf" class="bulleted-list"><li style="list-style-type:disc"><strong>Example</strong>: Use DataStax Enterprise Search for integrated search functionality.</li></ul></li></ol><ol type="1" id="cfe3e8a2-0ebb-4665-a9da-a5e2475448d6" class="numbered-list" start="3"><li><strong>Analyzing Data with Apache Spark</strong><ul id="de6a66d1-c35d-4003-b012-92bfd90122f1" class="bulleted-list"><li style="list-style-type:disc">Use Spark for data analytics.</li></ul><ul id="9c0a57a6-4866-4297-ad79-a0993ecd5001" class="bulleted-list"><li style="list-style-type:disc"><strong>Example</strong>: Deploy Spark Workers on Cassandra nodes for efficient data processing.</li></ul></li></ol><h3 id="12d2bcc0-5878-44a7-b536-fd4bf2ae888d" class=""><strong>Summary</strong></h3><p id="d466e24f-e6e4-468f-87eb-bc2c1c8bb950" class="">Migrating to Cassandra involves careful planning, adapting data models, refactoring application code, ensuring data consistency, and integrating with existing infrastructure. By following best practices and leveraging tools like Apache Kafka, Lucene, SOLR, Elasticsearch, and Apache Spark, you can effectively transition to a scalable, high-performance Cassandra-based architecture.</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

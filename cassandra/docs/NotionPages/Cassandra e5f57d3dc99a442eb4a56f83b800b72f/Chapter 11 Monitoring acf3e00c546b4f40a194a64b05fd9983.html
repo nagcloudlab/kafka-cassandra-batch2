@@ -1,0 +1,678 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Chapter 11. Monitoring</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="acf3e00c-546b-4f40-a194-a64b05fd9983" class="page sans"><header><h1 class="page-title"><strong>Chapter 11. Monitoring</strong></h1><p class="page-description"></p></header><div class="page-body"><hr id="816500a9-ffa6-49d4-8c8c-6745709aa032"/><p id="101a07d8-7505-41cb-8194-830df808633c" class="">
+</p><p id="18b7c2a8-f3ab-4e58-a724-fda7bc4406cf" class=""><strong>Chapter Overview</strong></p><ul id="51f05884-d279-48de-b802-450cb2e1f1ba" class="bulleted-list"><li style="list-style-type:disc">Importance of observability in distributed systems.</li></ul><ul id="5aea07df-a1ea-4ba5-aa4e-41d4f470df28" class="bulleted-list"><li style="list-style-type:disc">Elements of observability: metrics, logging, tracing.</li></ul><ul id="53a706c5-8b04-4b03-81f4-18a3c2fba341" class="bulleted-list"><li style="list-style-type:disc">Monitoring Cassandra using JMX, nodetool, virtual tables, metrics, and logs.</li></ul><hr id="7c65b729-290a-4381-b645-9075c0bc5637"/><h3 id="ef24223f-c6bf-401c-883a-14e98c3fd36c" class=""><strong>Monitoring Cassandra with JMX<br/><br/><br/><br/></strong></h3><figure id="68e793b8-e343-41af-ae76-92cc344132a6" class="image"><a href="Chapter%2011%20Monitoring%20acf3e00c546b4f40a194a64b05fd9983/Untitled.png"><img style="width:1440px" src="Chapter%2011%20Monitoring%20acf3e00c546b4f40a194a64b05fd9983/Untitled.png"/></a></figure><p id="4e7f3651-3d18-4d87-940b-a9c3f0253f57" class=""><strong>Java Management Extensions (JMX)</strong></p><ul id="1295b917-17c9-4709-9c4c-dbb0e157f77d" class="bulleted-list"><li style="list-style-type:disc">Enables remote management of Cassandra nodes.</li></ul><ul id="e3d7b08e-bc6c-49c5-840c-6829bb0f4b6a" class="bulleted-list"><li style="list-style-type:disc">Provides insight into application health and performance.</li></ul><ul id="af392eb3-2acc-40bd-9c3e-e7e4774409d2" class="bulleted-list"><li style="list-style-type:disc">Instrumentation allows JVM to gather data for external tools.</li></ul><p id="649cf16c-43cd-4cc0-97a1-57e74419485f" class=""><strong>Connecting Remotely via JMX</strong></p><ul id="a5f6b13b-29be-4229-b067-80a6adb86ca8" class="bulleted-list"><li style="list-style-type:disc">By default, JMX is enabled for local access only.</li></ul><ul id="7c117e73-f885-45fc-96c1-e8ae43a33ec1" class="bulleted-list"><li style="list-style-type:disc">To enable remote access, edit <code><strong>&lt;cassandra-home&gt;/cassandra-env.sh</strong></code>.</li></ul><p id="1ae0e327-fb8d-4284-863c-b40c612286db" class=""><strong>JMX Clients</strong></p><ul id="fb00eea1-e773-40e0-b2a8-f7438adb686b" class="bulleted-list"><li style="list-style-type:disc"><span style="border-bottom:0.05em solid"><strong>Nodetool</strong></span><span style="border-bottom:0.05em solid">: Command-line tool bundled with Cassandra.</span></li></ul><ul id="02cf1ef8-c05d-4c54-b302-61b8a5910873" class="bulleted-list"><li style="list-style-type:disc"><strong>JConsole</strong>: GUI client for working with MBeans, included with JDK.</li></ul><ul id="c020fe49-6c81-457b-9dfd-e041f89e0c3f" class="bulleted-list"><li style="list-style-type:disc"><strong>Oracle Java Mission Control and Visual VM</strong>: Robust metrics and diagnostics tools.</li></ul><ul id="e5246359-1233-4534-9d7b-ce8db0c02484" class="bulleted-list"><li style="list-style-type:disc"><strong>MX4J</strong>: Open-source JMX implementation with HTTP/HTML interface.</li></ul><ul id="24ba704d-0f83-492d-89fc-cfc72c378b15" class="bulleted-list"><li style="list-style-type:disc"><strong>Jmxterm</strong>: Command-line JMX client.</li></ul><ul id="6955d080-0ffe-4b1b-be07-9abfcbc27603" class="bulleted-list"><li style="list-style-type:disc"><strong>IDE Integrations</strong>: JMX clients for IDEs like Eclipse.</li></ul><hr id="2d7742da-2e9e-4f5f-af9b-446b63181030"/><h3 id="5dd00afc-6317-499f-a161-87bce7280a36" class=""><strong>Cassandra&#x27;s MBeans</strong></h3><p id="fd2f1e22-e907-4f2c-83f0-b4931ad1b69a" class=""><strong>Managed Beans (MBeans)</strong></p><ul id="08aa6cf9-3aa4-4d04-b476-4b1338675686" class="bulleted-list"><li style="list-style-type:disc">Special type of Java bean representing a manageable resource.</li></ul><ul id="fa72b8ad-1a63-4cd0-8514-78a42d2747c1" class="bulleted-list"><li style="list-style-type:disc">Examples include <code><strong>CompactionManagerMBean</strong></code>, <code><strong>StorageServiceMBean</strong></code>, <code><strong>HintsServiceMBean</strong></code>, etc.</li></ul><p id="d68fa5ba-6f32-477d-a877-6eb3ebc0e211" class=""><strong>Key MBeans</strong></p><ul id="3281310f-42c8-4885-aa3b-eed69cccae45" class="bulleted-list"><li style="list-style-type:disc"><strong>Storage Service MBean</strong>: Essential for monitoring and managing the storage engine.</li></ul><ul id="6d383236-698b-4d82-9a68-95c629752f42" class="bulleted-list"><li style="list-style-type:disc"><strong>Storage Proxy MBean</strong>: Handles client requests and inter-node communications.</li></ul><ul id="8cabe8bc-c15c-48a3-9ab7-67bec4e9fbce" class="bulleted-list"><li style="list-style-type:disc"><strong>Hints Service MBean</strong>: Manages hinted handoff operations.</li></ul><ul id="e93df442-dfe6-42eb-ba9b-db95a5ca90e1" class="bulleted-list"><li style="list-style-type:disc"><strong>Column Family Store MBean</strong>: Provides access to compaction and compression settings.</li></ul><ul id="b575da3a-12d0-4fba-aa81-2b0ae7e84d27" class="bulleted-list"><li style="list-style-type:disc"><strong>Commit Log MBean</strong>: Exposes commit log state and recovery operations.</li></ul><ul id="49f38907-d438-426b-849a-6bc540bcadb1" class="bulleted-list"><li style="list-style-type:disc"><strong>Compaction Manager MBean</strong>: Statistics and operations related to compactions.</li></ul><ul id="2b59f43b-981d-4b3b-92a6-7d621bf61143" class="bulleted-list"><li style="list-style-type:disc"><strong>Cache Service MBean</strong>: Access to key, row, chunk, and counter caches.</li></ul><p id="e9ffaacf-9eb4-4dc1-9af5-6f36143afe82" class=""><strong>Cluster-Related MBeans</strong></p><ul id="2154cbb0-0121-42ef-8624-34d383efe64c" class="bulleted-list"><li style="list-style-type:disc"><strong>Gossiper MBean</strong>: Manages node gossip.</li></ul><ul id="63288b62-17c6-45be-9749-b01d5bdee01d" class="bulleted-list"><li style="list-style-type:disc"><strong>Failure Detector MBean</strong>: Describes states and Phi scores of nodes.</li></ul><ul id="c1e2a12e-f856-4629-8402-620857dbc806" class="bulleted-list"><li style="list-style-type:disc"><strong>Snitch MBeans</strong>: Monitor and configure snitch behavior.</li></ul><ul id="9fca3d03-c6eb-4c98-90a7-1a1c6575a5f5" class="bulleted-list"><li style="list-style-type:disc"><strong>Stream Manager MBean</strong>: Manages SSTable streaming between nodes.</li></ul><ul id="582e308f-1ebe-4d08-9d03-6c6b7532d7ff" class="bulleted-list"><li style="list-style-type:disc"><strong>Messaging Service MBean</strong>: Manages messages between nodes.</li></ul><p id="82f6f2da-d137-4a2a-9a38-34bfadbfa561" class=""><strong>Internal MBeans</strong></p><ul id="9a3cafd7-c984-4809-a494-b89557c3d672" class="bulleted-list"><li style="list-style-type:disc"><strong>Thread Pool MBeans</strong>: Monitor and configure thread pools.</li></ul><ul id="70e2f10d-6425-47d7-a4f8-dbbc12e42f9e" class="bulleted-list"><li style="list-style-type:disc"><strong>Garbage Collection MBeans</strong>: Monitor JVM garbage collection.</li></ul><ul id="7ccce6b1-8c04-43ae-965e-9fc2759a5857" class="bulleted-list"><li style="list-style-type:disc"><strong>Security MBeans</strong>: Configure client authentication caching.</li></ul><ul id="9f135d7d-3ad0-4084-a91d-ef3725a4576c" class="bulleted-list"><li style="list-style-type:disc"><strong>Metrics MBeans</strong>: Report various application performance metrics.</li></ul><hr id="1bc96e69-f988-4ece-b70f-31d79491ef98"/><h3 id="7674af1e-8099-4b77-8a14-2fc46aa62664" class=""><strong>Monitoring with nodetool</strong></h3><p id="72469838-850b-4361-a71d-e5db9d74edf2" class=""><strong>Using nodetool</strong></p><ul id="bb305503-a5fc-4901-9e2b-d6b5892fa64c" class="bulleted-list"><li style="list-style-type:disc">Command-line tool for monitoring and managing Cassandra.</li></ul><ul id="f024cf0a-3334-4e4b-a38a-96154c87ebab" class="bulleted-list"><li style="list-style-type:disc">Uses JMX to access MBeans.</li></ul><ul id="774e772f-60ba-46e8-8a76-7339c8fb45b6" class="bulleted-list"><li style="list-style-type:disc">Commands include: <code><strong>describecluster</strong></code>, <code><strong>status</strong></code>, <code><strong>info</strong></code>, <code><strong>ring</strong></code>, <code><strong>tpstats</strong></code>, <code><strong>tablestats</strong></code>.</li></ul><p id="7a9953e1-8b91-4d62-8f69-4ee2fcd1d471" class=""><strong>Common Commands</strong></p><ul id="b4e85757-46ef-411f-abfe-70d8bd9be60e" class="bulleted-list"><li style="list-style-type:disc"><code><strong>describecluster</strong></code>: Prints basic cluster information.</li></ul><ul id="419f6957-a4aa-46cf-b6ae-5bcdaa7140c4" class="bulleted-list"><li style="list-style-type:disc"><code><strong>status</strong></code>: Identifies nodes and their states.</li></ul><ul id="93f9f07c-8e9e-4424-a585-9f631f4ef857" class="bulleted-list"><li style="list-style-type:disc"><code><strong>info</strong></code>: Gets basic data about a specific node.</li></ul><ul id="e380cff9-fcde-454e-9e6c-1294266d7122" class="bulleted-list"><li style="list-style-type:disc"><code><strong>ring</strong></code>: Determines node states in the ring.</li></ul><hr id="f9f41005-4cd2-4bac-aab8-d28690a17fa6"/><h3 id="290bd44c-fa34-4374-9cc8-e427b2e556ec" class=""><strong>Virtual Tables</strong></h3><p id="ae62a854-2b2b-464b-bda6-ec138d3fb385" class=""><strong>Introduction</strong></p><ul id="d88b2efd-787b-4aaf-8652-1fc404752c2d" class="bulleted-list"><li style="list-style-type:disc">Virtual tables provide metadata about nodes and tables via CQL.</li></ul><ul id="a7be3e38-92ff-4408-af78-ad63f36a6bd2" class="bulleted-list"><li style="list-style-type:disc">Not actual tables stored using Cassandra’s typical write path.</li></ul><p id="70669f95-fb6f-4294-86ae-b58ba15541a5" class=""><strong>System Virtual Schema</strong></p><ul id="f06c2964-a942-4044-b516-10644cda4e65" class="bulleted-list"><li style="list-style-type:disc">Tables: <code><strong>keyspaces</strong></code>, <code><strong>columns</strong></code>, <code><strong>tables</strong></code>.</li></ul><ul id="9375a093-e929-4121-95c4-0d1719b02812" class="bulleted-list"><li style="list-style-type:disc">Provides metadata similar to <code><strong>DESCRIBE</strong></code> operations in CQL.</li></ul><p id="e2fd34bb-ef4e-4fdf-b97c-699773e85ea4" class=""><strong>System Views</strong></p><ul id="d91f034d-4b91-478c-8e71-1c520626ea82" class="bulleted-list"><li style="list-style-type:disc">Tables include: <code><strong>caches</strong></code>, <code><strong>clients</strong></code>, <code><strong>disk_usage</strong></code>, <code><strong>settings</strong></code>, <code><strong>sstable_tasks</strong></code>, etc.</li></ul><ul id="14719102-febb-4918-83ee-37646140ddf2" class="bulleted-list"><li style="list-style-type:disc">Useful for identifying issues like wide partitions and tombstone counts.</li></ul><hr id="f62a5a30-6b8c-49e1-8f2a-cb688a2d3862"/><h3 id="8110a0bc-c466-4abc-8933-2cd9f3b01264" class=""><strong>Metrics</strong></h3><p id="f7ec28be-33c3-4ce5-970d-0e99a8203a98" class=""><strong>Metrics Overview</strong></p><ul id="d0dee2dc-1098-4025-90ff-3a2582c41260" class="bulleted-list"><li style="list-style-type:disc">Metrics are vital for system observability.</li></ul><ul id="e420845d-47e1-4a07-bf57-7605eeecb99a" class="bulleted-list"><li style="list-style-type:disc">Cassandra reports metrics at OS, JVM, and application levels.</li></ul><ul id="303695ff-2fda-44c8-9e47-2f8954a2f3a3" class="bulleted-list"><li style="list-style-type:disc">Metrics include: buffer pool, CQL, cache, client, commit log, compaction, connection, dropped message, read repair, storage, streaming, thread pool, table, and keyspace metrics.</li></ul><p id="2a2bff4d-00ef-41a3-acd6-ebb9b7c696b9" class=""><strong>Metrics Aggregation</strong></p><ul id="d01c8315-d9fe-4050-9f5d-240d58ae9752" class="bulleted-list"><li style="list-style-type:disc">Use tools like Prometheus and Grafana for metrics aggregation and visualization.</li></ul><ul id="e7b76d9b-c665-4000-9dd9-2feb3fae6d82" class="bulleted-list"><li style="list-style-type:disc">GitHub repositories provide configurations for integrating Cassandra with these tools.<br/><br/></li></ul><figure id="066a5f94-90f3-480b-9f0c-c7453e4b36d0" class="image"><a href="Chapter%2011%20Monitoring%20acf3e00c546b4f40a194a64b05fd9983/Untitled%201.png"><img style="width:1151px" src="Chapter%2011%20Monitoring%20acf3e00c546b4f40a194a64b05fd9983/Untitled%201.png"/></a></figure><hr id="7215b0b7-3c49-4bda-94f7-eadbb430be19"/><h3 id="3638e0ab-f7f0-4370-9903-4ec8473a4d77" class=""><strong>Logging</strong></h3><p id="159ac4cf-64ac-4750-93cf-7f505192e9e9" class=""><strong>Logging Configuration</strong></p><ul id="e1ce41dc-7567-4230-afc9-9adcb5223e66" class="bulleted-list"><li style="list-style-type:disc">Cassandra uses SLF4J API with Logback implementation.</li></ul><ul id="17bcf632-b3a9-4df2-875b-bed90c82e5e4" class="bulleted-list"><li style="list-style-type:disc">Logs include <code><strong>system.log</strong></code>, <code><strong>debug.log</strong></code>, <code><strong>gc.log</strong></code>.</li></ul><p id="ebdcac8d-de78-4fa8-9933-cb9186217306" class=""><strong>Log Levels</strong></p><ul id="b6d5c424-b292-400e-ad15-0ef98a3691f4" class="bulleted-list"><li style="list-style-type:disc">Configurable levels: ALL &lt; DEBUG &lt; INFO &lt; WARN &lt; ERROR &lt; FATAL &lt; OFF.</li></ul><ul id="cc49b91c-3443-40a2-9f43-959caffb3a04" class="bulleted-list"><li style="list-style-type:disc">Default log files stored in <code><strong>logs</strong></code> directory under Cassandra installation.</li></ul><p id="da61e811-e419-40bf-ab9d-2c2831487f26" class=""><strong>Full Query Logging</strong></p><ul id="8716ea5d-35a2-45f7-8568-d061d3d9a433" class="bulleted-list"><li style="list-style-type:disc">Enabled in Cassandra 4.0.</li></ul><ul id="a3150eb3-1b32-4a53-98f3-b5dd2e0b8b1f" class="bulleted-list"><li style="list-style-type:disc">Logs CQL queries for detailed analysis and replay.</li></ul><p id="9c623613-184d-4dba-8178-7de252326b7f" class=""><strong>Log Aggregation and Distributed Tracing</strong></p><ul id="632e3349-aaf0-4766-ab42-d99c550928c3" class="bulleted-list"><li style="list-style-type:disc">Aggregate logs using tools like ELK stack (Elasticsearch, Logstash, Kibana).</li></ul><ul id="73a7ee29-e610-428c-9d1e-63931bbc965e" class="bulleted-list"><li style="list-style-type:disc">Perform distributed traces to analyze system-wide requests.</li></ul><hr id="f2d25371-26ea-4bfa-b207-6b594cea53da"/><h3 id="1c2b931b-a538-4523-9e73-aa85197ecd62" class=""><strong>Summary</strong></h3><ul id="32828872-40ef-4960-a9a7-5d7ddf86131a" class="bulleted-list"><li style="list-style-type:disc">Monitoring and managing Cassandra clusters using JMX, nodetool, virtual tables, metrics, and logs.</li></ul><ul id="7634927d-1598-4d8f-a4a7-b89299584fa5" class="bulleted-list"><li style="list-style-type:disc">Ensuring observability through metrics, logging, and tracing.</li></ul><ul id="c0dbbcdb-06b6-4120-9aaa-93771f2e0618" class="bulleted-list"><li style="list-style-type:disc">Preparing for routine maintenance tasks to keep Cassandra clusters healthy.</li></ul></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

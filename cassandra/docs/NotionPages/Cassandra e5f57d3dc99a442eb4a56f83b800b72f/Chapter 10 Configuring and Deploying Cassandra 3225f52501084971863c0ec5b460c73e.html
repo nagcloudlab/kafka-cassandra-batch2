@@ -1,0 +1,686 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Chapter 10. Configuring and Deploying Cassandra</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="3225f525-0108-4971-863c-0ec5b460c73e" class="page sans"><header><h1 class="page-title"><strong>Chapter 10. Configuring and Deploying Cassandra</strong></h1><p class="page-description"></p></header><div class="page-body"><hr id="d7f5484c-adde-4620-94db-2f75cbd45430"/><p id="a6f8810e-80f4-435e-82c1-60169181065e" class="">
+</p><h3 id="e332c889-ead4-4b47-b6d3-58ccbf982312" class=""><strong>Configuring and Deploying Cassandra</strong></h3><p id="c3dca91e-4544-41cb-a5a3-ebf3e8025c81" class=""><strong>Chapter Overview</strong></p><ul id="46fa4b2f-9e80-4d18-a644-02d886d1be3b" class="bulleted-list"><li style="list-style-type:disc">Build your first cluster.</li></ul><ul id="e9069aa7-0530-46c9-b8f1-dd8699ba7f53" class="bulleted-list"><li style="list-style-type:disc">Configure Cassandra nodes: partitioning, snitches, replication.</li></ul><ul id="4bbbd353-c36a-4efb-b0ac-475887f8bd7b" class="bulleted-list"><li style="list-style-type:disc">Deploying Cassandra in production and cloud environments.</li></ul><hr id="a0610eee-e407-4871-a39f-569a5f9b9b5c"/><h3 id="68817879-c6c5-43fd-bc0d-631ffe5b8e3b" class=""><strong>Cassandra Cluster Manager</strong></h3><p id="06e4bae6-30e1-4658-ac67-76ac5677cff2" class=""><strong>Out-of-the-Box Configuration</strong></p><ul id="1c928f98-69c7-4948-836d-cfd56ec83602" class="bulleted-list"><li style="list-style-type:disc">Cassandra starts with no configuration.</li></ul><ul id="88b4c6c3-dcd9-47dc-ad7b-b05cacb85c25" class="bulleted-list"><li style="list-style-type:disc">Download, decompress, execute to start the server with default settings.</li></ul><p id="552a1cff-d23b-4a2b-9506-4ea4ab245935" class=""><strong>Customizability</strong></p><ul id="c3a153dc-b9c9-4846-b956-7ed820fb98ac" class="bulleted-list"><li style="list-style-type:disc">Emphasis on configurability and customization.</li></ul><ul id="e4aee737-324f-4c7c-a924-7045db8193c3" class="bulleted-list"><li style="list-style-type:disc">Use <strong>Cassandra Cluster Manager (ccm)</strong> to practice building clusters.</li></ul><ul id="f81eddaf-6360-48e1-96ab-d394a8c35a54" class="bulleted-list"><li style="list-style-type:disc"><a href="https://github.com/riptano/ccm">https://github.com/riptano/ccm</a></li></ul><ul id="c582ef0c-ef6e-4e4a-9fc9-f63c48cce7e2" class="bulleted-list"><li style="list-style-type:disc">Allows running a multinode cluster on a single machine.</li></ul><p id="42bd283f-64d8-4025-b628-5279d27005a6" class=""><strong>Creating Clusters for Testing</strong></p><ul id="f982ad7d-6521-4054-807e-38d3453f8585" class="bulleted-list"><li style="list-style-type:disc">Use real clusters for unit and integration testing.</li></ul><ul id="3652e087-0ae3-43d0-b86a-e6818c9e1630" class="bulleted-list"><li style="list-style-type:disc">Tools: Docker, ccm.</li></ul><ul id="38b5177c-c6d2-406c-9158-2d0122c46e49" class="bulleted-list"><li style="list-style-type:disc">Quick start: <code><strong>$ pip install ccm</strong></code> or <code><strong>$ brew install ccm</strong></code>.</li></ul><p id="ba7ec3aa-f134-4d44-a596-61e4875dcc96" class=""><strong>Basic Commands</strong></p><ul id="d3be7913-f65d-443f-8d8a-7f73971abb79" class="bulleted-list"><li style="list-style-type:disc"><code><strong>ccm create -v 4.0.0 -n 3 reservation_cluster --vnodes</strong></code></li></ul><ul id="8d1d68ef-aeac-46c1-9ebe-006547eac821" class="bulleted-list"><li style="list-style-type:disc"><code><strong>ccm list</strong></code></li></ul><ul id="023f9397-1d73-437f-8a0e-f8803d9c410c" class="bulleted-list"><li style="list-style-type:disc"><code><strong>ccm status</strong></code></li></ul><ul id="3d692bff-1e9d-45b4-a040-5d85caacf737" class="bulleted-list"><li style="list-style-type:disc"><code><strong>ccm start</strong></code></li></ul><p id="5b4dfec2-bc50-4f89-addb-d664e1a1ef41" class=""><strong>Node Status and Configuration</strong></p><ul id="687c7ac5-7475-4658-8df9-c60622870cbd" class="bulleted-list"><li style="list-style-type:disc">Check status: <code><strong>ccm status</strong></code>, <code><strong>ccm node1 status</strong></code>.</li></ul><ul id="0bf558f9-94f9-415a-8c7a-4fca3557912e" class="bulleted-list"><li style="list-style-type:disc">Examine configuration: <code><strong>diff node1/conf/ node2/conf/</strong></code>.</li></ul><p id="8d422b71-ac9d-47c5-ac34-52184151884d" class=""><strong>Adding Nodes to a Cluster</strong></p><ul id="a0861c13-65cd-4581-bb62-a44e4d77506b" class="bulleted-list"><li style="list-style-type:disc"><code><strong>ccm add node4 -i 127.0.0.4 -j 7400</strong></code></li></ul><ul id="74db26f2-a12a-4a9a-b079-a5f91cc5fcaa" class="bulleted-list"><li style="list-style-type:disc">Start new node: <code><strong>ccm node4 start</strong></code>.</li></ul><p id="d51a2461-1945-421c-ac75-a67004b866a7" class=""><strong>Dynamic Ring Participation</strong></p><ul id="bfced5bc-6bf4-417f-aef0-fb35c9ed0f15" class="bulleted-list"><li style="list-style-type:disc">Nodes can be brought down and back up without disrupting the cluster.</li></ul><ul id="f0582c52-19ed-492d-a41f-f32c5ca5ccee" class="bulleted-list"><li style="list-style-type:disc">Example commands: <code><strong>ccm stop</strong></code>, <code><strong>ccm status</strong></code>.</li></ul><hr id="fb8aa8a4-71f0-4490-8147-22d140d8d35a"/><h3 id="69e5f613-88d2-40ee-8640-ee9dee8ebb8a" class=""><strong>Node Configuration</strong></h3><p id="e20364cb-0995-4417-b29e-9480ea9c309c" class=""><strong>Cassandra.yaml File</strong></p><ul id="764899a1-414b-4ed9-971b-4da7ea847b1d" class="bulleted-list"><li style="list-style-type:disc">Primary configuration file.</li></ul><ul id="e639c535-2ffb-436f-9fac-cf9f6d421621" class="bulleted-list"><li style="list-style-type:disc">Key values: cluster name, partitioner, snitch, seed nodes.</li></ul><p id="36d91b67-b924-42cf-8731-36d5f0bd1a62" class=""><strong>Changing Cluster Name</strong></p><ul id="2eaed675-a9b5-4595-afc8-8e6cd1434fb3" class="bulleted-list"><li style="list-style-type:disc">Update <code><strong>cluster_name</strong></code> property in cassandra.yaml.</li></ul><p id="6c86f652-b61f-4da9-ad41-b264451ae0e5" class=""><strong>Seed Nodes</strong></p><ul id="7e4509f1-2349-4061-94ff-9b973651a74e" class="bulleted-list"><li style="list-style-type:disc">Contact points for other nodes.</li></ul><ul id="9c98cb42-a9f4-426c-8678-2b8539a3a549" class="bulleted-list"><li style="list-style-type:disc">Example: <code><strong>seeds: &quot;127.0.0.1, 127.0.0.2, 127.0.0.3&quot;</strong></code></li></ul><p id="123b013d-4288-4c9c-9343-e5190be7104b" class=""><strong>Snitches</strong></p><ul id="47037acc-ba5d-422e-9f86-39a092891f82" class="bulleted-list"><li style="list-style-type:disc">Gather information about network topology.</li></ul><ul id="c359d93a-9da0-451c-9bc6-c6d13c27a52c" class="bulleted-list"><li style="list-style-type:disc">Configure with <code><strong>endpoint_snitch</strong></code> property.</li></ul><ul id="dadcdfcf-1e99-453f-99d4-beb9236bdecc" class="bulleted-list"><li style="list-style-type:disc">Types: <code>SimpleSnitch, PropertyFileSnitch, GossipingPropertyFileSnitch, RackInferringSnitch, DynamicEndpointSnitch.</code></li></ul><p id="66fe3e71-50ce-4774-8d9e-0d02d02d3ad3" class=""><strong>Partitioners</strong></p><ul id="3a151b13-7342-4e23-8a6d-756c30f5ed36" class="bulleted-list"><li style="list-style-type:disc">Specify how partition keys are mapped to token values.</li></ul><ul id="f7fa97e9-aa91-44e0-b827-ed3bf2ff1138" class="bulleted-list"><li style="list-style-type:disc">Types: <code>Murmur3Partitioner (default), RandomPartitioner, OrderPreservingPartitioner, ByteOrderedPartitioner.</code></li></ul><hr id="ab434fa9-8a29-4745-860b-ae678d58abae"/><h3 id="537cd2e7-03b5-4b40-a968-6e56e499d470" class=""><code><strong>Network Interfaces</strong></code></h3><p id="5ff82128-b5a2-4bc5-974c-18aaddaaed32" class=""><strong>Internode Settings</strong></p><ul id="612a130c-b1a8-40dd-8fd9-131485b04179" class="bulleted-list"><li style="list-style-type:disc"><code><strong>listen_address</strong></code>: IP address for incoming connections.</li></ul><ul id="f71fa3e3-64d6-4385-b528-7c8282f0ad75" class="bulleted-list"><li style="list-style-type:disc"><code><strong>broadcast_address</strong></code>: IP address advertised to other nodes.</li></ul><ul id="13a423fb-6ae5-4b23-ab65-1618157bd5e1" class="bulleted-list"><li style="list-style-type:disc"><code><strong>storage_port</strong></code>: Port for internode communications.</li></ul><p id="522f2185-2f60-4324-9aa9-3bcd85ab9f62" class=""><strong>Client-to-Node Settings</strong></p><ul id="9646f38a-2001-4c05-8076-2b6b271d03ab" class="bulleted-list"><li style="list-style-type:disc"><code><strong>rpc_address</strong></code>: IP address for native transport (CQL).</li></ul><ul id="023bb473-4db5-4ffe-ab39-422fa6839789" class="bulleted-list"><li style="list-style-type:disc"><code><strong>broadcast_rpc_address</strong></code>: IP address advertised to clients.</li></ul><ul id="dfbd9142-5372-4ba3-9d31-4d2cc09f688d" class="bulleted-list"><li style="list-style-type:disc"><code><strong>native_transport_port</strong></code>: Port for native transport (default: 9042).</li></ul><p id="adcefb7b-6f55-4174-93a6-ae5d257982ed" class=""><strong>Deprecation of Thrift RPC Properties</strong></p><ul id="258b7cef-76dc-493d-a333-eca46b24ca63" class="bulleted-list"><li style="list-style-type:disc">Thrift interface deprecated in Cassandra 4.0.</li></ul><hr id="f066c70a-0d2d-45e1-b704-e935a5537971"/><h3 id="88d101b9-d331-4ffd-8de2-d834a86780fb" class=""><strong>Data Storage</strong></h3><p id="dba3cdf9-d767-4eb6-b165-bde9719dd331" class=""><strong>File Locations</strong></p><ul id="da9e6355-df4a-48a4-95c9-f9b2dcd83c4e" class="bulleted-list"><li style="list-style-type:disc">Default: <code><strong>$CASSANDRA_HOME/data</strong></code> or <code><strong>%CASSANDRA_HOME%/data</strong></code>.</li></ul><ul id="4f55d2d9-d1fa-429c-9984-f376412eddc4" class="bulleted-list"><li style="list-style-type:disc">Commit log location: <code><strong>commitlog_directory</strong></code>.</li></ul><ul id="fcd06c57-e0e6-4d05-a25d-ff35d82ab7d4" class="bulleted-list"><li style="list-style-type:disc">Datafile location: <code><strong>data_file_directories</strong></code>.</li></ul><p id="989ed7f0-0d8b-43f1-9766-d18274ee8910" class=""><strong>Disk Failure Policies</strong></p><ul id="53da3341-d077-40f1-875c-0d0e6a654796" class="bulleted-list"><li style="list-style-type:disc">Properties: <code><strong>disk_failure_policy</strong></code>, <code><strong>commit_failure_policy</strong></code>.</li></ul><hr id="afcbe805-2aa9-4229-b59f-f44ebd97b771"/><h3 id="6b7c158a-4540-404a-afef-ec07fa17daf2" class=""><strong>Startup and JVM Settings</strong></h3><p id="93a14879-4945-45b3-a5a1-7028883ca3fd" class=""><strong>Configuration Files</strong></p><ul id="32e38099-2a05-4d24-a902-9d0cdb2cfe7c" class="bulleted-list"><li style="list-style-type:disc"><code><strong>conf/jvm.options</strong></code>: JVM settings.</li></ul><ul id="37b518cd-de51-4b63-9240-424ac40a944e" class="bulleted-list"><li style="list-style-type:disc"><code><strong>conf/logback.xml</strong></code>: Logging configuration.</li></ul><p id="b7919624-877d-4be5-ba07-294d4b6ce83e" class=""><strong>Logging and JMX</strong></p><ul id="baf913e9-ea7f-4f75-bee3-9199029edc74" class="bulleted-list"><li style="list-style-type:disc">Examined in detail in subsequent chapters.</li></ul><hr id="30a98338-39bc-465d-8297-7de066156c60"/><h3 id="eacef9d4-a564-4305-b398-b036e1b0e984" class=""><strong>Creating a Cluster in Docker</strong></h3><p id="a5f583a6-cb6a-48d9-9f6b-019759f14dde" class=""><strong>Quick Setup</strong></p><ul id="6086dccc-55fb-40e0-8fc9-afb9051a8af7" class="bulleted-list"><li style="list-style-type:disc">Create Docker network: <code><strong>$ docker network create my-network</strong></code>.</li></ul><ul id="1b6ca91b-e4df-4a0d-afdf-9def6e72aa7f" class="bulleted-list"><li style="list-style-type:disc">Create nodes:<ul id="b83c6543-ecb9-4760-a924-0cf7cbb9680c" class="bulleted-list"><li style="list-style-type:circle"><code><strong>$ docker run --name node1 --network my-network -p 9042:9042 -d cassandra</strong></code></li></ul><ul id="3f2968f2-a46b-466e-bc2d-3e4183d84cbc" class="bulleted-list"><li style="list-style-type:circle"><code><strong>$ docker run --name node2 -d --network my-network -p 9042:9042 -d -e CASSANDRA_SEEDS=node1 cassandra</strong></code></li></ul><ul id="2c8896ae-9d36-4ea2-8906-64a60dc79fab" class="bulleted-list"><li style="list-style-type:circle"><code><strong>$ docker run --name node3 -d --network my-network -p 9042:9042 -d -e CASSANDRA_SEEDS=node1,node2 cassandra</strong></code></li></ul></li></ul><hr id="6aaabdf6-1289-430e-ad6e-b4f1fd96ee97"/><h3 id="6febe00e-e6a2-481e-9ae5-a531d7ada02a" class=""><strong>Planning a Cluster Deployment</strong></h3><p id="84e8bf3c-9c8f-4433-a431-3ca48d36f5c1" class=""><strong>Topology and Replication Strategies</strong></p><ul id="f53e440e-cb17-4bdf-af5c-3477cd14f5fe" class="bulleted-list"><li style="list-style-type:disc">Cluster topology: number of data centers, geographic distribution.</li></ul><ul id="75a55d25-48b1-4fb0-b1dc-e9018be7e5b9" class="bulleted-list"><li style="list-style-type:disc">Replication strategies: SimpleStrategy, NetworkTopologyStrategy.</li></ul><p id="57b8d17b-7c2f-41e2-ba26-cf66ecc860a5" class="">
+</p><p id="d1168779-198e-45fc-b54c-01b31b8672c9" class="">The <code>SimpleStrategy</code> places replicas in a single data center, without respect to topology</p><figure id="ab84edd8-17a9-48bc-92c9-aaec06989d25" class="image"><a href="Chapter%2010%20Configuring%20and%20Deploying%20Cassandra%203225f52501084971863c0ec5b460c73e/Untitled.png"><img style="width:708.0000610351562px" src="Chapter%2010%20Configuring%20and%20Deploying%20Cassandra%203225f52501084971863c0ec5b460c73e/Untitled.png"/></a></figure><p id="8e09e8cd-dcf4-4b40-8bf1-14a90c4b1b01" class="">
+</p><p id="62e15180-f8c1-4e27-8b2e-f99ea64399e3" class="">
+</p><figure id="c39da709-1a60-4f3e-bd17-92a3d835b590" class="image"><a href="Chapter%2010%20Configuring%20and%20Deploying%20Cassandra%203225f52501084971863c0ec5b460c73e/Untitled%201.png"><img style="width:1431px" src="Chapter%2010%20Configuring%20and%20Deploying%20Cassandra%203225f52501084971863c0ec5b460c73e/Untitled%201.png"/></a></figure><p id="5927adb4-a715-4010-93d1-5f032f78262b" class="">The <code>NetworkTopologyStrategy</code> places replicas in multiple data centers according to the specified replication factor per data center</p><p id="3b247f1d-b9a2-4c9e-a0c2-c8e3b401784d" class="">
+</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c06102b6-e0c6-4613-8818-677939b309ad" class="code"><code class="language-Bash">ALTER KEYSPACE reservation
+  WITH REPLICATION = {&#x27;class&#x27; : &#x27;NetworkTopologyStrategy&#x27;,
+    &#x27;DC1&#x27; : &#x27;3&#x27;, &#x27;DC2&#x27; : &#x27;3&#x27;};</code></pre><p id="e8887b96-23c0-4334-b93c-3ef4b194f2fd" class="">
+</p><p id="83ec8372-dd84-40b2-8821-f4f18f91be2c" class=""><strong>Sizing Your Cluster</strong></p><ul id="12781c3d-089f-48ad-8465-b4a0b5977bf6" class="bulleted-list"><li style="list-style-type:disc">Calculate storage size and required number of nodes.</li></ul><ul id="9f07e3db-ca53-4f2b-9371-8dc01a053dc7" class="bulleted-list"><li style="list-style-type:disc">Consider replication factor and compaction strategy.</li></ul><p id="245386cc-42d4-40d1-bcc5-c3898d38ef04" class=""><strong>Selecting Instances</strong></p><ul id="7aa1af80-3407-4a0d-9e5b-89578a29df34" class="bulleted-list"><li style="list-style-type:disc">Development: at least two cores, 8 GB memory.</li></ul><ul id="ac7e294e-4675-497d-8206-5d224ba020cb" class="bulleted-list"><li style="list-style-type:disc">Production: at least eight cores, 32 GB memory.</li></ul><ul id="706e0b9a-17be-447f-926d-04a18b0185fd" class="bulleted-list"><li style="list-style-type:disc">HDDs vs. SSDs: SSDs preferred for performance.</li></ul><p id="da9617d5-f0ce-4ce2-8480-4ecf92efd485" class=""><strong>Network Considerations</strong></p><ul id="6dafdb20-3a0f-4c9b-ae8a-8341c12c4c7f" class="bulleted-list"><li style="list-style-type:disc">Ensure sufficient network bandwidth (1 Gbps or higher).</li></ul><ul id="70b02f42-dbff-4956-a6cf-c3039803cd9f" class="bulleted-list"><li style="list-style-type:disc">Avoid load balancers.</li></ul><ul id="9b897ae1-3f01-410a-b7ed-7b159c5f706e" class="bulleted-list"><li style="list-style-type:disc">Synchronize clocks using NTP.</li></ul><hr id="2a479976-509f-4822-8748-c1bd2275062f"/><h3 id="2458fae1-1ff8-40d0-b7ea-8e5dbffd5222" class=""><strong>Cloud Deployment</strong></h3><p id="0c527350-ad73-45ee-9288-54be63b1b47b" class=""><strong>Advantages of Cloud Deployment</strong></p><ul id="bc44f1a1-a07c-4fe9-8309-5d1f873591a4" class="bulleted-list"><li style="list-style-type:disc">High availability and disaster recovery.</li></ul><ul id="8a3de179-f0c3-4cd6-b5dd-c16f39e3f339" class="bulleted-list"><li style="list-style-type:disc">Improved application response time.</li></ul><p id="6ff4868c-6a35-41bd-befc-178cdc90da61" class=""><strong>Amazon Web Services (AWS)</strong></p><ul id="07ad37a5-096d-4dfb-952c-e55430624294" class="bulleted-list"><li style="list-style-type:disc">Use EC2 instances, choose between ephemeral storage and EBS.</li></ul><ul id="93c49e41-804f-4135-9317-d03db82c66b2" class="bulleted-list"><li style="list-style-type:disc">Configure networking with VPC, Direct Connect, or VPN.</li></ul><p id="d786da8b-6e47-4c55-abf8-bca96fa8ae3e" class=""><strong>Google Cloud Platform (GCP)</strong></p><ul id="a180859b-35a1-4dc6-ab12-c6a74d5f873e" class="bulleted-list"><li style="list-style-type:disc">Use Google Compute Engine (GCE) for regions and zones.</li></ul><ul id="a4857442-a6b2-459e-90b2-5fe09060fb5a" class="bulleted-list"><li style="list-style-type:disc">Recommended VMs: n1-standard, n1-highmem.</li></ul><ul id="de7c94d4-f83f-4b22-8db4-98095cb6a5c6" class="bulleted-list"><li style="list-style-type:disc">Use GoogleCloudSnitch for network configuration.</li></ul><p id="a5c9c662-31e6-4481-aa56-98dcbaabb22e" class=""><strong>Microsoft Azure</strong></p><ul id="0e5b27d4-f72c-4f0a-990a-2d1b3a197a1f" class="bulleted-list"><li style="list-style-type:disc">Use Azure Resource Manager for managing deployments.</li></ul><ul id="3e5bf42a-38f2-4db2-a2a0-13f12937debb" class="bulleted-list"><li style="list-style-type:disc">Recommended VMs: D series, H series.</li></ul><ul id="bc1f2ccb-1610-48de-8431-bce0f23a53ea" class="bulleted-list"><li style="list-style-type:disc">Use GossipingPropertyFileSnitch for network configuration.</li></ul><hr id="eb7872a9-7ddf-4eb5-aead-6c8e691b9d06"/><h3 id="d0caa4fa-dab1-4213-9ede-3e5286254e58" class=""><strong>Summary</strong></h3><ul id="23cf9196-3987-485e-9719-9562d1fa6917" class="bulleted-list"><li style="list-style-type:disc">Created and configured Cassandra clusters.</li></ul><ul id="3f777993-57fe-4f2c-a57d-9ce4df0d502c" class="bulleted-list"><li style="list-style-type:disc">Configured nodes with cassandra.yaml.</li></ul><ul id="f7b1ab07-5411-4dc0-bbb5-cffce48c3cba" class="bulleted-list"><li style="list-style-type:disc">Planned and deployed clusters in various environments.</li></ul><ul id="1645a043-9d3f-47b5-8ea7-d47715b13a94" class="bulleted-list"><li style="list-style-type:disc">Prepared for monitoring clusters in subsequent chapters.</li></ul><p id="2648d19f-4743-40d1-8fe5-131c69f64c5f" class="">
+</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
